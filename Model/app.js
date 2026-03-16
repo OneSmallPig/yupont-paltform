@@ -14,19 +14,19 @@ const state = {
 
 const heroData = [
   {
-    title: "面向电力与行业场景的视觉算法平台",
-    text: "聚焦输电、配网、光伏与安全监察等重点业务方向，形成可展示、可测试、可转化的算法平台首页。",
-    theme: "theme-grid",
+    title: "聚焦电力场景的视觉算法",
+    text: "围绕输电、配网、光伏与安全监察等业务场景构建视觉算法能力体系，支持算法展示、在线测试与应用验证。",
+    image: "./效果图/轮播/聚焦电力场景的视觉算法.jfif",
   },
   {
-    title: "重点展示输电线路与设备识别能力",
-    text: "通过算法轮播和缩略图，让用户快速理解煜邦在电网视觉算法方向的核心优势。",
-    theme: "theme-scan",
+    title: "输电线路与设备识别能力",
+    text: "覆盖输电线路通道、杆塔设备及典型缺陷识别等场景，提供稳定的目标检测与识别能力，支撑电网巡检与运维应用。",
+    image: "./效果图/轮播/输电线路与设备识别能力.png",
   },
   {
     title: "支持在线测试与结果沉淀",
-    text: "用户登录后可上传样本、调节参数、生成结果并保存测试记录，形成完整试用闭环。",
-    theme: "theme-compare",
+    text: "支持样本上传、算法推理与结果展示，并记录测试过程与结果数据，形成可追溯的算法验证与评估能力。",
+    image: "./效果图/轮播/在线推理测试与结果留存.JPG",
   },
 ];
 
@@ -316,7 +316,8 @@ function switchView(view) {
 
 function renderHero() {
   el.heroSlides.innerHTML = heroData.map((item, index) => `
-    <article class="hero-slide ${item.theme} ${index === state.heroIndex ? "active" : ""}">
+    <article class="hero-slide ${index === state.heroIndex ? "active" : ""}">
+      <img class="hero-image" src="${item.image}" alt="${item.title}">
       <div class="hero-copy overlay">
         <p class="eyebrow">Yupont AI Platform</p>
         <h1>${item.title}</h1>
