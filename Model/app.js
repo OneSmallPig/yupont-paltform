@@ -58,18 +58,20 @@ function renderHomeAlgorithms() {
   const featured = platformData.algorithms.filter((item) => item.featured).slice(0, 4);
 
   homeAlgoGridEl.innerHTML = featured.map((item) => `
-    <article class="algo-card home-featured-card">
-      <div class="algo-cover" style="background-image: url('${item.image}');"></div>
-      <p class="eyebrow">${item.industry}</p>
-      <h3>${item.name}</h3>
-      <p class="algo-business-copy">${item.businessDesc}</p>
-      <div class="algo-meta algo-business-meta">
-        <span class="status-pill status-pill-neutral">收藏 ${item.favorites}</span>
-        <span class="status-pill status-pill-neutral">测试 ${item.tests}</span>
-        <span class="status-pill status-pill-accent">${item.badge}</span>
+    <a class="algo-card home-featured-card sharp-featured-card" href="./algorithm.html?id=${item.id}">
+      <div class="algo-cover sharp-featured-cover" style="background-image: url('${item.image}');"></div>
+      <div class="sharp-featured-body">
+        <div class="sharp-featured-top">
+          <span class="sharp-featured-type">${item.category}</span>
+          <div class="sharp-featured-actions">
+            <span class="icon-pill" aria-label="收藏数">★ ${item.favorites}</span>
+            <span class="icon-pill" aria-label="测试数">◉ ${item.tests}</span>
+          </div>
+        </div>
+        <h3>${item.name}</h3>
+        <p class="sharp-featured-text">${item.businessDesc}</p>
       </div>
-      <a class="ghost-btn small" href="./algorithm.html?id=${item.id}">在线使用</a>
-    </article>
+    </a>
   `).join("");
 }
 

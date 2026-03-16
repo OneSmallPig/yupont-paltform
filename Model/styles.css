@@ -1484,22 +1484,29 @@ button, input, select { font: inherit; }
 
 .home-featured-card {
   padding: 0;
-  background: transparent;
-  border: 0;
+  display: block;
+  color: var(--text);
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid rgba(24, 50, 77, 0.12);
+  border-radius: 0;
   box-shadow: none;
+  overflow: hidden;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
 }
 
 .home-featured-card .algo-cover {
   min-height: 260px;
-  margin-bottom: 18px;
-  border-radius: 24px;
+  margin-bottom: 0;
+  border-radius: 0;
   background-size: cover;
   background-position: center;
 }
 
 .home-featured-card h3 {
-  margin: 12px 0 10px;
-  font-size: 24px;
+  margin: 0;
+  font-size: 25px;
+  line-height: 1.25;
 }
 
 .home-featured-card p {
@@ -1529,6 +1536,76 @@ button, input, select { font: inherit; }
 
 .home-featured-card .ghost-btn {
   margin-top: 16px;
+}
+
+.sharp-featured-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(191, 67, 45, 0.3);
+  box-shadow: 0 24px 40px rgba(24, 50, 77, 0.12);
+}
+
+.sharp-featured-cover {
+  position: relative;
+  min-height: 280px;
+}
+
+.sharp-featured-cover::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 72px;
+  background: linear-gradient(180deg, transparent 0%, rgba(8, 15, 24, 0.42) 100%);
+}
+
+.sharp-featured-body {
+  padding: 22px 22px 24px;
+  border-top: 4px solid #bf432d;
+}
+
+.sharp-featured-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sharp-featured-type {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  background: rgba(191, 67, 45, 0.08);
+  color: #bf432d;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sharp-featured-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.icon-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 10px;
+  background: #f4f6f8;
+  color: #415063;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(24, 50, 77, 0.08);
+}
+
+.sharp-featured-text {
+  margin: 14px 0 0;
+  min-height: 86px;
+  color: #5f6876;
 }
 
 .home-industry-pills {
