@@ -6,34 +6,9 @@
   <title>煜邦视觉算法平台</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
-<body class="page-home">
+<body class="page-home" data-page="home">
   <div class="page-bg"></div>
-
-  <header class="site-header">
-    <div class="header-inner">
-      <a class="brand" href="./index.html">
-        <div class="brand-logo">
-          <img src="./logo.png" alt="煜邦电力 Logo">
-        </div>
-        <div class="brand-copy">
-          <strong>煜邦视觉算法平台</strong>
-          <span>北京煜邦电力技术股份有限公司</span>
-        </div>
-      </a>
-
-      <nav class="top-nav">
-        <a class="nav-link active" href="./index.html">首页</a>
-        <a class="nav-link" href="./market.html">算法商城</a>
-        <a class="nav-link" href="./llm.html">大模型</a>
-        <a class="nav-link" href="./resources.html">资源中心</a>
-      </nav>
-
-      <div class="header-actions">
-        <a class="ghost-btn" href="./resources.html">资料获取</a>
-        <a class="primary-btn" href="./market.html">预约体验</a>
-      </div>
-    </div>
-  </header>
+  <header class="site-header"></header>
 
   <main class="main-shell">
     <section id="homeView">
@@ -41,11 +16,11 @@
         <div class="section-inner hero-shell">
           <div class="hero-copy-block">
             <p class="eyebrow">YUPONT VISION AI</p>
-            <h1>智能视觉，驱动电力场景商业落地</h1>
-            <p class="hero-lead">聚焦输电、配网、光伏、安全监管与应急场景，提供算法展示、在线验证、方案对接与项目落地的一体化平台。</p>
+            <h1>智能视觉算法平台，服务电力与工业场景落地</h1>
+            <p class="hero-lead">聚焦输电、变电、配网、光伏、安全监管等业务场景，提供算法展示、在线检测、结果导出、用户留存与智能推荐的一体化能力。</p>
             <div class="hero-action-row">
               <a class="primary-btn" href="./market.html">查看精选算法</a>
-              <a class="ghost-btn" href="./resources.html">预约方案演示</a>
+              <button class="ghost-btn" type="button" id="openRecommendModal">智能算法推荐</button>
             </div>
           </div>
           <div class="hero-visual">
@@ -77,7 +52,7 @@
               <p class="eyebrow">Industry Solutions</p>
               <h2>行业解决方案</h2>
             </div>
-            <p class="section-intro">面向电力巡检、城市治理与应急监管等典型场景，构建从算法能力到业务方案的应用入口。</p>
+            <p class="section-intro">围绕电力巡检、城市治理与应急监管等典型场景，形成从算法能力到业务方案的应用入口。</p>
           </div>
           <div class="industry-grid home-industry-grid" id="industryGrid"></div>
         </div>
@@ -87,8 +62,8 @@
         <div class="section-inner proof-layout">
           <div class="proof-copy">
             <p class="eyebrow">Resource Center</p>
-            <h2>沉淀方案资料、能力说明与项目案例</h2>
-            <p>资源中心承接售前演示、客户沟通与项目推进场景，聚焦资料支撑与标准化输出，而不是简单的信息堆叠。</p>
+            <h2>方案资料、能力说明与项目案例沉淀</h2>
+            <p>资源中心承接售前演示、客户沟通与项目推进场景，聚焦资料沉淀与标准化输出，而不是简单的信息堆叠。</p>
           </div>
           <div class="news-main" id="newsMain"></div>
           <div class="news-side" id="resourceList"></div>
@@ -102,7 +77,7 @@
             <h2>推动算法能力进入真实业务场景</h2>
             <p>支持平台演示、算法能力交流、行业方案咨询与项目合作对接，面向电力及相关行业客户提供定向服务。</p>
             <div class="business-actions">
-              <a class="primary-btn" href="./resources.html">联系商务团队</a>
+              <a class="primary-btn" href="./market.html">浏览算法详情</a>
               <a class="ghost-btn" href="./llm.html">查看大模型能力</a>
             </div>
           </div>
@@ -114,18 +89,18 @@
             </div>
             <div class="business-card">
               <span>商务咨询</span>
-              <strong>400-010-xxxx</strong>
+              <strong>400-010-1024</strong>
               <p>工作日 9:00 - 18:00</p>
             </div>
             <div class="business-card">
-              <span>资料获取</span>
+              <span>资料支持</span>
               <strong>ai@yupont.com</strong>
               <p>支持能力清单、案例材料与方案资料获取。</p>
             </div>
             <div class="business-card action">
               <span>合作方式</span>
               <strong>方案咨询 / 产品演示 / 项目合作</strong>
-              <a class="primary-btn small" href="./resources.html">预约演示</a>
+              <a class="primary-btn small" href="./user.html">进入用户中心</a>
             </div>
           </div>
         </div>
@@ -133,7 +108,27 @@
     </section>
   </main>
 
+  <div class="modal-shell" id="recommendModal">
+    <div class="modal-mask" data-close-modal="recommendModal"></div>
+    <div class="modal-card recommend-card">
+      <button class="modal-close" type="button" data-close-modal="recommendModal">×</button>
+      <div class="modal-head">
+        <p class="eyebrow">Smart Recommendation</p>
+        <h3>智能算法推荐</h3>
+        <p>输入应用场景、目标对象与业务要求，系统会提取关键词并推荐最匹配的算法。</p>
+      </div>
+      <div class="recommend-form">
+        <textarea id="recommendInput" placeholder="例如：需要对输电线路巡检图片中的异物、烟雾和本体缺陷进行联合识别，并支持导出检测报告。"></textarea>
+        <div class="recommend-actions">
+          <button class="primary-btn" type="button" id="runRecommendBtn">开始推荐</button>
+        </div>
+      </div>
+      <div class="recommend-result" id="recommendResult"></div>
+    </div>
+  </div>
+
   <script src="./platform-data.js"></script>
+  <script src="./common.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>

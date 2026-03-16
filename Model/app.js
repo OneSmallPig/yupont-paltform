@@ -9,6 +9,10 @@ const homeAlgoGridEl = document.getElementById("homeAlgoGrid");
 const industryGridEl = document.getElementById("industryGrid");
 const resourceListEl = document.getElementById("resourceList");
 const newsMainEl = document.getElementById("newsMain");
+const recommendModalTriggerEl = document.getElementById("openRecommendModal");
+const recommendInputEl = document.getElementById("recommendInput");
+const runRecommendBtnEl = document.getElementById("runRecommendBtn");
+const recommendResultEl = document.getElementById("recommendResult");
 
 function renderHero() {
   if (!heroSlidesEl || !heroDotsEl) return;
@@ -25,7 +29,7 @@ function renderHero() {
   `).join("");
 
   heroDotsEl.innerHTML = platformData.heroSlides.map((_, index) => `
-    <button class="hero-dot ${index === heroState.index ? "active" : ""}" data-hero-dot="${index}"></button>
+    <button class="hero-dot ${index === heroState.index ? "active" : ""}" data-hero-dot="${index}" type="button"></button>
   `).join("");
 
   document.querySelectorAll("[data-hero-dot]").forEach((node) => {
@@ -55,22 +59,22 @@ function renderHomeAlgorithms() {
 
   homeAlgoGridEl.innerHTML = featured.map((item) => `
     <article class="algo-card home-featured-card">
-      <div class="algo-cover" style="background-image: linear-gradient(180deg, rgba(14, 16, 24, 0.08), rgba(14, 16, 24, 0.35)), url('${item.image}');"></div>
+      <div class="algo-cover" style="background-image: url('${item.image}');"></div>
       <p class="eyebrow">${item.industry}</p>
       <h3>${item.name}</h3>
-      <p>${item.subtitle}</p>
-      <div class="algo-meta">
-        <span class="status-pill">${item.category}</span>
-        <span class="status-pill">${item.metric}</span>
+      <p class="algo-business-copy">${item.businessDesc}</p>
+      <div class="algo-meta algo-business-meta">
+        <span class="status-pill status-pill-neutral">收藏 ${item.favorites}</span>
+        <span class="status-pill status-pill-neutral">测试 ${item.tests}</span>
+        <span class="status-pill status-pill-accent">${item.badge}</span>
       </div>
-      <a class="ghost-btn small" href="./market.html">查看详情</a>
+      <a class="ghost-btn small" href="./algorithm.html?id=${item.id}">在线使用</a>
     </article>
   `).join("");
 }
 
 function renderIndustrySection() {
   if (!industryGridEl) return;
-
   industryGridEl.innerHTML = platformData.industries.map((item, index) => `
     <article class="industry-card industry-tile">
       <span class="industry-icon">0${index + 1}</span>
@@ -86,14 +90,13 @@ function renderIndustrySection() {
 
 function renderResources() {
   if (!resourceListEl || !newsMainEl) return;
-
   newsMainEl.innerHTML = `
     <article class="news-feature support-feature">
       <div class="news-body">
         <p class="eyebrow">Resource Center</p>
-        <h3>沉淀演示资料、能力说明与项目案例</h3>
-        <p>围绕方案介绍、算法目录、测试报告和商务资料，形成更适合客户沟通的资源中心入口。</p>
-        <span class="news-meta">售前支撑 · 2026-03-16</span>
+        <h3>在线检测、结果导出与项目支持资料一体呈现</h3>
+        <p>围绕算法目录、检测说明、项目案例和商务支撑资料，形成更适合客户沟通和演示的资源中心入口。</p>
+        <span class="news-meta">售前支持 · 2026-03-17</span>
       </div>
     </article>
   `;
@@ -109,11 +112,79 @@ function renderResources() {
   `).join("");
 }
 
+function getRecommendationMatches(query) {
+  const keywords = query.toLowerCase();
+  const rules = [
+    { keys: ["输电", "线路", "本体", "缺陷"], ids: ["algo-1", "algo-6"] },
+    { keys: ["烟雾", "山火", "火情"], ids: ["algo-2"] },
+    { keys: ["杆塔", "配网", "部件"], ids: ["algo-3"] },
+    { keys: ["光伏", "热斑"], ids: ["algo-4"] },
+    { keys: ["安全", "安检", "人员", "作业"], ids: ["algo-5"] },
+    { keys: ["变电", "设备"], ids: ["algo-9"] },
+    { keys: ["去雾", "增强", "低能见度"], ids: ["algo-7"] },
+  ];
+
+  const matchedIds = new Set();
+  const hitKeywords = [];
+
+  rules.forEach((rule) => {
+    const matched = rule.keys.some((key) => keywords.includes(key));
+    if (matched) {
+      rule.ids.forEach((id) => matchedIds.add(id));
+      hitKeywords.push(...rule.keys.filter((key) => keywords.includes(key)));
+    }
+  });
+
+  if (!matchedIds.size) {
+    platformData.algorithms.slice(0, 3).forEach((item) => matchedIds.add(item.id));
+  }
+
+  return {
+    keywords: [...new Set(hitKeywords)].slice(0, 6),
+    algorithms: [...matchedIds].map((id) => platformData.algorithms.find((item) => item.id === id)).filter(Boolean),
+  };
+}
+
+function renderRecommendationResult() {
+  const query = recommendInputEl.value.trim();
+  if (!query) return;
+
+  const matches = getRecommendationMatches(query);
+  recommendResultEl.innerHTML = `
+    <div class="recommend-keywords">
+      <span>识别关键词</span>
+      <div class="combo-tags">
+        ${(matches.keywords.length ? matches.keywords : ["输电巡检", "目标检测", "在线导出"]).map((item) => `<span class="combo-tag">${item}</span>`).join("")}
+      </div>
+    </div>
+    <div class="recommend-grid">
+      ${matches.algorithms.map((item) => `
+        <a class="recommend-item" href="./algorithm.html?id=${item.id}">
+          <strong>${item.name}</strong>
+          <p>${item.businessDesc}</p>
+          <div class="algo-meta">
+            <span class="status-pill status-pill-accent">${item.badge}</span>
+            <span class="status-pill">${item.scene}</span>
+          </div>
+        </a>
+      `).join("")}
+    </div>
+  `;
+}
+
+function initRecommendationModal() {
+  if (!recommendModalTriggerEl) return;
+  recommendModalTriggerEl.addEventListener("click", () => openModal("recommendModal"));
+  runRecommendBtnEl.addEventListener("click", renderRecommendationResult);
+  bindGlobalModalActions();
+}
+
 function initHome() {
   renderHero();
   renderHomeAlgorithms();
   renderIndustrySection();
   renderResources();
+  initRecommendationModal();
   startHeroTimer();
 }
 

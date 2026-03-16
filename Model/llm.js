@@ -15,11 +15,16 @@ function renderLlms() {
   `).join("");
 
   llmScenarioEl.innerHTML = [
-    "巡检图像理解与缺陷解释",
-    "多模态预警事件研判",
+    "巡检图像理解与缺陷归因",
+    "多模态预警事件分析",
     "运维知识问答与辅助决策",
-    "项目演示中的智能报告生成",
-  ].map((item) => `<article class="scenario-row"><strong>${item}</strong><p>面向电力业务流程输出更具交互性和解释性的模型能力。</p></article>`).join("");
+    "演示场景中的智能报告生成",
+  ].map((item) => `
+    <article class="scenario-row">
+      <strong>${item}</strong>
+      <p>面向电力业务流程输出更具交互性和解释性的模型能力。</p>
+    </article>
+  `).join("");
 }
 
 renderLlms();
