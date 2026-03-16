@@ -9,6 +9,7 @@ const homeAlgoGridEl = document.getElementById("homeAlgoGrid");
 const industryGridEl = document.getElementById("industryGrid");
 const resourceListEl = document.getElementById("resourceList");
 const newsMainEl = document.getElementById("newsMain");
+const solutionFeatureEl = document.getElementById("solutionFeature");
 const recommendModalTriggerEl = document.getElementById("openRecommendModal");
 const recommendInputEl = document.getElementById("recommendInput");
 const runRecommendBtnEl = document.getElementById("runRecommendBtn");
@@ -77,14 +78,45 @@ function renderHomeAlgorithms() {
 
 function renderIndustrySection() {
   if (!industryGridEl) return;
-  industryGridEl.innerHTML = platformData.industries.map((item, index) => `
-    <article class="industry-card industry-tile">
-      <span class="industry-icon">0${index + 1}</span>
-      <p class="eyebrow">${item.name}</p>
-      <h3>${item.name}</h3>
-      <p>${item.desc}</p>
-      <div class="algo-meta">
-        ${item.scenes.map((scene) => `<span class="status-pill">${scene}</span>`).join("")}
+  const [featuredIndustry, ...restIndustries] = platformData.industries;
+
+  if (solutionFeatureEl && featuredIndustry) {
+    solutionFeatureEl.innerHTML = `
+      <div class="solution-feature-copy">
+        <p class="eyebrow">Core Solutions</p>
+        <h3>${featuredIndustry.name}</h3>
+        <p>${featuredIndustry.desc}</p>
+        <a class="primary-btn solution-feature-btn" href="./market.html">了解更多</a>
+      </div>
+      <div class="solution-feature-visual">
+        <div class="solution-orbit orbit-a"></div>
+        <div class="solution-orbit orbit-b"></div>
+        <div class="solution-orbit orbit-c"></div>
+        <div class="solution-float-card float-card-a">
+          <span></span>
+          <strong>${featuredIndustry.scenes[0]}</strong>
+          <p>面向高频巡检问题提供快速识别入口</p>
+        </div>
+        <div class="solution-float-card float-card-b media">
+          <div class="float-card-media"></div>
+          <strong>${featuredIndustry.scenes[1]}</strong>
+          <p>支持图像样本与检测结果联动展示</p>
+        </div>
+        <div class="solution-float-card float-card-c">
+          <span></span>
+          <strong>${featuredIndustry.scenes[2]}</strong>
+          <p>适配方案演示与在线检测验证流程</p>
+        </div>
+      </div>
+    `;
+  }
+
+  industryGridEl.innerHTML = restIndustries.map((item, index) => `
+    <article class="industry-card industry-solution-item">
+      <span class="industry-item-index">0${index + 2}</span>
+      <div class="industry-item-copy">
+        <h3>${item.name}</h3>
+        <p>${item.desc}</p>
       </div>
     </article>
   `).join("");
