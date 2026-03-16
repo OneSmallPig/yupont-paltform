@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>煜邦视觉算法平台原型</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#" data-view-link="home">
+        <div class="brand-logo">
+          <img src="./logo.png" alt="北京煜邦电力技术股份有限公司 Logo">
+        </div>
+        <div class="brand-copy">
+          <strong>煜邦视觉算法平台</strong>
+          <span>北京煜邦电力技术股份有限公司</span>
+        </div>
+      </a>
+
+      <nav class="top-nav">
+        <button class="nav-link active" data-view="home">首页</button>
+        <button class="nav-link" data-view="market">算法商城</button>
+        <button class="nav-link" data-view="contact">联系我们</button>
+        <button class="nav-link" data-view="user">用户中心</button>
+      </nav>
+
+      <div class="header-actions">
+        <button class="ghost-btn" id="recommendBtn">智能推荐</button>
+        <button class="primary-btn" id="loginBtn">登录后体验</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-shell">
+    <section class="view active" id="homeView">
+      <section class="hero">
+        <div class="hero-main">
+          <div class="hero-slides" id="heroSlides"></div>
+          <div class="hero-dots" id="heroDots"></div>
+        </div>
+        <aside class="hero-side">
+          <div class="info-card hero-value">
+            <p class="eyebrow">Platform Value</p>
+            <h3>面向电力与行业场景的视觉算法平台</h3>
+            <p>视觉算法平台提供面向电力与行业场景的算法能力管理与在线推理环境，支持算法分类管理、场景能力展示、在线测试与结果可视化。通过统一平台实现算法能力的集中管理、效果验证与测试记录留存，支撑算法能力评估与业务方案展示。</p>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span>重点行业</span>
+              <strong>4+</strong>
+              <p>电网巡检、应急救援、城市管理、农林植保</p>
+            </div>
+            <div class="stat-card">
+              <span>算法方向</span>
+              <strong>12</strong>
+              <p>目标检测、语义分割、异常分析、多模态识别</p>
+            </div>
+            <div class="stat-card">
+              <span>体验路径</span>
+              <strong>3 步</strong>
+              <p>选算法、传样本、看结果</p>
+            </div>
+            <div class="stat-card accent">
+              <span>企业主体</span>
+              <strong>煜邦电力</strong>
+              <p>突出电力行业算法展示与应用能力</p>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section-block">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Featured Algorithms</p>
+            <h2>重点算法介绍</h2>
+          </div>
+          <button class="ghost-btn small" data-view-jump="market">进入算法商城</button>
+        </div>
+        <div class="algo-grid" id="homeAlgoGrid"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Industry Solutions</p>
+            <h2>行业解决方案入口</h2>
+          </div>
+          <div class="pill-group" id="homeIndustryPills"></div>
+        </div>
+        <div class="industry-grid" id="industryGrid"></div>
+      </section>
+    </section>
+
+    <section class="view" id="marketView">
+      <section class="banner-card">
+        <div>
+          <p class="eyebrow">Algorithm Marketplace</p>
+          <h2>按算法分类与行业场景快速查找能力</h2>
+          <p>先按算法类型筛选，再按行业查看算法，支持详情查看、在线测试和测试记录保存。</p>
+        </div>
+        <div class="status-card" id="loginStatusCard">
+          <span>当前状态</span>
+          <strong>未登录</strong>
+          <p>登录后可进行在线测试并沉淀测试记录。</p>
+        </div>
+      </section>
+
+      <section class="market-toolbar">
+        <div class="toolbar-group" id="categoryTabs"></div>
+        <div class="toolbar-row">
+          <div class="toolbar-group" id="industryTabs"></div>
+          <div class="search-group">
+            <input id="searchInput" type="search" placeholder="搜索算法名称、场景、标签">
+          </div>
+        </div>
+      </section>
+
+      <section class="market-layout">
+        <div class="algo-grid market-grid" id="marketAlgoGrid"></div>
+        <aside class="detail-panel" id="detailPanel">
+          <div class="empty-detail">
+            <p class="eyebrow">Algorithm Detail</p>
+            <h3>选择一个算法查看详情</h3>
+            <p>这里会显示算法简介、核心指标、缩略图和测试入口。</p>
+          </div>
+        </aside>
+      </section>
+    </section>
+
+    <section class="view" id="contactView">
+      <section class="banner-card contact-banner">
+        <div>
+          <p class="eyebrow">Contact Us</p>
+          <h2>联系我们</h2>
+          <p>如需预约平台演示、了解算法合作方案或获取电力视觉算法能力清单，可通过以下方式联系。</p>
+        </div>
+      </section>
+
+      <section class="contact-layout">
+        <article class="info-card contact-card">
+          <p class="eyebrow">Company</p>
+          <h3>北京煜邦电力技术股份有限公司</h3>
+          <p>聚焦电力行业数字化与视觉智能化应用，围绕输电、配网、光伏、安全监察等场景，打造可展示、可测试、可转化的视觉算法平台。</p>
+        </article>
+        <article class="info-card contact-card">
+          <p class="eyebrow">Contact</p>
+          <h3>商务咨询</h3>
+          <ul class="contact-list">
+            <li>联系电话：400-010-xxxx</li>
+            <li>邮箱：ai@yupont.com</li>
+            <li>地址：北京市朝阳区示例地址</li>
+          </ul>
+          <button class="primary-btn" id="demoApplyBtn">预约演示</button>
+        </article>
+        <article class="info-card contact-card">
+          <p class="eyebrow">Platform</p>
+          <h3>平台能力方向</h3>
+          <ul class="contact-list">
+            <li>电网巡检算法展示</li>
+            <li>算法商城与在线测试</li>
+            <li>用户测试留痕与反馈追踪</li>
+            <li>售前演示与行业方案支撑</li>
+          </ul>
+        </article>
+      </section>
+    </section>
+
+    <section class="view" id="userView">
+      <section class="banner-card">
+        <div>
+          <p class="eyebrow">User Center</p>
+          <h2>用户中心</h2>
+          <p>围绕测试记录、我的收藏和我的反馈构建试用闭环。</p>
+        </div>
+        <button class="ghost-btn" id="exportBtn">导出摘要</button>
+      </section>
+
+      <section class="summary-grid">
+        <div class="summary-card">
+          <span>累计测试</span>
+          <strong id="summaryTests">0</strong>
+          <p>已完成测试任务数量</p>
+        </div>
+        <div class="summary-card">
+          <span>收藏算法</span>
+          <strong id="summaryFavorites">0</strong>
+          <p>重点关注算法数量</p>
+        </div>
+        <div class="summary-card">
+          <span>待处理反馈</span>
+          <strong id="summaryFeedback">0</strong>
+          <p>待平台处理问题数量</p>
+        </div>
+      </section>
+
+      <section class="history-toolbar">
+        <div class="history-tabs">
+          <button class="history-tab active" data-history="tests">我的测试记录</button>
+          <button class="history-tab" data-history="favorites">我的收藏</button>
+          <button class="history-tab" data-history="feedback">我的反馈</button>
+        </div>
+        <div class="history-filters">
+          <select id="historySceneFilter">
+            <option value="all">全部场景</option>
+          </select>
+          <select id="historyStatusFilter">
+            <option value="all">全部状态</option>
+            <option value="已完成">已完成</option>
+            <option value="处理中">处理中</option>
+            <option value="待确认">待确认</option>
+          </select>
+        </div>
+      </section>
+
+      <div class="table-wrap">
+        <table class="history-table">
+          <thead id="historyHead"></thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="drawer" id="testDrawer">
+    <div class="drawer-mask" data-close-drawer="true"></div>
+    <div class="drawer-panel">
+      <div class="drawer-head">
+        <div>
+          <p class="eyebrow">Online Test</p>
+          <h3 id="drawerTitle">算法在线测试</h3>
+        </div>
+        <button class="icon-btn" data-close-drawer="true">×</button>
+      </div>
+
+      <div class="drawer-layout">
+        <div class="test-config">
+          <label>
+            <span>输入样本</span>
+            <div class="upload-box" id="uploadBox">
+              <strong>点击加载示例样本</strong>
+              <p>支持图片或视频样本上传，原型中采用示例数据模拟。</p>
+            </div>
+          </label>
+
+          <div class="thumbs" id="thumbs"></div>
+
+          <label>
+            <span>置信度阈值</span>
+            <input id="confRange" type="range" min="10" max="95" value="68">
+          </label>
+          <label>
+            <span>NMS 阈值</span>
+            <input id="nmsRange" type="range" min="10" max="90" value="42">
+          </label>
+          <label>
+            <span>输出模式</span>
+            <select id="outputMode">
+              <option>标准检测图</option>
+              <option>热力图</option>
+              <option>对比视图</option>
+            </select>
+          </label>
+
+          <div class="compare-box">
+            <span>对比算法</span>
+            <div class="pill-group" id="compareTags"></div>
+          </div>
+
+          <button class="primary-btn full" id="runTestBtn">开始测试</button>
+        </div>
+
+        <div class="test-result">
+          <div class="preview-box">
+            <div class="frame frame-a"></div>
+            <div class="frame frame-b"></div>
+            <div class="frame frame-c"></div>
+            <span class="preview-label">结果预览</span>
+          </div>
+
+          <div class="result-grid">
+            <div class="result-card">
+              <span>mAP</span>
+              <strong id="metricMap">-</strong>
+            </div>
+            <div class="result-card">
+              <span>召回率</span>
+              <strong id="metricRecall">-</strong>
+            </div>
+            <div class="result-card">
+              <span>响应时间</span>
+              <strong id="metricLatency">-</strong>
+            </div>
+          </div>
+
+          <div class="report-box">
+            <strong>测试输出</strong>
+            <p>支持检测图、关键指标、JSON 和 PDF 报告查看，并可一键保存到用户中心。</p>
+            <div class="report-actions">
+              <button class="ghost-btn small">查看 JSON</button>
+              <button class="ghost-btn small">预览 PDF</button>
+              <button class="primary-btn small" id="saveHistoryBtn">保存到历史</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
