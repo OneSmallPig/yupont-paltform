@@ -14,42 +14,83 @@ const state = {
 
 const heroData = [
   {
-    title: "聚焦电力场景的视觉算法",
-    text: "围绕输电、配网、光伏与安全监察等业务场景构建视觉算法能力体系，支持算法展示、在线测试与应用验证。",
+    title: "面向电力巡检的视觉算法能力",
+    text: "聚焦输电、配网与光伏场景，以可展示、可验证、可交付的方式组织算法能力。",
     image: "./效果图/轮播/聚焦电力场景的视觉算法.jfif",
   },
   {
     title: "输电线路与设备识别能力",
-    text: "覆盖输电线路通道、杆塔设备及典型缺陷识别等场景，提供稳定的目标检测与识别能力，支撑电网巡检与运维应用。",
+    text: "覆盖通道隐患、杆塔设备、缺陷识别等高频场景，服务巡检和运维业务。",
     image: "./效果图/轮播/输电线路与设备识别能力.png",
   },
   {
-    title: "支持在线测试与结果沉淀",
-    text: "支持样本上传、算法推理与结果展示，并记录测试过程与结果数据，形成可追溯的算法验证与评估能力。",
+    title: "在线推理测试与结果留存",
+    text: "支持样本上传、结果预览、指标输出与历史留存，缩短售前沟通与验证路径。",
     image: "./效果图/轮播/在线推理测试与结果留存.JPG",
   },
 ];
 
+const capabilities = [
+  {
+    key: "01",
+    title: "算法资产沉淀",
+    desc: "按检测、分割、多模态和异常分析等方向组织算法能力，支持标准化展示。",
+  },
+  {
+    key: "02",
+    title: "在线测试验证",
+    desc: "支持样本上传、参数配置、结果预览与报告输出，缩短售前验证路径。",
+  },
+  {
+    key: "03",
+    title: "行业方案交付",
+    desc: "将单点算法能力快速组织为面向客户的行业化解决方案和项目沟通材料。",
+  },
+];
+
+const homeSupport = {
+  title: "标准化演示资料与验证路径",
+  desc: "围绕方案介绍、能力清单、测试报告和客户交流材料，形成更适合商务转化的首页支撑内容。",
+  meta: "售前支撑 · 2026-03-16",
+};
+
+const resources = [
+  { title: "平台能力清单", meta: "资料下载" },
+  { title: "电力巡检算法目录", meta: "能力目录" },
+  { title: "在线测试说明", meta: "使用指南" },
+  { title: "合作接入方式", meta: "商务支持" },
+];
+
 const industries = [
   {
-    name: "电网巡检",
-    desc: "围绕输电、配网、变电与光伏场景，构建高价值电力算法展示区。",
-    scenes: ["输电线路巡检", "配网巡检", "光伏巡检", "变电设备分析"],
+    name: "输电巡检",
+    desc: "聚焦线路缺陷、通道异物、山火烟雾和设备识别等高价值场景。",
+    scenes: ["本体缺陷检测", "通道隐患识别", "山火预警"],
+  },
+  {
+    name: "配网巡检",
+    desc: "覆盖杆塔、关键部件、设备状态与配网通道场景，适合巡检与运维业务。",
+    scenes: ["杆塔关键部件", "设备状态识别", "通道巡检"],
+  },
+  {
+    name: "光伏巡检",
+    desc: "面向热斑、组件缺陷和阵列异常定位，强化光伏运维场景价值表达。",
+    scenes: ["热斑检测", "组件缺陷定位", "阵列异常识别"],
+  },
+  {
+    name: "安全监管",
+    desc: "支撑安全帽穿戴、现场安检与作业规范识别等监管类应用。",
+    scenes: ["作业规范识别", "安全帽检测", "现场安检"],
   },
   {
     name: "应急救援",
-    desc: "服务森林防火、灾害搜救、海上搜救等需要快速识别与预警的场景。",
-    scenes: ["森林防火", "灾害救援", "海上搜救"],
+    desc: "服务山火、烟雾和灾害应急识别场景，强调快速预警与多模态识别能力。",
+    scenes: ["山火识别", "烟雾检测", "灾害搜救"],
   },
   {
-    name: "城市管理",
-    desc: "聚焦交通监控、城管执法、违规建筑等城市治理相关方向。",
-    scenes: ["交通监控", "城管执法", "违规建筑"],
-  },
-  {
-    name: "农林植保",
-    desc: "覆盖漂浮物检测、违规排污、绿藻监测和农业相关识别场景。",
-    scenes: ["水面漂浮物", "违规排污", "绿藻监测", "高茬检测"],
+    name: "环保治理",
+    desc: "覆盖漂浮物、水体异常和环境目标识别等治理类场景。",
+    scenes: ["漂浮物检测", "水体异常识别", "环境巡查"],
   },
 ];
 
@@ -57,141 +98,138 @@ const algorithms = [
   {
     id: "algo-1",
     name: "输电线路本体缺陷检测",
-    subtitle: "29 类电力本体缺陷识别",
+    subtitle: "29 类输电本体缺陷识别",
     category: "目标检测",
-    industry: "电网巡检",
-    scene: "输电线路巡检",
+    industry: "输电巡检",
+    scene: "本体缺陷检测",
     metric: "mAP 92.4%",
     stack: "YOLOv8",
-    desc: "识别异物、鸟窝、绝缘子缺陷、金具状态、螺丝松动等重点问题。",
+    desc: "识别异物、鸟巢、绝缘子缺陷、金具状态和螺栓松动等重点问题。",
     featured: true,
+    image: "./效果图/输电线路本体缺陷检测/1474349739174.jpg",
   },
   {
     id: "algo-2",
-    name: "输电通道山火覆冰检测",
-    subtitle: "烟雾、火焰双目标告警",
+    name: "输电通道山火烟雾识别",
+    subtitle: "烟雾与火情双目标告警",
     category: "多模态识别",
-    industry: "电网巡检",
-    scene: "输电线路巡检",
+    industry: "应急救援",
+    scene: "山火识别",
     metric: "Recall 90.8%",
     stack: "YOLOv11 + Qwen2.5-VL",
-    desc: "适合抓拍机通道预警，突出山火预警与多模态识别能力。",
+    desc: "适合通道监测与预警场景，突出早期识别与多模态感知能力。",
     featured: true,
+    image: "./效果图/冀北侵物检测/101746736.jpg",
   },
   {
     id: "algo-3",
     name: "配网杆塔关键部件识别",
     subtitle: "配网关键部件识别与跟踪",
     category: "目标检测",
-    industry: "电网巡检",
-    scene: "配网巡检",
+    industry: "配网巡检",
+    scene: "杆塔关键部件",
     metric: "mAP 89.6%",
     stack: "YOLOv8n + ByteTrack",
-    desc: "识别塔头、导线、刀闸、断路器、熔断器等关键部件。",
+    desc: "识别塔头、导线、刀闸、断路器和熔断器等关键部件。",
     featured: true,
+    image: "./效果图/配网杆塔关键部件识别/10kV-wang-qiao-08-xian-104#-quan-ta.JPG",
   },
   {
     id: "algo-4",
     name: "光伏缺陷检测与定位",
     subtitle: "热斑与组件缺陷识别",
     category: "目标检测",
-    industry: "电网巡检",
-    scene: "光伏巡检",
+    industry: "光伏巡检",
+    scene: "热斑检测",
     metric: "mAP 87.3%",
     stack: "YOLO11",
-    desc: "识别热斑、接线故障和组件缺失等问题。",
+    desc: "识别热斑、接线故障和组件缺失等问题，适合光伏运维展示。",
     featured: true,
+    image: "./效果图/光伏缺陷检测以及定位/DJI_20210801101641_0069_T.JPG",
   },
   {
     id: "algo-5",
-    name: "森林火点热成像识别",
-    subtitle: "红外热成像火点识别",
+    name: "现场安检识别",
+    subtitle: "作业现场安全规范识别",
     category: "目标检测",
-    industry: "应急救援",
-    scene: "森林防火",
+    industry: "安全监管",
+    scene: "现场安检",
     metric: "Recall 93.1%",
     stack: "InfraVision",
-    desc: "通过热成像识别火点与烟雾，用于火灾早期告警。",
+    desc: "适用于现场人员规范识别、安全要素检测与异常告警。",
     featured: false,
+    image: "./效果图/海南安检/11.3-329.JPG",
   },
   {
     id: "algo-6",
-    name: "城市交通违法检测",
-    subtitle: "交通违法与拥堵分析",
+    name: "输电通道侵物识别",
+    subtitle: "通道异物与风险目标监测",
     category: "目标检测",
-    industry: "城市管理",
-    scene: "交通监控",
+    industry: "输电巡检",
+    scene: "通道隐患识别",
     metric: "mAP 88.2%",
     stack: "YOLOv8 + OCR",
-    desc: "识别拥堵、逆行、占道和重点车辆行为，适合城市治理展示。",
+    desc: "识别通道中的外部风险目标，适合输电巡检业务展示。",
     featured: false,
+    image: "./效果图/冀北侵物检测/101741749.jpg",
   },
   {
     id: "algo-7",
-    name: "安徽漂浮物检测",
-    subtitle: "环保巡检漂浮物识别",
+    name: "水面漂浮物检测",
+    subtitle: "环保巡查中的漂浮物识别",
     category: "目标检测",
-    industry: "农林植保",
-    scene: "水面漂浮物",
+    industry: "环保治理",
+    scene: "漂浮物检测",
     metric: "mAP 86.4%",
     stack: "YOLOv8",
-    desc: "识别漂浮垃圾、防尘网和彩带等目标。",
+    desc: "识别漂浮垃圾、障碍物和污染相关目标，适合治理场景演示。",
     featured: false,
+    image: "./效果图/去雾处理/0099_0.9_0.16.jpg",
   },
   {
     id: "algo-8",
-    name: "水体绿藻爆发识别",
-    subtitle: "水域分割与绿藻识别",
+    name: "水体异常识别",
+    subtitle: "水域分割与异常特征识别",
     category: "语义分割",
-    industry: "农林植保",
-    scene: "绿藻监测",
+    industry: "环保治理",
+    scene: "水体异常识别",
     metric: "IoU 82.7%",
     stack: "SegFormer",
-    desc: "适合环境治理和遥感监测展示。",
+    desc: "适合环境治理和遥感监测类场景展示。",
     featured: false,
+    image: "./效果图/去雾处理/1400_2.png",
   },
   {
     id: "algo-9",
-    name: "安徽通道地物分割",
-    subtitle: "输电通道地物分割",
-    category: "语义分割",
-    industry: "电网巡检",
-    scene: "输电线路巡检",
-    metric: "IoU 85.5%",
-    stack: "DeepLabV3+",
-    desc: "识别农田、树株、房屋、水域、公路等多类地物。",
-    featured: false,
-  },
-  {
-    id: "algo-10",
-    name: "变电设备状态异常分析",
-    subtitle: "变电设备状态判别",
+    name: "变电设备缺陷识别",
+    subtitle: "变电设备状态与缺陷分析",
     category: "异常分析",
-    industry: "电网巡检",
-    scene: "配网巡检",
+    industry: "配网巡检",
+    scene: "设备状态识别",
     metric: "准确率 91.2%",
     stack: "孪生网络",
-    desc: "分析刀闸分合状态和硅胶变色等异常。",
+    desc: "分析设备状态变化和典型缺陷，适合运维场景能力展示。",
     featured: false,
+    image: "./效果图/变电设备缺陷智能识别/biandian_02102.jpg",
   },
 ];
 
-const categories = ["全部算法", "目标检测", "语义分割", "异常分析", "图像处理", "多模态识别"];
+const categories = ["全部算法", "目标检测", "语义分割", "异常分析", "多模态识别"];
 
 const testRecords = [
-  { time: "2026-03-16 10:28", scene: "输电线路巡检", algorithm: "输电线路本体缺陷检测", status: "已完成", output: "PDF 报告 / JSON" },
-  { time: "2026-03-15 17:42", scene: "光伏巡检", algorithm: "光伏缺陷检测与定位", status: "已完成", output: "检测图 / 热力图" },
-  { time: "2026-03-15 11:06", scene: "森林防火", algorithm: "森林火点热成像识别", status: "处理中", output: "等待报告生成" },
+  { time: "2026-03-16 10:28", scene: "本体缺陷检测", algorithm: "输电线路本体缺陷检测", status: "已完成", output: "PDF 报告 / JSON" },
+  { time: "2026-03-15 17:42", scene: "热斑检测", algorithm: "光伏缺陷检测与定位", status: "已完成", output: "检测图 / 热力图" },
+  { time: "2026-03-15 11:06", scene: "山火识别", algorithm: "输电通道山火烟雾识别", status: "处理中", output: "等待报告生成" },
 ];
 
 const favorites = [
-  { industry: "电网巡检", algorithm: "配网杆塔关键部件识别", value: "售前展示重点 / 设备识别" },
-  { industry: "城市管理", algorithm: "城市交通违法检测", value: "城市治理项目常用" },
+  { industry: "配网巡检", algorithm: "配网杆塔关键部件识别", value: "售前演示重点 / 设备识别" },
+  { industry: "输电巡检", algorithm: "输电线路本体缺陷检测", value: "高价值巡检场景" },
 ];
 
 const feedback = [
   { time: "2026-03-16 09:10", issue: "希望增加结果叠加透明度调节", status: "待确认", owner: "产品经理" },
-  { time: "2026-03-15 16:20", issue: "光伏样本建议增加批量上传", status: "处理中", owner: "前端开发" },
+  { time: "2026-03-15 16:20", issue: "建议增加批量样本上传能力", status: "处理中", owner: "前端开发" },
   { time: "2026-03-14 14:35", issue: "增加误检标签反馈入口", status: "已完成", owner: "算法团队" },
 ];
 
@@ -209,9 +247,12 @@ const el = {
   loginBtn: document.getElementById("loginBtn"),
   heroSlides: document.getElementById("heroSlides"),
   heroDots: document.getElementById("heroDots"),
+  capabilityGrid: document.getElementById("capabilityGrid"),
   homeAlgoGrid: document.getElementById("homeAlgoGrid"),
   homeIndustryPills: document.getElementById("homeIndustryPills"),
   industryGrid: document.getElementById("industryGrid"),
+  newsMain: document.getElementById("newsMain"),
+  resourceList: document.getElementById("resourceList"),
   loginStatusCard: document.getElementById("loginStatusCard"),
   categoryTabs: document.getElementById("categoryTabs"),
   industryTabs: document.getElementById("industryTabs"),
@@ -245,8 +286,10 @@ const el = {
 function init() {
   bindEvents();
   renderHero();
+  renderCapabilities();
   renderHomeAlgorithms();
   renderIndustrySection();
+  renderNewsSection();
   renderMarketTabs();
   renderMarketAlgorithms();
   renderHistoryFilters();
@@ -265,7 +308,7 @@ function bindEvents() {
 
   el.recommendBtn.addEventListener("click", () => {
     state.selectedCategory = "目标检测";
-    state.selectedIndustry = "电网巡检";
+    state.selectedIndustry = "输电巡检";
     state.selectedAlgorithmId = "algo-1";
     renderMarketTabs();
     renderMarketAlgorithms();
@@ -318,9 +361,9 @@ function renderHero() {
   el.heroSlides.innerHTML = heroData.map((item, index) => `
     <article class="hero-slide ${index === state.heroIndex ? "active" : ""}">
       <img class="hero-image" src="${item.image}" alt="${item.title}">
-      <div class="hero-copy overlay">
-        <p class="eyebrow">Yupont AI Platform</p>
-        <h1>${item.title}</h1>
+      <div class="hero-slide-caption">
+        <p class="eyebrow">Scene Focus</p>
+        <h2>${item.title}</h2>
         <p>${item.text}</p>
       </div>
     </article>
@@ -349,11 +392,21 @@ function restartHeroTimer() {
   startHeroTimer();
 }
 
+function renderCapabilities() {
+  el.capabilityGrid.innerHTML = capabilities.map((item) => `
+    <article class="capability-card capability-lite">
+      <span class="capability-index">${item.key}</span>
+      <h3>${item.title}</h3>
+      <p>${item.desc}</p>
+    </article>
+  `).join("");
+}
+
 function renderHomeAlgorithms() {
-  const featured = algorithms.filter((item) => item.featured).slice(0, 6);
+  const featured = algorithms.filter((item) => item.featured).slice(0, 4);
   el.homeAlgoGrid.innerHTML = featured.map((item) => `
-    <article class="algo-card" data-home-algo="${item.id}">
-      <div class="algo-cover"></div>
+    <article class="algo-card home-featured-card" data-home-algo="${item.id}">
+      <div class="algo-cover" style="background-image: linear-gradient(180deg, rgba(14, 16, 24, 0.08), rgba(14, 16, 24, 0.35)), url('${item.image}');"></div>
       <p class="eyebrow">${item.industry}</p>
       <h3>${item.name}</h3>
       <p>${item.subtitle}</p>
@@ -361,6 +414,7 @@ function renderHomeAlgorithms() {
         <span class="status-pill">${item.category}</span>
         <span class="status-pill">${item.metric}</span>
       </div>
+      <button class="ghost-btn small">查看详情</button>
     </article>
   `).join("");
 
@@ -379,19 +433,19 @@ function renderHomeAlgorithms() {
 
 function renderIndustrySection() {
   el.homeIndustryPills.innerHTML = industries.map((item) => `<button class="tab-pill" data-home-industry="${item.name}">${item.name}</button>`).join("");
-  el.industryGrid.innerHTML = industries.map((item) => `
-    <article class="industry-card" data-card-industry="${item.name}">
+  el.industryGrid.innerHTML = industries.map((item, index) => `
+    <article class="industry-card industry-tile" data-card-industry="${item.name}">
+      <span class="industry-icon">0${index + 1}</span>
       <p class="eyebrow">${item.name}</p>
-      <h3>${item.name}解决方案</h3>
+      <h3>${item.name}</h3>
       <p>${item.desc}</p>
       <div class="algo-meta">
         ${item.scenes.map((scene) => `<span class="status-pill">${scene}</span>`).join("")}
       </div>
-      <button class="ghost-btn small" data-card-industry="${item.name}">进入专区</button>
     </article>
   `).join("");
 
-  [...document.querySelectorAll("[data-home-industry], .industry-card [data-card-industry]")].forEach((node) => {
+  [...document.querySelectorAll("[data-home-industry], [data-card-industry]")].forEach((node) => {
     node.addEventListener("click", () => {
       state.selectedIndustry = node.dataset.homeIndustry || node.dataset.cardIndustry;
       state.selectedCategory = "全部算法";
@@ -400,6 +454,29 @@ function renderIndustrySection() {
       switchView("market");
     });
   });
+}
+
+function renderNewsSection() {
+  el.newsMain.innerHTML = `
+    <article class="news-feature support-feature">
+      <div class="news-body">
+        <p class="eyebrow">Support Material</p>
+        <h3>${homeSupport.title}</h3>
+        <p>${homeSupport.desc}</p>
+        <span class="news-meta">${homeSupport.meta}</span>
+      </div>
+    </article>
+  `;
+
+  el.resourceList.innerHTML = resources.map((item, index) => `
+    <article class="resource-card support-card">
+      <span class="resource-tag">0${index + 1}</span>
+      <div>
+        <strong>${item.title}</strong>
+        <p>${item.meta}</p>
+      </div>
+    </article>
+  `).join("");
 }
 
 function renderMarketTabs() {
@@ -429,8 +506,7 @@ function getFilteredAlgorithms() {
     const categoryOk = state.selectedCategory === "全部算法" || item.category === state.selectedCategory;
     const industryOk = state.selectedIndustry === "全部" || item.industry === state.selectedIndustry;
     const text = [item.name, item.subtitle, item.scene, item.desc, item.category, item.industry].join(" ").toLowerCase();
-    const keywordOk = !keyword || text.includes(keyword);
-    return categoryOk && industryOk && keywordOk;
+    return categoryOk && industryOk && (!keyword || text.includes(keyword));
   });
 }
 
@@ -442,7 +518,7 @@ function renderMarketAlgorithms() {
 
   el.marketAlgoGrid.innerHTML = list.map((item) => `
     <article class="algo-card ${state.selectedAlgorithmId === item.id ? "active" : ""}" data-market-algo="${item.id}">
-      <div class="algo-cover"></div>
+      <div class="algo-cover" style="background-image: linear-gradient(180deg, rgba(14, 16, 24, 0.08), rgba(14, 16, 24, 0.35)), url('${item.image}');"></div>
       <p class="eyebrow">${item.industry} · ${item.scene}</p>
       <h3>${item.name}</h3>
       <p>${item.subtitle}</p>
@@ -476,7 +552,7 @@ function renderDetail() {
   el.detailPanel.innerHTML = `
     <p class="eyebrow">Algorithm Detail</p>
     <h3>${item.name}</h3>
-    <div class="detail-cover"></div>
+    <div class="detail-cover" style="background-image: linear-gradient(180deg, rgba(14, 16, 24, 0.08), rgba(14, 16, 24, 0.35)), url('${item.image}');"></div>
     <div class="detail-thumbs">
       <div class="thumb"></div>
       <div class="thumb"></div>
@@ -485,7 +561,7 @@ function renderDetail() {
     <div class="detail-specs">
       <div class="spec-card"><span>算法分类</span><strong>${item.category}</strong></div>
       <div class="spec-card"><span>适用行业</span><strong>${item.industry}</strong></div>
-      <div class="spec-card"><span>技术架构</span><strong>${item.stack}</strong></div>
+      <div class="spec-card"><span>技术栈</span><strong>${item.stack}</strong></div>
       <div class="spec-card"><span>关键指标</span><strong>${item.metric}</strong></div>
     </div>
     <div class="detail-body">

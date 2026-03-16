@@ -13,7 +13,7 @@
     <div class="header-inner">
       <a class="brand" href="#" data-view-link="home">
         <div class="brand-logo">
-          <img src="./logo.png" alt="北京煜邦电力技术股份有限公司 Logo">
+          <img src="./logo.png" alt="煜邦电力 Logo">
         </div>
         <div class="brand-copy">
           <strong>煜邦视觉算法平台</strong>
@@ -37,62 +37,112 @@
 
   <main class="main-shell">
     <section class="view active" id="homeView">
-      <section class="hero">
-        <div class="hero-main">
-          <div class="hero-slides" id="heroSlides"></div>
-          <div class="hero-dots" id="heroDots"></div>
+      <section class="home-section home-hero">
+        <div class="section-inner hero-shell">
+          <div class="hero-copy-block">
+            <p class="eyebrow">YUPONT VISION AI</p>
+            <h1>智能视觉，驱动电力场景商业落地</h1>
+            <p class="hero-lead">聚焦输电、配网、光伏、安全监管与应急场景，提供算法展示、在线验证、方案对接与项目落地的一体化平台。</p>
+            <div class="hero-action-row">
+              <button class="primary-btn" data-view-jump="market">查看精选算法</button>
+              <button class="ghost-btn" data-view-jump="contact">预约方案演示</button>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="hero-main">
+              <div class="hero-slides" id="heroSlides"></div>
+              <div class="hero-dots" id="heroDots"></div>
+            </div>
+          </div>
         </div>
-        <aside class="hero-side">
-          <div class="info-card hero-value">
-            <p class="eyebrow">Platform Value</p>
-            <h3>面向电力与行业场景的视觉算法平台</h3>
-            <p>视觉算法平台提供面向电力与行业场景的算法能力管理与在线推理环境，支持算法分类管理、场景能力展示、在线测试与结果可视化。通过统一平台实现算法能力的集中管理、效果验证与测试记录留存，支撑算法能力评估与业务方案展示。</p>
-          </div>
-          <div class="stats-grid">
-            <div class="stat-card">
-              <span>重点行业</span>
-              <strong>4+</strong>
-              <p>电网巡检、应急救援、城市管理、农林植保</p>
-            </div>
-            <div class="stat-card">
-              <span>算法方向</span>
-              <strong>12</strong>
-              <p>目标检测、语义分割、异常分析、多模态识别</p>
-            </div>
-            <div class="stat-card">
-              <span>体验路径</span>
-              <strong>3 步</strong>
-              <p>选算法、传样本、看结果</p>
-            </div>
-            <div class="stat-card accent">
-              <span>算法能力库</span>
-              <strong>持续扩展</strong>
-              <p>聚焦电力与行业场景，沉淀电力与行业视觉算法能力</p>
-            </div>
-          </div>
-        </aside>
       </section>
 
-      <section class="section-block">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Featured Algorithms</p>
-            <h2>重点算法介绍</h2>
+      <section class="home-section capability-band">
+        <div class="section-inner">
+          <div class="section-head home-head split-head">
+            <div>
+              <p class="eyebrow">Core Capability</p>
+              <h2>核心技术能力</h2>
+            </div>
+            <p class="section-intro">围绕算法资产管理、在线验证和行业化交付，构建可展示、可验证、可承接的平台能力闭环。</p>
           </div>
-          <button class="ghost-btn small" data-view-jump="market">进入算法商城</button>
+          <div class="capability-grid" id="capabilityGrid"></div>
         </div>
-        <div class="algo-grid" id="homeAlgoGrid"></div>
       </section>
 
-      <section class="section-block">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Industry Solutions</p>
-            <h2>行业解决方案入口</h2>
+      <section class="home-section algorithm-band">
+        <div class="section-inner">
+          <div class="section-head home-head">
+            <div>
+              <p class="eyebrow">Featured Models</p>
+              <h2>精选算法模型</h2>
+            </div>
+            <button class="ghost-btn small" data-view-jump="market">进入算法商城</button>
           </div>
-          <div class="pill-group" id="homeIndustryPills"></div>
+          <div class="algo-grid home-algo-grid" id="homeAlgoGrid"></div>
         </div>
-        <div class="industry-grid" id="industryGrid"></div>
+      </section>
+
+      <section class="home-section solution-band">
+        <div class="section-inner">
+          <div class="section-head home-head split-head">
+            <div>
+              <p class="eyebrow">Industry Solutions</p>
+              <h2>行业解决方案</h2>
+            </div>
+            <p class="section-intro">面向电力巡检、城市治理与应急监管等典型场景，构建从算法能力到业务方案的应用入口。</p>
+          </div>
+          <div class="pill-group home-industry-pills" id="homeIndustryPills"></div>
+          <div class="industry-grid home-industry-grid" id="industryGrid"></div>
+        </div>
+      </section>
+
+      <section class="home-section resource-band">
+        <div class="section-inner proof-layout">
+          <div class="proof-copy">
+            <p class="eyebrow">Delivery Support</p>
+            <h2>支持从售前演示走向项目推进</h2>
+            <p>首页聚焦资料支撑、标准输出和演示路径，不再承担资讯堆叠角色，让平台更像商业官网而不是汇报页面。</p>
+          </div>
+          <div class="news-main" id="newsMain"></div>
+          <div class="news-side" id="resourceList"></div>
+        </div>
+      </section>
+
+      <section class="home-section business-band">
+        <div class="section-inner business-strip">
+          <div class="business-copy">
+            <p class="eyebrow">Business Cooperation</p>
+            <h2>推动算法能力进入真实业务场景</h2>
+            <p>支持平台演示、算法能力交流、行业方案咨询与项目合作对接，面向电力及相关行业客户提供定向服务。</p>
+            <div class="business-actions">
+              <button class="primary-btn" data-view-jump="contact">联系商务团队</button>
+              <button class="ghost-btn" data-view-jump="market">进入算法商城</button>
+            </div>
+          </div>
+          <div class="business-grid">
+            <div class="business-card">
+              <span>企业主体</span>
+              <strong>北京煜邦电力技术股份有限公司</strong>
+              <p>聚焦电力数字化与视觉智能化应用，服务高价值行业场景。</p>
+            </div>
+            <div class="business-card">
+              <span>商务咨询</span>
+              <strong>400-010-xxxx</strong>
+              <p>工作日 9:00 - 18:00</p>
+            </div>
+            <div class="business-card">
+              <span>资料获取</span>
+              <strong>ai@yupont.com</strong>
+              <p>支持能力清单、案例材料与方案资料获取。</p>
+            </div>
+            <div class="business-card action">
+              <span>合作方式</span>
+              <strong>方案咨询 / 产品演示 / 项目合作</strong>
+              <button class="primary-btn small" data-view-jump="contact">预约演示</button>
+            </div>
+          </div>
+        </div>
       </section>
     </section>
 
@@ -101,12 +151,12 @@
         <div>
           <p class="eyebrow">Algorithm Marketplace</p>
           <h2>按算法分类与行业场景快速查找能力</h2>
-          <p>先按算法类型筛选，再按行业查看算法，支持详情查看、在线测试和测试记录保存。</p>
+          <p>支持按算法类型与行业场景筛选，查看详情、在线测试并保存测试记录，形成标准化展示与验证路径。</p>
         </div>
         <div class="status-card" id="loginStatusCard">
           <span>当前状态</span>
           <strong>未登录</strong>
-          <p>登录后可进行在线测试并沉淀测试记录。</p>
+          <p>登录后可进行在线测试，并沉淀测试记录。</p>
         </div>
       </section>
 
@@ -126,7 +176,7 @@
           <div class="empty-detail">
             <p class="eyebrow">Algorithm Detail</p>
             <h3>选择一个算法查看详情</h3>
-            <p>这里会显示算法简介、核心指标、缩略图和测试入口。</p>
+            <p>这里会展示算法简介、核心指标、缩略图和测试入口。</p>
           </div>
         </aside>
       </section>
@@ -145,7 +195,7 @@
         <article class="info-card contact-card">
           <p class="eyebrow">Company</p>
           <h3>北京煜邦电力技术股份有限公司</h3>
-          <p>聚焦电力行业数字化与视觉智能化应用，围绕输电、配网、光伏、安全监察等场景，打造可展示、可测试、可转化的视觉算法平台。</p>
+          <p>聚焦电力行业数字化与视觉智能化应用，围绕输电、配网、光伏与安全监管等场景，打造可展示、可测试、可转化的视觉算法平台。</p>
         </article>
         <article class="info-card contact-card">
           <p class="eyebrow">Contact</p>
@@ -163,8 +213,8 @@
           <ul class="contact-list">
             <li>电网巡检算法展示</li>
             <li>算法商城与在线测试</li>
-            <li>用户测试留痕与反馈追踪</li>
-            <li>售前演示与行业方案支撑</li>
+            <li>用户测试留痕与反馈跟踪</li>
+            <li>售前演示与行业方案支持</li>
           </ul>
         </article>
       </section>
@@ -175,7 +225,7 @@
         <div>
           <p class="eyebrow">User Center</p>
           <h2>用户中心</h2>
-          <p>围绕测试记录、我的收藏和我的反馈构建试用闭环。</p>
+          <p>围绕测试记录、我的收藏和我的反馈，构建试用闭环。</p>
         </div>
         <button class="ghost-btn" id="exportBtn">导出摘要</button>
       </section>
