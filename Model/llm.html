@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大模型 - 煜邦视觉算法平台</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="site-header site-header-solid">
+    <div class="header-inner">
+      <a class="brand" href="./index.html">
+        <div class="brand-logo">
+          <img src="./logo.png" alt="煜邦电力 Logo">
+        </div>
+        <div class="brand-copy">
+          <strong>煜邦视觉算法平台</strong>
+          <span>北京煜邦电力技术股份有限公司</span>
+        </div>
+      </a>
+      <nav class="top-nav">
+        <a class="nav-link" href="./index.html">首页</a>
+        <a class="nav-link" href="./market.html">算法商城</a>
+        <a class="nav-link active" href="./llm.html">大模型</a>
+        <a class="nav-link" href="./resources.html">资源中心</a>
+      </nav>
+      <div class="header-actions">
+        <a class="ghost-btn" href="./resources.html">获取资料</a>
+        <a class="primary-btn" href="./resources.html">预约演示</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-shell page-shell">
+    <section class="page-hero llm-hero">
+      <div class="page-hero-copy">
+        <p class="eyebrow">Large Models</p>
+        <h1>面向电力场景的大模型能力</h1>
+        <p>围绕视觉理解、知识问答、报告生成与多模态预警，构建更适合复杂业务流程的大模型能力矩阵。</p>
+      </div>
+      <div class="page-hero-aside">
+        <strong>能力方向</strong>
+        <p>从单点识别走向更强解释力、交互力与业务辅助能力。</p>
+      </div>
+    </section>
+
+    <section class="llm-layout">
+      <div class="llm-grid" id="llmGrid"></div>
+      <aside class="llm-scenarios">
+        <p class="eyebrow">Use Cases</p>
+        <h2>典型应用方向</h2>
+        <div id="llmScenarios"></div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="./platform-data.js"></script>
+  <script src="./llm.js"></script>
+</body>
+</html>
