@@ -72,8 +72,7 @@ function buildHeaderMarkup() {
           <img src="./logo.png" alt="煜邦电力 Logo">
         </div>
         <div class="brand-copy">
-          <strong>煜邦视觉算法平台</strong>
-          <span>北京煜邦电力技术股份有限公司</span>
+          <strong>视觉算法平台</strong>
         </div>
       </a>
       <nav class="top-nav">
