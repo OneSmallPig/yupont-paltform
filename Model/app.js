@@ -9,6 +9,7 @@ const homeAlgoGridEl = document.getElementById("homeAlgoGrid");
 const industryGridEl = document.getElementById("industryGrid");
 const resourceListEl = document.getElementById("resourceList");
 const newsMainEl = document.getElementById("newsMain");
+const resourceActionsEl = document.getElementById("resourceActions");
 const solutionFeatureEl = document.getElementById("solutionFeature");
 const recommendModalTriggerEl = document.getElementById("openRecommendModal");
 const recommendInputEl = document.getElementById("recommendInput");
@@ -123,27 +124,53 @@ function renderIndustrySection() {
 }
 
 function renderResources() {
-  if (!resourceListEl || !newsMainEl) return;
+  if (!resourceListEl || !newsMainEl || !resourceActionsEl) return;
+
+  const { featured, groups, actions } = platformData.resourceHub;
+
   newsMainEl.innerHTML = `
-    <article class="news-feature support-feature">
-      <div class="news-body">
-        <p class="eyebrow">Resource Center</p>
-        <h3>在线检测、结果导出与项目支持资料一体呈现</h3>
-        <p>围绕算法目录、检测说明、项目案例和商务支撑资料，形成更适合客户沟通和演示的资源中心入口。</p>
-        <span class="news-meta">售前支持 · 2026-03-17</span>
+    <article class="resource-feature-card">
+      <p class="eyebrow">${featured.type}</p>
+      <h3>${featured.title}</h3>
+      <p>${featured.desc}</p>
+      <div class="resource-highlight-list">
+        ${featured.highlights.map((item) => `<span class="status-pill status-pill-accent">${item}</span>`).join("")}
       </div>
+      <a class="primary-btn small resource-feature-link" href="${featured.actionHref}">${featured.actionLabel}</a>
     </article>
   `;
 
-  resourceListEl.innerHTML = platformData.resources.slice(0, 4).map((item, index) => `
-    <article class="resource-card support-card">
-      <span class="resource-tag">0${index + 1}</span>
-      <div>
-        <strong>${item.title}</strong>
-        <p>${item.meta}</p>
+  resourceListEl.innerHTML = groups.map((group) => `
+    <section class="resource-group-panel">
+      <div class="resource-group-head">
+        <h3>${group.title}</h3>
       </div>
-    </article>
+      <div class="resource-group-list">
+        ${group.items.map((item) => `
+          <article class="resource-group-item">
+            <strong>${item.name}</strong>
+            <p>${item.meta}</p>
+          </article>
+        `).join("")}
+      </div>
+    </section>
   `).join("");
+
+  resourceActionsEl.innerHTML = actions.map((item) => `
+    <a class="resource-action-card ${item.href === "#cooperation" ? "resource-action-trigger" : ""}" href="${item.href}" ${item.href === "#cooperation" ? 'data-open-modal="cooperationModal"' : ""}>
+      <strong>${item.title}</strong>
+      <p>${item.desc}</p>
+    </a>
+  `).join("");
+
+  document.querySelectorAll("[data-open-modal]").forEach((node) => {
+    if (node.dataset.boundOpen === "true") return;
+    node.dataset.boundOpen = "true";
+    node.addEventListener("click", (event) => {
+      event.preventDefault();
+      openModal(node.dataset.openModal);
+    });
+  });
 }
 
 function getRecommendationMatches(query) {

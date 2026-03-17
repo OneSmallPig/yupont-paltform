@@ -82,17 +82,21 @@ function buildHeaderMarkup() {
       <div class="header-actions header-user-area">
         <div class="user-menu ${user.loggedIn ? "is-authenticated" : ""}">
           <button class="user-menu-trigger" type="button" id="userMenuTrigger">
-            <span class="user-avatar">${user.name.slice(0, 1)}</span>
-            <span class="user-trigger-copy">
-              <strong>${user.loggedIn ? user.name : "用户中心"}</strong>
-              <span>${user.loggedIn ? user.membership : "登录 / 注册"}</span>
-            </span>
+            <span class="user-avatar ${user.loggedIn ? "" : "user-avatar-guest"}">${user.loggedIn ? user.name.slice(0, 1) : ""}</span>
           </button>
           <div class="user-menu-panel" id="userMenuPanel">
             ${user.loggedIn ? `
+              <div class="user-menu-summary">
+                <strong>${user.name}</strong>
+                <span>${user.email}</span>
+              </div>
               <a class="user-menu-link" href="./user.html">进入用户页面</a>
               <button class="user-menu-link" type="button" id="logoutAction">退出登录</button>
             ` : `
+              <div class="user-menu-summary">
+                <strong>用户中心</strong>
+                <span>登录后查看个人信息</span>
+              </div>
               <button class="user-menu-link" type="button" data-auth-mode="login">登录</button>
               <button class="user-menu-link" type="button" data-auth-mode="register">注册</button>
             `}

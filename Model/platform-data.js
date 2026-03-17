@@ -211,6 +211,44 @@ const platformData = {
     { title: "项目案例摘要", meta: "案例精选", type: "案例沉淀" },
     { title: "演示脚本模板", meta: "售前支持", type: "交付资料" },
   ],
+  resourceHub: {
+    featured: {
+      title: "视觉算法平台能力总览",
+      type: "重点资料",
+      desc: "从平台定位、算法分类、在线检测、结果导出到合作推进，形成面向售前展示与项目沟通的总览入口。",
+      highlights: ["平台能力地图", "在线检测流程", "导出与接入说明"],
+      actionLabel: "查看总览",
+      actionHref: "./resources.html",
+    },
+    groups: [
+      {
+        title: "方案资料",
+        items: [
+          { name: "输电巡检解决方案", meta: "适用于输电本体缺陷与通道隐患场景" },
+          { name: "光伏缺陷检测方案", meta: "覆盖热斑检测、组件异常与定位流程" },
+        ],
+      },
+      {
+        title: "能力说明",
+        items: [
+          { name: "在线检测与结果导出指南", meta: "说明上传、检测、JSON/PDF 导出流程" },
+          { name: "API 接入说明", meta: "适合系统对接与业务流程集成评估" },
+        ],
+      },
+      {
+        title: "项目案例",
+        items: [
+          { name: "典型案例：光伏缺陷检测", meta: "从问题发现到结果留存的完整案例摘要" },
+          { name: "典型案例：安全监管识别", meta: "展示作业安全监管类项目的落地方式" },
+        ],
+      },
+    ],
+    actions: [
+      { title: "算法商城", desc: "浏览算法分类、场景能力并进入在线检测与验证流程", href: "./market.html" },
+      { title: "大模型能力", desc: "查看视觉理解、知识问答与多模态分析相关能力入口", href: "./llm.html" },
+      { title: "合作咨询", desc: "查看商务合作、资料对接与项目推进相关联系方式", href: "#cooperation" },
+    ],
+  },
   llms: [
     {
       name: "电力巡检多模态大模型",
