@@ -6,32 +6,65 @@
   <title>算法商城 - 煜邦视觉算法平台</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
-<body data-page="market">
+<body class="page-market" data-page="market">
   <div class="page-bg"></div>
   <header class="site-header site-header-solid"></header>
 
   <main class="main-shell page-shell">
-    <section class="banner-card page-banner">
-      <div>
+    <section class="page-hero market-hero">
+      <div class="page-hero-copy market-hero-copy">
         <p class="eyebrow">Algorithm Marketplace</p>
-        <h2>按算法分类与行业场景快速查找能力</h2>
-        <p>支持按算法类型与行业场景筛选，查看详情并进入在线检测流程。</p>
-      </div>
-      <div class="status-card">
-        <span>平台定位</span>
-        <strong>算法展示与在线验证</strong>
-        <p>面向售前演示、客户交流与场景方案组合。</p>
-      </div>
-    </section>
-
-    <section class="market-toolbar">
-      <div class="toolbar-group" id="categoryTabs"></div>
-      <div class="toolbar-row">
-        <div class="toolbar-group" id="industryTabs"></div>
-        <div class="search-group">
-          <input id="searchInput" type="search" placeholder="搜索算法名称、场景、标签">
+        <h1>按算法能力与行业场景快速组织商城内容</h1>
+        <p>以首页统一的品牌视觉为基础，围绕输电、变电、配网、光伏与安监等业务场景，集中展示平台内可直接演示、筛选与进入在线检测流程的核心算法。</p>
+        <div class="hero-action-row">
+          <a class="primary-btn" href="#marketAlgoGrid">浏览算法列表</a>
+          <a class="ghost-btn" href="./index.html">返回平台首页</a>
         </div>
       </div>
+      <aside class="page-hero-aside market-hero-aside">
+        <div class="market-hero-panel">
+          <span class="market-panel-label">平台定位</span>
+          <strong>算法展示与在线验证入口</strong>
+          <p>面向售前演示、客户交流与场景方案组合，形成统一、清晰、可筛选的算法陈列界面。</p>
+        </div>
+        <div class="market-hero-stats">
+          <div class="market-stat-card">
+            <span>当前算法</span>
+            <strong id="marketResultCount">0</strong>
+          </div>
+          <div class="market-stat-card">
+            <span>覆盖行业</span>
+            <strong id="marketIndustryCount">0</strong>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="market-controls">
+      <div class="market-controls-head">
+        <div>
+          <p class="eyebrow">Filter Console</p>
+          <h2>按类别、行业与关键词快速定位算法</h2>
+        </div>
+        <p class="market-controls-copy">将首页的“精选算法”展示方式扩展为可检索、可筛选、可查看详情的商城工作台，帮助业务侧更快完成能力匹配与演示准备。</p>
+      </div>
+      <section class="market-toolbar">
+        <div class="toolbar-group" id="categoryTabs"></div>
+        <div class="toolbar-row">
+          <div class="toolbar-group" id="industryTabs"></div>
+          <div class="search-group market-search-group">
+            <input id="searchInput" type="search" placeholder="搜索算法名称、场景、标签">
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="market-content-head">
+      <div>
+        <p class="eyebrow">Result Overview</p>
+        <h2>算法列表与详情联动浏览</h2>
+      </div>
+      <p class="market-result-meta" id="marketResultMeta">正在加载算法数据...</p>
     </section>
 
     <section class="market-layout">
