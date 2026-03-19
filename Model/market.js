@@ -2,26 +2,60 @@ const categoryTabsEl = document.getElementById("categoryTabs");
 const industryTabsEl = document.getElementById("industryTabs");
 const searchInputEl = document.getElementById("searchInput");
 const marketGridEl = document.getElementById("marketAlgoGrid");
-const detailPanelEl = document.getElementById("detailPanel");
-const marketResultCountEl = document.getElementById("marketResultCount");
-const marketIndustryCountEl = document.getElementById("marketIndustryCount");
 const marketResultMetaEl = document.getElementById("marketResultMeta");
+const favoriteFilterBtnEl = document.getElementById("favoriteFilterBtn");
+const openDemandModalEl = document.getElementById("openDemandModal");
+const demandFormEl = document.getElementById("demandForm");
+const demandFormNoteEl = document.getElementById("demandFormNote");
 
 const marketState = {
   selectedCategory: "全部算法",
   selectedIndustry: "全部",
-  selectedId: platformData.algorithms[0]?.id ?? "",
+  favoritesOnly: false,
 };
 
 const marketCategories = ["全部算法", "目标检测", "语义分割", "异常分析", "多模态识别", "图像处理"];
 
+function isMarketFavorite(algorithmId) {
+  const user = getCurrentUser();
+  return user.loggedIn && user.favorites.includes(algorithmId);
+}
+
+function getFavoriteDisplayCount(item) {
+  return item.favorites + (isMarketFavorite(item.id) ? 1 : 0);
+}
+
+function getFilteredAlgorithms() {
+  const keyword = searchInputEl.value.trim().toLowerCase();
+
+  return platformData.algorithms.filter((item) => {
+    const categoryOk = marketState.selectedCategory === "全部算法" || item.category === marketState.selectedCategory;
+    const industryOk = marketState.selectedIndustry === "全部" || item.industry === marketState.selectedIndustry;
+    const favoriteOk = !marketState.favoritesOnly || isMarketFavorite(item.id);
+    const text = [
+      item.name,
+      item.subtitle,
+      item.scene,
+      item.desc,
+      item.businessDesc,
+      item.industry,
+      item.badge,
+      item.stack,
+      item.metric,
+      item.category,
+    ].join(" ").toLowerCase();
+
+    return categoryOk && industryOk && favoriteOk && (!keyword || text.includes(keyword));
+  });
+}
+
 function renderMarketTabs() {
   categoryTabsEl.innerHTML = marketCategories.map((item) => `
-    <button class="tab-pill ${marketState.selectedCategory === item ? "active" : ""}" data-category="${item}" type="button">${item}</button>
+    <button class="market-filter-chip ${marketState.selectedCategory === item ? "active" : ""}" data-category="${item}" type="button">${item}</button>
   `).join("");
 
   industryTabsEl.innerHTML = ["全部", ...platformData.industries.map((item) => item.name)].map((item) => `
-    <button class="tab-pill ${marketState.selectedIndustry === item ? "active" : ""}" data-industry="${item}" type="button">${item}</button>
+    <button class="market-filter-chip market-filter-chip-soft ${marketState.selectedIndustry === item ? "active" : ""}" data-industry="${item}" type="button">${item}</button>
   `).join("");
 
   document.querySelectorAll("[data-category]").forEach((node) => {
@@ -39,67 +73,23 @@ function renderMarketTabs() {
       renderMarket();
     });
   });
+
+  favoriteFilterBtnEl.classList.toggle("active", marketState.favoritesOnly);
+  favoriteFilterBtnEl.setAttribute("aria-label", marketState.favoritesOnly ? "查看全部算法" : "仅看收藏");
+  favoriteFilterBtnEl.setAttribute("title", marketState.favoritesOnly ? "查看全部算法" : "仅看收藏");
 }
 
-function getFilteredAlgorithms() {
-  const keyword = searchInputEl.value.trim().toLowerCase();
-  return platformData.algorithms.filter((item) => {
-    const categoryOk = marketState.selectedCategory === "全部算法" || item.category === marketState.selectedCategory;
-    const industryOk = marketState.selectedIndustry === "全部" || item.industry === marketState.selectedIndustry;
-    const text = [item.name, item.subtitle, item.scene, item.desc, item.industry, item.stack, item.metric].join(" ").toLowerCase();
-    return categoryOk && industryOk && (!keyword || text.includes(keyword));
-  });
-}
-
-function renderResultSummary(list) {
-  const industryCount = new Set(platformData.algorithms.map((item) => item.industry)).size;
+function renderSummary(list) {
   const activeFilters = [
     marketState.selectedCategory !== "全部算法" ? marketState.selectedCategory : "",
     marketState.selectedIndustry !== "全部" ? marketState.selectedIndustry : "",
-    searchInputEl.value.trim() ? `关键词: ${searchInputEl.value.trim()}` : "",
+    marketState.favoritesOnly ? "仅看收藏" : "",
+    searchInputEl.value.trim() ? `关键词：${searchInputEl.value.trim()}` : "",
   ].filter(Boolean);
 
-  marketResultCountEl.textContent = String(list.length);
-  marketIndustryCountEl.textContent = String(industryCount);
   marketResultMetaEl.textContent = activeFilters.length
-    ? `当前共匹配 ${list.length} 个算法，筛选条件为 ${activeFilters.join(" / ")}。`
-    : `当前展示全部 ${list.length} 个算法，可按行业、能力类别或关键词继续缩小范围。`;
-}
-
-function renderDetail() {
-  const item = platformData.algorithms.find((entry) => entry.id === marketState.selectedId);
-  if (!item) {
-    detailPanelEl.innerHTML = `
-      <div class="empty-detail market-empty-detail">
-        <p class="eyebrow">Algorithm Detail</p>
-        <h3>当前筛选条件下暂无算法详情</h3>
-        <p>请调整类别、行业或关键词条件，重新定位可展示的算法能力。</p>
-      </div>
-    `;
-    return;
-  }
-
-  detailPanelEl.innerHTML = `
-    <div class="market-detail-head">
-      <p class="eyebrow">Algorithm Detail</p>
-      <h3>${item.name}</h3>
-      <p>${item.subtitle}</p>
-    </div>
-    <div class="detail-cover" style="background-image: url('${item.image}');"></div>
-    <div class="detail-specs">
-      <div class="spec-card"><span>算法分类</span><strong>${item.category}</strong></div>
-      <div class="spec-card"><span>适用行业</span><strong>${item.industry}</strong></div>
-      <div class="spec-card"><span>技术栈</span><strong>${item.stack}</strong></div>
-      <div class="spec-card"><span>核心指标</span><strong>${item.metric}</strong></div>
-    </div>
-    <div class="detail-body">
-      <p>${item.desc}</p>
-    </div>
-    <div class="detail-actions">
-      <a class="primary-btn" href="./algorithm.html?id=${item.id}">进入在线检测</a>
-      <a class="ghost-btn" href="./algorithm.html?id=${item.id}">查看详情页</a>
-    </div>
-  `;
+    ? `当前共展示 ${list.length} 个算法，已启用 ${activeFilters.join(" / ")}。`
+    : "";
 }
 
 function renderEmptyState() {
@@ -107,60 +97,113 @@ function renderEmptyState() {
     <article class="market-empty-state">
       <p class="eyebrow">No Match</p>
       <h3>没有找到符合当前条件的算法</h3>
-      <p>可以尝试清空关键词、切换行业，或返回“全部算法”查看平台完整能力。</p>
-      <button class="ghost-btn" type="button" id="resetMarketFilters">重置筛选条件</button>
+      <p>建议先恢复“全部算法”，再按行业或关键词逐步缩小范围，避免过滤条件过多。</p>
+      <button class="ghost-btn" type="button" id="resetEmptyStateFilters">重置筛选条件</button>
     </article>
   `;
 
-  document.getElementById("resetMarketFilters")?.addEventListener("click", () => {
-    marketState.selectedCategory = "全部算法";
-    marketState.selectedIndustry = "全部";
-    searchInputEl.value = "";
-    renderMarketTabs();
-    renderMarket();
+  document.getElementById("resetEmptyStateFilters")?.addEventListener("click", resetFilters);
+}
+
+function renderGrid(list) {
+  if (!list.length) {
+    renderEmptyState();
+    return;
+  }
+
+  marketGridEl.innerHTML = list.map((item) => `
+    <article class="algo-card home-featured-card sharp-featured-card market-card">
+      <div class="algo-cover sharp-featured-cover market-card-cover" style="background-image: url('${item.image}');"></div>
+      <div class="sharp-featured-body market-card-body">
+        <div class="market-card-top">
+          <span class="sharp-featured-type">${item.category}</span>
+          <div class="market-card-icon-actions">
+            <button class="market-favorite-icon ${isMarketFavorite(item.id) ? "is-favorite" : ""}" data-favorite-toggle="${item.id}" type="button" aria-label="${isMarketFavorite(item.id) ? "取消收藏" : "添加收藏"}">
+              <span aria-hidden="true">${isMarketFavorite(item.id) ? "★" : "☆"}</span>
+            </button>
+            <a class="market-detail-link" href="./algorithm.html?id=${item.id}" aria-label="查看算法详情"><span aria-hidden="true">➜</span></a>
+          </div>
+        </div>
+        <h3>${item.name}</h3>
+        <div class="market-card-tags">
+          <span class="market-tag market-tag-scene">${item.industry}</span>
+          <span class="market-tag market-tag-light">${item.scene}</span>
+          <span class="market-tag market-tag-accent">${item.badge}</span>
+        </div>
+      </div>
+    </article>
+  `).join("");
+}
+
+function bindFavoriteActions() {
+  document.querySelectorAll("[data-favorite-toggle]").forEach((node) => {
+    node.addEventListener("click", (event) => {
+      event.preventDefault();
+      const result = toggleFavoriteAlgorithm(node.dataset.favoriteToggle);
+      if (result === null) return;
+      renderMarket();
+    });
   });
 }
 
 function renderMarket() {
   const list = getFilteredAlgorithms();
-  if (list.length && !list.some((item) => item.id === marketState.selectedId)) {
-    marketState.selectedId = list[0].id;
-  }
+  renderSummary(list);
+  renderGrid(list);
+  bindFavoriteActions();
+}
 
-  renderResultSummary(list);
+function resetFilters() {
+  marketState.selectedCategory = "全部算法";
+  marketState.selectedIndustry = "全部";
+  marketState.favoritesOnly = false;
+  searchInputEl.value = "";
+  renderMarketTabs();
+  renderMarket();
+}
 
-  if (!list.length) {
-    marketState.selectedId = "";
-    renderEmptyState();
-    renderDetail();
-    return;
-  }
-
-  marketGridEl.innerHTML = list.map((item) => `
-    <article class="algo-card market-algo-card ${marketState.selectedId === item.id ? "active" : ""}" data-market-id="${item.id}">
-      <div class="algo-cover" style="background-image: url('${item.image}');"></div>
-      <p class="eyebrow">${item.industry} / ${item.scene}</p>
-      <h3>${item.name}</h3>
-      <p>${item.subtitle}</p>
-      <div class="algo-meta">
-        <span class="status-pill">${item.category}</span>
-        <span class="status-pill">${item.stack}</span>
-        <span class="status-pill">${item.metric}</span>
-      </div>
-      <p>${item.desc}</p>
-    </article>
-  `).join("");
-
-  document.querySelectorAll("[data-market-id]").forEach((node) => {
-    node.addEventListener("click", () => {
-      marketState.selectedId = node.dataset.marketId;
-      renderMarket();
-    });
+function bindDemandModal() {
+  openDemandModalEl?.addEventListener("click", () => {
+    demandFormNoteEl.textContent = "提交后将进入定制需求跟进流程。";
+    openModal("demandModal");
   });
 
-  renderDetail();
+  demandFormEl?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(demandFormEl);
+    const requiredFields = ["name", "phone", "company", "title", "requirement"];
+    const isValid = requiredFields.every((key) => String(formData.get(key) || "").trim());
+
+    if (!isValid) {
+      demandFormNoteEl.textContent = "请完整填写所有必填信息后再提交。";
+      return;
+    }
+
+    demandFormNoteEl.textContent = "需求已提交，我们会尽快与您联系。";
+    demandFormEl.reset();
+    window.setTimeout(() => closeModal("demandModal"), 900);
+  });
 }
 
 searchInputEl.addEventListener("input", renderMarket);
+
+favoriteFilterBtnEl.addEventListener("click", () => {
+  if (!getCurrentUser().loggedIn && !marketState.favoritesOnly) {
+    configureAuthModal("login");
+    openModal("authModal");
+    return;
+  }
+
+  marketState.favoritesOnly = !marketState.favoritesOnly;
+  renderMarketTabs();
+  renderMarket();
+});
+
+window.addEventListener("vision-user-updated", () => {
+  renderMarketTabs();
+  renderMarket();
+});
+
+bindDemandModal();
 renderMarketTabs();
 renderMarket();

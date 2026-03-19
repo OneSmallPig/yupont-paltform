@@ -55,6 +55,27 @@ function updateCurrentUser(patch) {
   window.dispatchEvent(new CustomEvent("vision-user-updated", { detail: window.__visionUserProfile }));
 }
 
+function isFavoriteAlgorithm(algorithmId) {
+  return getCurrentUser().favorites.includes(algorithmId);
+}
+
+function toggleFavoriteAlgorithm(algorithmId) {
+  const user = getCurrentUser();
+
+  if (!user.loggedIn) {
+    configureAuthModal("login");
+    openModal("authModal");
+    return null;
+  }
+
+  const nextFavorites = isFavoriteAlgorithm(algorithmId)
+    ? user.favorites.filter((id) => id !== algorithmId)
+    : [...new Set([...user.favorites, algorithmId])];
+
+  updateCurrentUser({ favorites: nextFavorites });
+  return nextFavorites.includes(algorithmId);
+}
+
 function buildHeaderMarkup() {
   const user = getCurrentUser();
   const page = document.body.dataset.page || "home";

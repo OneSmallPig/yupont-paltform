@@ -8,70 +8,97 @@
 </head>
 <body class="page-market" data-page="market">
   <div class="page-bg"></div>
-  <header class="site-header site-header-solid"></header>
+  <header class="site-header"></header>
 
   <main class="main-shell page-shell">
-    <section class="page-hero market-hero">
-      <div class="page-hero-copy market-hero-copy">
-        <p class="eyebrow">Algorithm Marketplace</p>
-        <h1>按算法能力与行业场景快速组织商城内容</h1>
-        <p>以首页统一的品牌视觉为基础，围绕输电、变电、配网、光伏与安监等业务场景，集中展示平台内可直接演示、筛选与进入在线检测流程的核心算法。</p>
-        <div class="hero-action-row">
-          <a class="primary-btn" href="#marketAlgoGrid">浏览算法列表</a>
-          <a class="ghost-btn" href="./index.html">返回平台首页</a>
+    <section class="market-hero-banner">
+      <div class="market-hero-media"></div>
+      <div class="market-hero-overlay"></div>
+      <div class="market-hero-content">
+        <div class="market-hero-copy">
+          <p class="eyebrow">Algorithm Marketplace</p>
+          <h1>围绕电网场景组织可直接演示的算法能力</h1>
+          <p>面向输电、变电、配网、光伏与安监等典型场景，集中展示平台可直接浏览、收藏与进入详情页的核心算法能力，让用户在进入商城时先看到价值，再决定下一步要深入哪一类能力。</p>
+          <div class="hero-action-row market-hero-actions">
+            <button class="market-demand-btn" type="button" id="openDemandModal">
+              <span>定制需求</span>
+              <i aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="market-hero-console">
+          <div class="market-search-panel">
+            <div class="market-search-input-wrap">
+              <input id="searchInput" type="search" placeholder="搜索算法名称、行业场景、业务标签">
+              <button class="market-collect-toggle" type="button" id="favoriteFilterBtn" aria-label="仅看收藏"></button>
+            </div>
+          </div>
+
+          <div class="market-hero-filter-block">
+            <span class="market-filter-label">算法分类</span>
+            <div class="market-filter-cluster" id="categoryTabs"></div>
+          </div>
+
+          <div class="market-hero-filter-block">
+            <span class="market-filter-label">行业场景</span>
+            <div class="market-filter-cluster market-filter-cluster-soft" id="industryTabs"></div>
+          </div>
         </div>
       </div>
-      <aside class="page-hero-aside market-hero-aside">
-        <div class="market-hero-panel">
-          <span class="market-panel-label">平台定位</span>
-          <strong>算法展示与在线验证入口</strong>
-          <p>面向售前演示、客户交流与场景方案组合，形成统一、清晰、可筛选的算法陈列界面。</p>
-        </div>
-        <div class="market-hero-stats">
-          <div class="market-stat-card">
-            <span>当前算法</span>
-            <strong id="marketResultCount">0</strong>
-          </div>
-          <div class="market-stat-card">
-            <span>覆盖行业</span>
-            <strong id="marketIndustryCount">0</strong>
-          </div>
-        </div>
-      </aside>
     </section>
 
-    <section class="market-controls">
-      <div class="market-controls-head">
+    <section class="market-grid-section">
+      <div class="market-section-head">
         <div>
-          <p class="eyebrow">Filter Console</p>
-          <h2>按类别、行业与关键词快速定位算法</h2>
+          <p class="eyebrow">Catalog</p>
+          <h2>算法能力陈列</h2>
         </div>
-        <p class="market-controls-copy">将首页的“精选算法”展示方式扩展为可检索、可筛选、可查看详情的商城工作台，帮助业务侧更快完成能力匹配与演示准备。</p>
+        <p class="market-result-meta" id="marketResultMeta">正在加载算法数据...</p>
       </div>
-      <section class="market-toolbar">
-        <div class="toolbar-group" id="categoryTabs"></div>
-        <div class="toolbar-row">
-          <div class="toolbar-group" id="industryTabs"></div>
-          <div class="search-group market-search-group">
-            <input id="searchInput" type="search" placeholder="搜索算法名称、场景、标签">
-          </div>
-        </div>
-      </section>
-    </section>
-
-    <section class="market-content-head">
-      <div>
-        <p class="eyebrow">Result Overview</p>
-        <h2>算法列表与详情联动浏览</h2>
-      </div>
-      <p class="market-result-meta" id="marketResultMeta">正在加载算法数据...</p>
-    </section>
-
-    <section class="market-layout">
       <div class="algo-grid market-grid" id="marketAlgoGrid"></div>
-      <aside class="detail-panel" id="detailPanel"></aside>
     </section>
   </main>
+
+  <div class="modal-shell" id="demandModal">
+    <div class="modal-mask" data-close-modal="demandModal"></div>
+    <div class="modal-card demand-modal-card">
+      <button class="modal-close" type="button" data-close-modal="demandModal">×</button>
+      <div class="modal-head">
+        <p class="eyebrow">Custom Request</p>
+        <h3>提交定制需求</h3>
+        <p>填写联系人信息与需求描述，便于我们按行业场景和算法能力进行定向沟通。</p>
+      </div>
+      <form class="demand-form" id="demandForm">
+        <div class="demand-form-grid">
+          <label>
+            <span>姓名</span>
+            <input name="name" type="text" placeholder="请输入姓名" required>
+          </label>
+          <label>
+            <span>电话</span>
+            <input name="phone" type="tel" placeholder="请输入联系电话" required>
+          </label>
+          <label>
+            <span>公司名称</span>
+            <input name="company" type="text" placeholder="请输入公司名称" required>
+          </label>
+          <label>
+            <span>职务</span>
+            <input name="title" type="text" placeholder="请输入职务" required>
+          </label>
+        </div>
+        <label>
+          <span>需求描述</span>
+          <textarea name="requirement" placeholder="请描述项目背景、关注场景、期望算法能力或交付方式" required></textarea>
+        </label>
+        <div class="demand-form-actions">
+          <span class="demand-form-note" id="demandFormNote">提交后将进入定制需求跟进流程。</span>
+          <button class="primary-btn" type="submit">提交需求</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script src="./platform-data.js"></script>
   <script src="./common.js"></script>
