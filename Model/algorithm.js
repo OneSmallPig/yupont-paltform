@@ -3,327 +3,266 @@ const selectedAlgorithm = platformData.algorithms.find((item) => item.id === det
 
 const heroEl = document.getElementById("algorithmHero");
 const sidebarEl = document.getElementById("algorithmSidebar");
-const comboPanelEl = document.getElementById("comboPanel");
-const uploadPreviewEl = document.getElementById("uploadPreview");
+const uploadPanelEl = document.getElementById("uploadPanel");
 const resultPreviewEl = document.getElementById("resultPreview");
 const resultMetricsEl = document.getElementById("resultMetrics");
 const resultStatusEl = document.getElementById("resultStatus");
-const comboToggleEl = document.getElementById("comboToggle");
-const fileInputEl = document.getElementById("detectionFile");
 const runBtnEl = document.getElementById("runDetectionBtn");
-const previewJsonBtnEl = document.getElementById("previewJsonBtn");
-const previewPdfBtnEl = document.getElementById("previewPdfBtn");
-const exportPreviewBodyEl = document.getElementById("exportPreviewBody");
-const downloadExportBtnEl = document.getElementById("downloadExportBtn");
+
+const detailSections = [
+  { label: "算法信息", value: selectedAlgorithm.category },
+  { label: "所属行业", value: selectedAlgorithm.industry },
+  { label: "核心场景", value: selectedAlgorithm.scene },
+  { label: "模型架构", value: selectedAlgorithm.stack },
+  { label: "热度收藏", value: `${selectedAlgorithm.favorites}` },
+  { label: "测试次数", value: `${selectedAlgorithm.tests}` },
+];
 
 const detectionState = {
-  fileName: "杆塔巡检样例.jpg",
+  uploadType: "image",
+  fileName: `${selectedAlgorithm.scene}-样例.jpg`,
   fileUrl: selectedAlgorithm.image,
-  selectedIds: [selectedAlgorithm.id],
   result: null,
-  exportType: "json",
 };
 
-function getAlgorithmById(id) {
-  return platformData.algorithms.find((item) => item.id === id);
+function isDetailFavorite() {
+  const user = getCurrentUser();
+  return user.loggedIn && user.favorites.includes(selectedAlgorithm.id);
+}
+
+function getFavoriteTotal() {
+  return selectedAlgorithm.favorites + (isDetailFavorite() ? 1 : 0);
+}
+
+function getHeroMetrics() {
+  return [
+    selectedAlgorithm.metric,
+    selectedAlgorithm.category,
+    `${getFavoriteTotal()} 收藏`,
+    `${selectedAlgorithm.tests} 次检测`,
+  ];
 }
 
 function renderDetailHero() {
   document.getElementById("detailBreadcrumb").textContent = selectedAlgorithm.name;
+
   heroEl.innerHTML = `
-    <div class="algorithm-hero-main">
-      <div class="algorithm-icon">AI</div>
-      <div class="algorithm-hero-copy">
-        <p class="eyebrow">${selectedAlgorithm.industry}</p>
-        <h1>${selectedAlgorithm.name}</h1>
-        <p>${selectedAlgorithm.desc}</p>
-        <div class="algo-meta">
-          <span class="status-pill status-pill-accent">${selectedAlgorithm.badge}</span>
-          <span class="status-pill">${selectedAlgorithm.category}</span>
-          <span class="status-pill">${selectedAlgorithm.stack}</span>
+    <div class="algorithm-hero-strip">
+      <div class="algorithm-hero-symbol">
+        <div class="algorithm-hero-icon">AI</div>
+      </div>
+      <div class="algorithm-hero-core">
+        <div class="algorithm-hero-topline">
+          <div>
+            <p class="eyebrow">${selectedAlgorithm.industry}</p>
+            <h1>${selectedAlgorithm.name}</h1>
+          </div>
+          <button class="favorite-icon-btn ${isDetailFavorite() ? "is-active" : ""}" type="button" id="favoriteToggleBtn" aria-label="${isDetailFavorite() ? "取消收藏" : "加入收藏"}" title="${isDetailFavorite() ? "取消收藏" : "加入收藏"}">
+            <span aria-hidden="true">${isDetailFavorite() ? "★" : "☆"}</span>
+          </button>
+        </div>
+        <p class="algorithm-hero-desc">${selectedAlgorithm.desc}</p>
+        <div class="algorithm-hero-tag-row">
+          <span class="business-tag business-tag-accent">${selectedAlgorithm.badge}</span>
+          <span class="business-tag">${selectedAlgorithm.scene}</span>
+          <span class="business-tag">${selectedAlgorithm.stack}</span>
+        </div>
+        <div class="algorithm-hero-metrics">
+          ${getHeroMetrics().map((item) => `<span class="metric-pill">${item}</span>`).join("")}
         </div>
       </div>
     </div>
-    <div class="algorithm-hero-score">
-      <strong>${selectedAlgorithm.metric}</strong>
-      <span>核心指标</span>
-    </div>
   `;
+
+  document.getElementById("favoriteToggleBtn")?.addEventListener("click", () => {
+    const result = toggleFavoriteAlgorithm(selectedAlgorithm.id);
+    if (result === null) return;
+    renderDetailHero();
+    renderSidebar();
+  });
 }
 
 function renderSidebar() {
-  const related = platformData.algorithms.filter((item) => item.id !== selectedAlgorithm.id).slice(0, 3);
   sidebarEl.innerHTML = `
-    <div class="section-card">
-      <p class="eyebrow">Algorithm Notes</p>
-      <h3>算法说明</h3>
-      <div class="sidebar-spec-list">
-        <div class="spec-row"><span>模型架构</span><strong>${selectedAlgorithm.stack}</strong></div>
-        <div class="spec-row"><span>适用场景</span><strong>${selectedAlgorithm.scene}</strong></div>
-        <div class="spec-row"><span>收藏次数</span><strong>${selectedAlgorithm.favorites}</strong></div>
-        <div class="spec-row"><span>测试次数</span><strong>${selectedAlgorithm.tests}</strong></div>
-      </div>
-      <p class="sidebar-copy">${selectedAlgorithm.businessDesc}</p>
-    </div>
-    <div class="section-card">
-      <p class="eyebrow">Related Models</p>
-      <h3>组合建议</h3>
-      <div class="related-list">
-        ${related.map((item) => `
-          <a class="related-item" href="./algorithm.html?id=${item.id}">
-            <strong>${item.name}</strong>
-            <span>${item.scene}</span>
-          </a>
-        `).join("")}
-      </div>
-    </div>
-  `;
-}
-
-function renderComboPanel() {
-  if (!comboToggleEl.checked) {
-    comboPanelEl.innerHTML = `
-      <div class="combo-summary">
-        <span>当前算法</span>
-        <div class="combo-tags"><span class="status-pill">${selectedAlgorithm.name}</span></div>
-      </div>
-    `;
-    detectionState.selectedIds = [selectedAlgorithm.id];
-    return;
-  }
-
-  const options = platformData.algorithms
-    .filter((item) => item.id !== selectedAlgorithm.id)
-    .map((item) => `<option value="${item.id}">${item.name}</option>`)
-    .join("");
-
-  comboPanelEl.innerHTML = `
-    <div class="combo-summary">
-      <span>已选择 ${detectionState.selectedIds.length} 个算法</span>
-      <div class="combo-tags" id="comboTags"></div>
-    </div>
-    <div class="combo-actions">
-      <select id="comboSelect">
-        <option value="">添加算法</option>
-        ${options}
-      </select>
-      <button class="ghost-btn small" type="button" id="clearComboBtn">清空组合</button>
-    </div>
-  `;
-
-  updateComboTags();
-
-  document.getElementById("comboSelect").addEventListener("change", (event) => {
-    const value = event.target.value;
-    if (!value || detectionState.selectedIds.includes(value)) return;
-    detectionState.selectedIds = [...detectionState.selectedIds, value];
-    updateComboTags();
-    event.target.value = "";
-  });
-
-  document.getElementById("clearComboBtn").addEventListener("click", () => {
-    detectionState.selectedIds = [selectedAlgorithm.id];
-    updateComboTags();
-  });
-}
-
-function updateComboTags() {
-  const tagsEl = document.getElementById("comboTags");
-  if (!tagsEl) return;
-  tagsEl.innerHTML = detectionState.selectedIds.map((id) => {
-    const item = getAlgorithmById(id);
-    const removable = id !== selectedAlgorithm.id;
-    return `
-      <span class="combo-tag">
-        ${item.name}
-        ${removable ? `<button type="button" data-remove-combo="${id}">×</button>` : ""}
-      </span>
-    `;
-  }).join("");
-
-  document.querySelectorAll("[data-remove-combo]").forEach((node) => {
-    node.addEventListener("click", () => {
-      detectionState.selectedIds = detectionState.selectedIds.filter((id) => id !== node.dataset.removeCombo);
-      updateComboTags();
-    });
-  });
-}
-
-function renderUploadPreview() {
-  uploadPreviewEl.innerHTML = `
-    <div class="upload-thumb" style="background-image: url('${detectionState.fileUrl}');"></div>
-    <div class="upload-meta">
-      <strong>${detectionState.fileName}</strong>
-      <span>可用于在线检测和结果导出预览</span>
-    </div>
-  `;
-}
-
-function buildDetectionResult() {
-  const models = detectionState.selectedIds.map((id) => getAlgorithmById(id).name);
-  const detections = models.map((name, index) => ({
-    id: index + 1,
-    model: name,
-    label: index === 0 ? "异常区域" : "关联目标",
-    confidence: `${(96 - index * 4.5).toFixed(1)}%`,
-    detail: index === 0 ? "存在疑似缺陷，需要复核" : "识别到关联部件特征",
-  }));
-
-  return {
-    success: true,
-    algorithmNames: models,
-    inferenceTime: `${32 + models.length * 6}ms`,
-    timestamp: new Date().toISOString(),
-    fileName: detectionState.fileName,
-    detections,
-  };
-}
-
-function renderDetectionResult() {
-  if (!detectionState.result) {
-    resultPreviewEl.innerHTML = `
-      <div class="empty-result">
-        <strong>尚未生成检测结果</strong>
-        <p>上传素材后点击“开始检测”，将在此展示标注图和检测明细。</p>
-      </div>
-    `;
-    resultMetricsEl.innerHTML = "";
-    resultStatusEl.textContent = "等待检测";
-    return;
-  }
-
-  resultStatusEl.textContent = "检测完成";
-  resultPreviewEl.innerHTML = `
-    <div class="annotated-preview">
-      <img src="${detectionState.fileUrl}" alt="${detectionState.fileName}">
-      ${detectionState.result.detections.map((item, index) => `
-        <div class="detection-box detection-box-${index + 1}">
-          <span>${item.label} ${item.confidence}</span>
-        </div>
-      `).join("")}
-    </div>
-  `;
-
-  resultMetricsEl.innerHTML = `
-    <div class="metrics-grid">
-      <div class="metric-card">
-        <span>检测目标数</span>
-        <strong>${detectionState.result.detections.length}</strong>
-      </div>
-      <div class="metric-card">
-        <span>推理时延</span>
-        <strong>${detectionState.result.inferenceTime}</strong>
-      </div>
-    </div>
-    <div class="result-detail-list">
-      ${detectionState.result.detections.map((item) => `
-        <article class="result-detail-item">
-          <strong>${item.model}</strong>
-          <span>${item.label}</span>
-          <span>${item.confidence}</span>
-          <p>${item.detail}</p>
-        </article>
-      `).join("")}
-    </div>
-  `;
-}
-
-function getJsonPreview() {
-  return JSON.stringify(detectionState.result, null, 2);
-}
-
-function getPdfPreviewMarkup() {
-  return `
-    <div class="pdf-preview">
-      <div class="pdf-preview-head">
-        <strong>检测结果报告</strong>
-        <span>${selectedAlgorithm.name}</span>
-      </div>
-      <div class="pdf-preview-grid">
-        <div>
-          <span>检测文件</span>
-          <strong>${detectionState.result.fileName}</strong>
-        </div>
-        <div>
-          <span>检测算法</span>
-          <strong>${detectionState.result.algorithmNames.join(" / ")}</strong>
-        </div>
-        <div>
-          <span>推理时间</span>
-          <strong>${detectionState.result.inferenceTime}</strong>
-        </div>
-        <div>
-          <span>检测时间</span>
-          <strong>${new Date(detectionState.result.timestamp).toLocaleString("zh-CN")}</strong>
-        </div>
-      </div>
-      <div class="pdf-preview-list">
-        ${detectionState.result.detections.map((item) => `
-          <div class="pdf-preview-item">
-            <strong>${item.model}</strong>
+    <section class="section-card sidebar-panel slim-sidebar-panel">
+      <p class="eyebrow">Quick Guide</p>
+      <h3>详情导览</h3>
+      <div class="sidebar-spec-list compact-spec-list">
+        ${detailSections.map((item) => `
+          <div class="spec-row">
             <span>${item.label}</span>
-            <span>${item.confidence}</span>
+            <strong>${item.label === "热度收藏" ? getFavoriteTotal() : item.value}</strong>
           </div>
         `).join("")}
       </div>
-    </div>
+    </section>
   `;
 }
 
-function triggerDownload() {
-  const type = detectionState.exportType;
-  const filename = `${selectedAlgorithm.name}-${type}-preview.${type === "json" ? "json" : "txt"}`;
-  const content = type === "json" ? getJsonPreview() : exportPreviewBodyEl.innerText;
-  const blob = new Blob([content], { type: type === "json" ? "application/json" : "text/plain" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
-}
+function renderUploadPanel() {
+  const isImage = detectionState.uploadType === "image";
+  const accept = isImage ? "image/*" : "video/*";
+  const title = isImage ? "上传图片素材" : "上传多媒体流";
+  const hint = isImage ? "支持 JPG、PNG、JPEG" : "支持 MP4、MOV、AVI";
 
-function openExportPreview(type) {
-  if (!detectionState.result) return;
-  detectionState.exportType = type;
-  document.getElementById("exportTypeLabel").textContent = type === "json" ? "JSON Preview" : "PDF Preview";
-  document.getElementById("exportTitle").textContent = type === "json" ? "JSON 结果预览" : "PDF 报告预览";
+  uploadPanelEl.innerHTML = `
+    <label class="upload-zone commercial-upload-zone" for="detectionFile">
+      <input id="detectionFile" type="file" accept="${accept}">
+      <div class="upload-zone-copy compact-upload-copy">
+        <strong>${title}</strong>
+        <span>${hint}</span>
+      </div>
+      <div class="upload-preview" id="uploadPreview"></div>
+    </label>
+  `;
 
-  exportPreviewBodyEl.innerHTML = type === "json"
-    ? `<pre class="code-preview">${getJsonPreview()}</pre>`
-    : getPdfPreviewMarkup();
+  renderUploadPreview();
 
-  downloadExportBtnEl.textContent = type === "json" ? "导出 JSON" : "导出 PDF";
-  openModal("exportModal");
-}
-
-function bindEvents() {
-  comboToggleEl.addEventListener("change", renderComboPanel);
-
-  fileInputEl.addEventListener("change", (event) => {
+  document.getElementById("detectionFile")?.addEventListener("change", (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
     detectionState.fileName = file.name;
     detectionState.fileUrl = URL.createObjectURL(file);
     renderUploadPreview();
   });
+}
 
+function renderUploadPreview() {
+  const uploadPreviewEl = document.getElementById("uploadPreview");
+  if (!uploadPreviewEl) return;
+
+  const previewVisual = detectionState.uploadType === "image"
+    ? `<div class="upload-thumb" style="background-image: url('${detectionState.fileUrl}');"></div>`
+    : `<div class="upload-media-badge">STREAM</div>`;
+
+  uploadPreviewEl.innerHTML = `
+    ${previewVisual}
+    <div class="upload-meta">
+      <strong>${detectionState.fileName}</strong>
+      <span>${detectionState.uploadType === "image" ? "图片检测输入" : "多媒体流检测输入"}</span>
+    </div>
+  `;
+}
+
+function buildDetectionResult() {
+  const baseLabel = detectionState.uploadType === "image" ? selectedAlgorithm.scene : "多媒体流分析";
+  const detectionCount = detectionState.uploadType === "image" ? 2 : 3;
+
+  return {
+    success: true,
+    inferenceTime: `${detectionState.uploadType === "image" ? 41 : 68}ms`,
+    confidence: detectionState.uploadType === "image" ? "96.2%" : "94.8%",
+    targetCount: detectionCount,
+    label: baseLabel,
+  };
+}
+
+function renderDetectionResult() {
+  if (!detectionState.result) {
+    resultPreviewEl.innerHTML = `
+      <div class="empty-result slim-empty-result">
+        <strong>等待检测</strong>
+      </div>
+    `;
+    resultMetricsEl.innerHTML = `
+      <div class="metrics-grid compact-metrics-grid">
+        <div class="metric-card">
+          <span>检测目标数</span>
+          <strong>--</strong>
+        </div>
+        <div class="metric-card">
+          <span>推理时延</span>
+          <strong>--</strong>
+        </div>
+        <div class="metric-card">
+          <span>检测置信度</span>
+          <strong>--</strong>
+        </div>
+        <div class="metric-card">
+          <span>识别类别</span>
+          <strong>--</strong>
+        </div>
+      </div>
+    `;
+    resultStatusEl.textContent = "等待检测";
+    return;
+  }
+
+  resultStatusEl.textContent = "检测完成";
+  const previewMarkup = detectionState.uploadType === "image"
+    ? `<img src="${detectionState.fileUrl}" alt="${detectionState.fileName}">`
+    : `
+      <div class="stream-preview-card">
+        <div class="upload-media-badge">STREAM</div>
+        <strong>${detectionState.fileName}</strong>
+      </div>
+    `;
+
+  resultPreviewEl.innerHTML = `
+    <div class="annotated-preview compact-annotated-preview">
+      ${previewMarkup}
+      <div class="detection-box detection-box-1">
+        <span>${detectionState.result.label}</span>
+      </div>
+      <div class="detection-box detection-box-2">
+        <span>${detectionState.result.confidence}</span>
+      </div>
+    </div>
+  `;
+
+  resultMetricsEl.innerHTML = `
+    <div class="metrics-grid compact-metrics-grid">
+      <div class="metric-card">
+        <span>检测目标数</span>
+        <strong>${detectionState.result.targetCount}</strong>
+      </div>
+      <div class="metric-card">
+        <span>推理时延</span>
+        <strong>${detectionState.result.inferenceTime}</strong>
+      </div>
+      <div class="metric-card">
+        <span>检测置信度</span>
+        <strong>${detectionState.result.confidence}</strong>
+      </div>
+      <div class="metric-card">
+        <span>识别类别</span>
+        <strong>${detectionState.result.label}</strong>
+      </div>
+    </div>
+  `;
+}
+
+function bindUploadTabs() {
+  document.querySelectorAll("[data-upload-tab]").forEach((node) => {
+    node.addEventListener("click", () => {
+      detectionState.uploadType = node.dataset.uploadTab;
+      detectionState.fileName = detectionState.uploadType === "image"
+        ? `${selectedAlgorithm.scene}-样例.jpg`
+        : `${selectedAlgorithm.scene}-视频流.mp4`;
+      detectionState.fileUrl = selectedAlgorithm.image;
+      document.querySelectorAll("[data-upload-tab]").forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.uploadTab === detectionState.uploadType);
+      });
+      renderUploadPanel();
+    });
+  });
+}
+
+function bindEvents() {
   runBtnEl.addEventListener("click", () => {
     detectionState.result = buildDetectionResult();
     renderDetectionResult();
-    previewJsonBtnEl.disabled = false;
-    previewPdfBtnEl.disabled = false;
   });
 
-  previewJsonBtnEl.addEventListener("click", () => openExportPreview("json"));
-  previewPdfBtnEl.addEventListener("click", () => openExportPreview("pdf"));
-  downloadExportBtnEl.addEventListener("click", triggerDownload);
+  window.addEventListener("vision-user-updated", () => {
+    renderDetailHero();
+    renderSidebar();
+  });
 }
 
 renderDetailHero();
 renderSidebar();
-renderComboPanel();
-renderUploadPreview();
+renderUploadPanel();
 renderDetectionResult();
-bindGlobalModalActions();
+bindUploadTabs();
 bindEvents();

@@ -6,11 +6,11 @@
   <title>算法详情 - 煜邦视觉算法平台</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
-<body data-page="market">
+<body class="page-algorithm" data-page="market">
   <div class="page-bg"></div>
-  <header class="site-header site-header-solid"></header>
+  <header class="site-header"></header>
 
-  <main class="main-shell page-shell">
+  <main class="main-shell page-shell algorithm-page-shell">
     <nav class="breadcrumb">
       <a href="./index.html">首页</a>
       <span>/</span>
@@ -19,47 +19,34 @@
       <strong id="detailBreadcrumb">算法详情</strong>
     </nav>
 
-    <section class="algorithm-hero" id="algorithmHero"></section>
+    <section class="algorithm-page-hero" id="algorithmHero"></section>
 
     <section class="algorithm-layout">
-      <div class="detection-panel">
-        <div class="section-card">
-          <div class="panel-head">
+      <aside class="algorithm-sidebar" id="algorithmSidebar"></aside>
+
+      <div class="algorithm-main">
+        <section class="section-card algorithm-workbench" id="algorithmWorkbench">
+          <div class="panel-head algorithm-section-head compact-head">
             <div>
               <p class="eyebrow">Online Detection</p>
               <h3>在线检测</h3>
             </div>
-            <label class="combo-toggle">
-              <input type="checkbox" id="comboToggle">
-              <span>多算法组合检测</span>
-            </label>
           </div>
 
-          <div class="combo-panel" id="comboPanel"></div>
-
-          <div class="upload-tabs">
-            <button class="tab-pill active" type="button">图片上传</button>
-            <button class="tab-pill" type="button">视频/多媒体</button>
+          <div class="upload-tabs" id="uploadTabs">
+            <button class="tab-pill active" type="button" data-upload-tab="image">图片上传</button>
+            <button class="tab-pill" type="button" data-upload-tab="media">多媒体流上传</button>
           </div>
 
-          <label class="upload-zone" for="detectionFile">
-            <input id="detectionFile" type="file" accept="image/*,video/*">
-            <div class="upload-zone-copy">
-              <strong>上传检测素材</strong>
-              <p>支持 JPG、PNG、MP4 等文件，上传后将自动生成预览。</p>
-            </div>
-            <div class="upload-preview" id="uploadPreview"></div>
-          </label>
+          <div class="upload-panel" id="uploadPanel"></div>
 
-          <div class="action-row">
+          <div class="action-row algorithm-action-row">
             <button class="primary-btn" type="button" id="runDetectionBtn">开始检测</button>
-            <button class="ghost-btn" type="button" id="previewJsonBtn" disabled>预览 JSON</button>
-            <button class="ghost-btn" type="button" id="previewPdfBtn" disabled>预览 PDF</button>
           </div>
-        </div>
+        </section>
 
-        <div class="section-card result-section" id="resultSection">
-          <div class="panel-head">
+        <section class="section-card result-section" id="resultSection">
+          <div class="panel-head algorithm-section-head compact-head">
             <div>
               <p class="eyebrow">Detection Result</p>
               <h3>检测结果</h3>
@@ -70,28 +57,10 @@
             <div class="result-preview" id="resultPreview"></div>
             <div class="result-metrics" id="resultMetrics"></div>
           </div>
-        </div>
+        </section>
       </div>
-
-      <aside class="algorithm-sidebar" id="algorithmSidebar"></aside>
     </section>
   </main>
-
-  <div class="modal-shell" id="exportModal">
-    <div class="modal-mask" data-close-modal="exportModal"></div>
-    <div class="modal-card export-card">
-      <button class="modal-close" type="button" data-close-modal="exportModal">×</button>
-      <div class="modal-head">
-        <p class="eyebrow" id="exportTypeLabel">Export Preview</p>
-        <h3 id="exportTitle">结果预览</h3>
-      </div>
-      <div class="export-preview-body" id="exportPreviewBody"></div>
-      <div class="modal-actions">
-        <button class="ghost-btn" type="button" data-close-modal="exportModal">取消</button>
-        <button class="primary-btn" type="button" id="downloadExportBtn">下载文件</button>
-      </div>
-    </div>
-  </div>
 
   <script src="./platform-data.js"></script>
   <script src="./common.js"></script>
