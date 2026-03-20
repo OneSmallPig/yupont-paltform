@@ -155,7 +155,6 @@ function renderUploadPreview() {
     <div class="upload-preview-frame">
       ${previewVisual}
     </div>
-    <div class="upload-file-chip">${getCurrentFileLabel()}</div>
   `;
 }
 
@@ -279,19 +278,19 @@ function renderDetectionResult() {
       </div>
       <p class="result-report-summary">${detectionState.result.summary}</p>
       <div class="result-report-stats">
-        <div>
+        <div data-label="识别目标">
           <span>识别目标</span>
           <strong>${detectionState.result.targetCount}</strong>
         </div>
-        <div>
+        <div data-label="推理时延">
           <span>推理时延</span>
           <strong>${detectionState.result.inferenceTime}</strong>
         </div>
-        <div>
+        <div data-label="置信度">
           <span>置信度</span>
           <strong>${detectionState.result.confidence}</strong>
         </div>
-        <div>
+        <div data-label="检测时间">
           <span>检测时间</span>
           <strong>${detectionState.result.timestamp}</strong>
         </div>
@@ -355,10 +354,10 @@ function renderExportPreview(type) {
           <span>${detectionState.result.timestamp}</span>
         </div>
         <div class="export-sheet-grid">
-          <div><span>算法行业</span><strong>${selectedAlgorithm.industry}</strong></div>
-          <div><span>模型架构</span><strong>${selectedAlgorithm.stack}</strong></div>
-          <div><span>检测目标</span><strong>${detectionState.result.targetCount}</strong></div>
-          <div><span>置信度</span><strong>${detectionState.result.confidence}</strong></div>
+          <div data-label="算法行业"><span>算法行业</span><strong>${selectedAlgorithm.industry}</strong></div>
+          <div data-label="模型架构"><span>模型架构</span><strong>${selectedAlgorithm.stack}</strong></div>
+          <div data-label="检测目标"><span>检测目标</span><strong>${detectionState.result.targetCount}</strong></div>
+          <div data-label="置信度"><span>置信度</span><strong>${detectionState.result.confidence}</strong></div>
         </div>
         <div class="export-sheet-section">
           <h5>检测摘要</h5>
