@@ -3,6 +3,8 @@ const selectedAlgorithm = platformData.algorithms.find((item) => item.id === det
 
 const heroEl = document.getElementById("algorithmHero");
 const sidebarEl = document.getElementById("algorithmSidebar");
+const comboDetectTriggerEl = document.getElementById("comboDetectTrigger");
+const comboDetectPanelEl = document.getElementById("comboDetectPanel");
 const uploadPanelEl = document.getElementById("uploadPanel");
 const resultPreviewEl = document.getElementById("resultPreview");
 const resultMetricsEl = document.getElementById("resultMetrics");
@@ -29,6 +31,8 @@ const detectionState = {
   fileUrl: selectedAlgorithm.image,
   result: null,
   exportType: "json",
+  comboEnabled: false,
+  comboAlgorithmId: "",
 };
 
 function isDetailFavorite() {
@@ -119,6 +123,67 @@ function renderSidebar() {
   `;
 }
 
+function getComboCandidates() {
+  return platformData.algorithms.filter((item) => item.id !== selectedAlgorithm.id);
+}
+
+function getSelectedComboAlgorithm() {
+  return getComboCandidates().find((item) => item.id === detectionState.comboAlgorithmId) || null;
+}
+
+function renderComboDetectPanel() {
+  const comboAlgorithm = getSelectedComboAlgorithm();
+  const candidates = getComboCandidates();
+
+  comboDetectTriggerEl.innerHTML = `
+    <button class="combo-trigger-btn ${detectionState.comboEnabled ? "is-active" : ""}" type="button" id="comboDetectToggle">
+      <span>多算法组合检测</span>
+    </button>
+  `;
+
+  comboDetectPanelEl.innerHTML = detectionState.comboEnabled ? `
+    <div class="combo-detect-shell is-open">
+      <div class="combo-detect-expand is-open">
+        <div class="combo-detect-expand-inner">
+          <div class="combo-detect-grid">
+            <div class="combo-detect-preview ${comboAlgorithm ? "" : "is-empty"}">
+              <span>已选组合</span>
+              <strong>${comboAlgorithm ? comboAlgorithm.name : "未选择组合算法"}</strong>
+              <small>${comboAlgorithm ? `${comboAlgorithm.category} / ${comboAlgorithm.scene}` : "可在右侧下拉列表中选择一个关联算法"}</small>
+            </div>
+            <div class="combo-detect-select">
+              <span>组合算法</span>
+              <select id="comboAlgorithmSelect">
+                <option value="">请选择组合算法</option>
+                ${candidates.map((item) => `<option value="${item.id}" ${item.id === detectionState.comboAlgorithmId ? "selected" : ""}>${item.name}</option>`).join("")}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ` : "";
+
+  document.getElementById("comboDetectToggle")?.addEventListener("click", () => {
+    detectionState.comboEnabled = !detectionState.comboEnabled;
+    if (!detectionState.comboEnabled) {
+      detectionState.comboAlgorithmId = "";
+    } else if (!detectionState.comboAlgorithmId) {
+      detectionState.comboAlgorithmId = candidates[0]?.id || "";
+    }
+    detectionState.result = null;
+    renderDetectionResult();
+    renderComboDetectPanel();
+  });
+
+  document.getElementById("comboAlgorithmSelect")?.addEventListener("change", (event) => {
+    detectionState.comboAlgorithmId = event.target.value;
+    detectionState.result = null;
+    renderDetectionResult();
+    renderComboDetectPanel();
+  });
+}
+
 function renderUploadPanel() {
   const accept = detectionState.uploadType === "image" ? "image/*" : "video/*";
 
@@ -160,9 +225,12 @@ function renderUploadPreview() {
 
 function buildDetectionResult() {
   const isImage = detectionState.uploadType === "image";
+  const comboAlgorithm = detectionState.comboEnabled ? getSelectedComboAlgorithm() : null;
   const targetCount = isImage ? 2 : 3;
   const confidence = isImage ? "96.2%" : "94.8%";
-  const inferenceTime = isImage ? "41ms" : "68ms";
+  const inferenceTime = comboAlgorithm
+    ? (isImage ? "63ms" : "89ms")
+    : (isImage ? "41ms" : "68ms");
   const label = isImage ? selectedAlgorithm.scene : "多媒体流分析";
 
   return {
@@ -172,22 +240,29 @@ function buildDetectionResult() {
     targetCount,
     label,
     timestamp: buildTimestamp(),
-    summary: `系统已完成本次${selectedAlgorithm.scene}样本解析，识别结果与当前业务场景匹配，可直接用于演示汇报与后续资料导出。`,
+    summary: comboAlgorithm
+      ? `系统已完成本次${selectedAlgorithm.scene}与${comboAlgorithm.scene}的组合检测解析，适合用于多算法协同演示与结果汇报。`
+      : `系统已完成本次${selectedAlgorithm.scene}样本解析，识别结果与当前业务场景匹配，可直接用于演示汇报与后续资料导出。`,
     detections: [
       { name: label, confidence, region: "主检测区域" },
+      ...(comboAlgorithm ? [{ name: comboAlgorithm.scene, confidence: isImage ? "92.8%" : "91.4%", region: "组合检测区域" }] : []),
       { name: selectedAlgorithm.category, confidence: isImage ? "93.4%" : "92.1%", region: "辅助识别区域" },
       ...(isImage ? [] : [{ name: "时序风险片段", confidence: "91.6%", region: "视频关键帧" }]),
     ],
     insights: [
-      `本次样本共识别 ${targetCount} 个重点目标，模型输出稳定。`,
+      comboAlgorithm
+        ? `本次组合检测已联动 ${selectedAlgorithm.name} 与 ${comboAlgorithm.name}，覆盖更完整的识别链路。`
+        : `本次样本共识别 ${targetCount} 个重点目标，模型输出稳定。`,
       `主类别置信度达到 ${confidence}，满足演示与业务汇报场景展示要求。`,
       `算法架构为 ${selectedAlgorithm.stack}，适合在 ${selectedAlgorithm.industry} 场景中延展部署。`,
     ],
     actions: [
       "建议保留当前样本作为方案演示案例。",
+      ...(comboAlgorithm ? ["可基于当前组合方案继续扩展更多关联算法能力。"] : []),
       "可继续补充不同场景样本进行对比验证。",
       "支持导出 JSON 与 PDF 用于汇报或归档。",
     ],
+    comboAlgorithmName: comboAlgorithm?.name || "",
   };
 }
 
@@ -202,6 +277,7 @@ function buildExportPayload() {
       category: selectedAlgorithm.category,
       scene: selectedAlgorithm.scene,
       stack: selectedAlgorithm.stack,
+      comboWith: detectionState.result.comboAlgorithmName || "",
     },
     input: {
       type: detectionState.uploadType,
@@ -465,6 +541,8 @@ function bindUploadTabs() {
       document.querySelectorAll("[data-upload-tab]").forEach((tab) => {
         tab.classList.toggle("active", tab.dataset.uploadTab === detectionState.uploadType);
       });
+      detectionState.result = null;
+      renderDetectionResult();
       renderUploadPanel();
     });
   });
@@ -494,6 +572,7 @@ function bindEvents() {
 
 renderDetailHero();
 renderSidebar();
+renderComboDetectPanel();
 renderUploadPanel();
 renderDetectionResult();
 bindUploadTabs();

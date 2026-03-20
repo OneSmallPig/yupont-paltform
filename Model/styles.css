@@ -4242,12 +4242,20 @@ button, input, select { font: inherit; }
     #fff;
 }
 
+.detect-toolbar {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(219, 231, 241, 0.92);
+}
+
 .upload-tabs {
+  flex: 1 1 auto;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid rgba(219, 231, 241, 0.92);
 }
 
 .compact-head {
@@ -4266,8 +4274,123 @@ button, input, select { font: inherit; }
   padding: 12px 0;
 }
 
+.combo-detect-trigger {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.combo-trigger-btn {
+  position: relative;
+  min-height: 40px;
+  padding: 0 4px 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #66778c;
+  cursor: pointer;
+  transition: color 0.24s ease;
+}
+
+.combo-trigger-btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(191, 67, 45, 0.92), rgba(29, 125, 242, 0.5));
+  transform: scaleX(0.28);
+  transform-origin: left center;
+  opacity: 0;
+  transition: transform 0.24s ease, opacity 0.24s ease;
+}
+
+.combo-trigger-btn:hover,
+.combo-trigger-btn.is-active {
+  color: #102640;
+}
+
+.combo-trigger-btn:hover::before,
+.combo-trigger-btn.is-active::before {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
 .upload-panel {
   margin-top: 20px;
+}
+
+.combo-detect-panel {
+  margin-top: 18px;
+}
+
+.combo-detect-shell {
+  display: grid;
+  gap: 0;
+  border: 1px solid rgba(219, 231, 241, 0.92);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 253, 0.96));
+}
+
+.combo-detect-toggle {
+  display: none;
+}
+
+.combo-detect-copy small,
+.combo-detect-select span,
+.combo-detect-preview span,
+.combo-detect-preview small {
+  color: var(--muted);
+}
+
+.combo-detect-expand {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.combo-detect-expand-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.combo-detect-shell.is-open .combo-detect-expand-inner {
+  padding: 16px 18px 18px;
+  border-top: 1px solid rgba(219, 231, 241, 0.92);
+}
+
+.combo-detect-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.combo-detect-select {
+  display: grid;
+  gap: 10px;
+}
+
+.combo-detect-select select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid rgba(219, 231, 241, 0.92);
+  border-radius: 0;
+  background: #fff;
+  color: var(--text);
+}
+
+.combo-detect-preview {
+  display: grid;
+  gap: 6px;
+  min-height: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(219, 231, 241, 0.92);
+  background: rgba(248, 251, 254, 0.92);
+}
+
+.combo-detect-preview.is-empty {
+  background: linear-gradient(180deg, rgba(248, 251, 254, 0.82), rgba(255, 255, 255, 0.92));
 }
 
 .commercial-upload-zone {
@@ -4845,5 +4968,18 @@ button, input, select { font: inherit; }
   .algorithm-hero-side,
   .result-export-row {
     flex-wrap: wrap;
+  }
+
+  .detect-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .combo-detect-panel {
+    width: 100%;
+  }
+
+  .combo-detect-grid {
+    grid-template-columns: 1fr;
   }
 }
