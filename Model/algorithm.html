@@ -41,7 +41,7 @@
           <div class="upload-panel" id="uploadPanel"></div>
 
           <div class="action-row algorithm-action-row">
-            <button class="primary-btn" type="button" id="runDetectionBtn">开始检测</button>
+            <button class="primary-btn detection-run-btn" type="button" id="runDetectionBtn">开始检测</button>
           </div>
         </section>
 
@@ -61,6 +61,23 @@
       </div>
     </section>
   </main>
+
+  <div class="modal-shell" id="exportPreviewModal">
+    <div class="modal-mask" data-close-modal="exportPreviewModal"></div>
+    <div class="modal-card export-modal-card">
+      <button class="modal-close" type="button" data-close-modal="exportPreviewModal">×</button>
+      <div class="modal-head">
+        <p class="eyebrow" id="exportPreviewEyebrow">Export Preview</p>
+        <h3 id="exportPreviewTitle">导出预览</h3>
+        <p id="exportPreviewDesc">预览导出内容后再执行文件导出。</p>
+      </div>
+      <div class="export-preview-body" id="exportPreviewBody"></div>
+      <div class="modal-actions">
+        <button class="ghost-btn" type="button" data-close-modal="exportPreviewModal">关闭</button>
+        <button class="primary-btn" type="button" id="exportConfirmBtn">导出文件</button>
+      </div>
+    </div>
+  </div>
 
   <script src="./platform-data.js"></script>
   <script src="./common.js"></script>
