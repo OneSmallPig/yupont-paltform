@@ -6,7 +6,7 @@
   <title>资源中心 - 煜邦视觉算法平台</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
-<body data-page="resources">
+<body class="page-resources" data-page="resources">
   <div class="page-bg"></div>
   <header class="site-header site-header-solid"></header>
 
@@ -17,11 +17,32 @@
         <h1>资料中心与项目支撑资源</h1>
         <p>沉淀平台能力清单、项目案例、演示脚本与合作资料，支持客户沟通与方案推进。</p>
       </div>
+      <div class="page-hero-aside resource-hero-aside">
+        <strong>内容矩阵</strong>
+        <p>围绕资料手册、能力说明、案例沉淀与售前支撑，形成统一的商务与项目资料入口。</p>
+      </div>
     </section>
 
     <section class="resource-toolbar" id="resourceCategories"></section>
     <section class="resource-grid" id="resourceGrid"></section>
   </main>
+
+  <div class="modal-shell" id="resourcePreviewModal">
+    <div class="modal-mask" data-close-modal="resourcePreviewModal"></div>
+    <div class="modal-card resource-preview-modal">
+      <button class="modal-close" type="button" data-close-modal="resourcePreviewModal">×</button>
+      <div class="modal-head">
+        <p class="eyebrow">Resource Preview</p>
+        <h3 id="resourcePreviewTitle">资源预览</h3>
+        <p id="resourcePreviewMeta">预览当前资源内容后可下载文件。</p>
+      </div>
+      <div class="resource-preview-body" id="resourcePreviewBody"></div>
+      <div class="modal-actions">
+        <button class="ghost-btn" type="button" data-close-modal="resourcePreviewModal">关闭</button>
+        <button class="primary-btn" type="button" id="resourceDownloadBtn">下载文件</button>
+      </div>
+    </div>
+  </div>
 
   <script src="./platform-data.js"></script>
   <script src="./common.js"></script>

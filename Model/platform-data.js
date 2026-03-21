@@ -204,12 +204,12 @@ const platformData = {
     },
   ],
   resources: [
-    { title: "平台能力清单", meta: "资料下载", type: "资料手册" },
-    { title: "电力巡检算法目录", meta: "能力目录", type: "能力说明" },
-    { title: "在线检测使用说明", meta: "操作指南", type: "使用手册" },
-    { title: "合作接入方式", meta: "商务支持", type: "合作文档" },
-    { title: "项目案例摘要", meta: "案例精选", type: "案例沉淀" },
-    { title: "演示脚本模板", meta: "售前支持", type: "交付资料" },
+    { title: "平台能力清单", meta: "资料下载", type: "资料手册", updatedAt: "2026-03-18" },
+    { title: "电力巡检算法目录", meta: "能力目录", type: "能力说明", updatedAt: "2026-03-16" },
+    { title: "在线检测使用说明", meta: "操作指南", type: "使用手册", updatedAt: "2026-03-12" },
+    { title: "合作接入方式", meta: "商务支持", type: "合作文档", updatedAt: "2026-03-09" },
+    { title: "项目案例摘要", meta: "案例精选", type: "案例沉淀", updatedAt: "2026-03-05" },
+    { title: "演示脚本模板", meta: "售前支持", type: "交付资料", updatedAt: "2026-03-01" },
   ],
   resourceHub: {
     featured: {
