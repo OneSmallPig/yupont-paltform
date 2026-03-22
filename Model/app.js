@@ -7,9 +7,6 @@ const heroSlidesEl = document.getElementById("heroSlides");
 const heroDotsEl = document.getElementById("heroDots");
 const homeAlgoGridEl = document.getElementById("homeAlgoGrid");
 const industryGridEl = document.getElementById("industryGrid");
-const resourceListEl = document.getElementById("resourceList");
-const newsMainEl = document.getElementById("newsMain");
-const resourceActionsEl = document.getElementById("resourceActions");
 const solutionFeatureEl = document.getElementById("solutionFeature");
 const recommendModalTriggerEl = document.getElementById("openRecommendModal");
 const recommendInputEl = document.getElementById("recommendInput");
@@ -123,56 +120,6 @@ function renderIndustrySection() {
   `).join("");
 }
 
-function renderResources() {
-  if (!resourceListEl || !newsMainEl || !resourceActionsEl) return;
-
-  const { featured, groups, actions } = platformData.resourceHub;
-
-  newsMainEl.innerHTML = `
-    <article class="resource-feature-card">
-      <p class="eyebrow">${featured.type}</p>
-      <h3>${featured.title}</h3>
-      <p>${featured.desc}</p>
-      <div class="resource-highlight-list">
-        ${featured.highlights.map((item) => `<span class="status-pill status-pill-accent">${item}</span>`).join("")}
-      </div>
-      <a class="primary-btn small resource-feature-link" href="${featured.actionHref}">${featured.actionLabel}</a>
-    </article>
-  `;
-
-  resourceListEl.innerHTML = groups.map((group) => `
-    <section class="resource-group-panel">
-      <div class="resource-group-head">
-        <h3>${group.title}</h3>
-      </div>
-      <div class="resource-group-list">
-        ${group.items.map((item) => `
-          <article class="resource-group-item">
-            <strong>${item.name}</strong>
-            <p>${item.meta}</p>
-          </article>
-        `).join("")}
-      </div>
-    </section>
-  `).join("");
-
-  resourceActionsEl.innerHTML = actions.map((item) => `
-    <a class="resource-action-card ${item.href === "#cooperation" ? "resource-action-trigger" : ""}" href="${item.href}" ${item.href === "#cooperation" ? 'data-open-modal="cooperationModal"' : ""}>
-      <strong>${item.title}</strong>
-      <p>${item.desc}</p>
-    </a>
-  `).join("");
-
-  document.querySelectorAll("[data-open-modal]").forEach((node) => {
-    if (node.dataset.boundOpen === "true") return;
-    node.dataset.boundOpen = "true";
-    node.addEventListener("click", (event) => {
-      event.preventDefault();
-      openModal(node.dataset.openModal);
-    });
-  });
-}
-
 function getRecommendationMatches(query) {
   const keywords = query.toLowerCase();
   const rules = [
@@ -221,11 +168,22 @@ function renderRecommendationResult() {
     <div class="recommend-grid">
       ${matches.algorithms.map((item) => `
         <a class="recommend-item" href="./algorithm.html?id=${item.id}">
-          <strong>${item.name}</strong>
-          <p>${item.businessDesc}</p>
-          <div class="algo-meta">
-            <span class="status-pill status-pill-accent">${item.badge}</span>
-            <span class="status-pill">${item.scene}</span>
+          <div class="recommend-item-cover" style="background-image: url('${item.image}')"></div>
+          <div class="recommend-item-body">
+            <div class="recommend-item-top">
+              <span class="sharp-featured-type">${item.category}</span>
+              <div class="sharp-featured-actions">
+                <span class="icon-pill" aria-label="收藏数">★ ${item.favorites}</span>
+                <span class="icon-pill" aria-label="测试数">◉ ${item.tests}</span>
+              </div>
+            </div>
+            <strong>${item.name}</strong>
+            <p>${item.businessDesc}</p>
+            <div class="algo-meta">
+              <span class="status-pill status-pill-accent">${item.badge}</span>
+              <span class="status-pill">${item.scene}</span>
+            </div>
+            <span class="recommend-item-link">进入详情</span>
           </div>
         </a>
       `).join("")}
@@ -244,7 +202,6 @@ function initHome() {
   renderHero();
   renderHomeAlgorithms();
   renderIndustrySection();
-  renderResources();
   initRecommendationModal();
   startHeroTimer();
 }

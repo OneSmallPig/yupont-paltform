@@ -61,23 +61,6 @@
         </div>
       </section>
 
-      <section class="home-section resource-band">
-        <div class="section-inner proof-layout">
-          <div class="section-head home-head split-head">
-            <div>
-              <p class="eyebrow">Resource Center</p>
-              <h2>方案资料、能力说明与项目案例沉淀</h2>
-            </div>
-            <p class="section-intro">围绕售前沟通、能力评估与项目推进，组织重点资料、结构化能力说明和可复用案例内容。</p>
-          </div>
-          <div class="resource-hub">
-            <div class="resource-feature" id="newsMain"></div>
-            <div class="resource-groups" id="resourceList"></div>
-          </div>
-          <div class="resource-actions" id="resourceActions"></div>
-        </div>
-      </section>
-
       <section class="home-section business-band">
         <div class="section-inner business-footer">
           <div class="business-footer-grid">
@@ -106,11 +89,9 @@
                 </div>
               </div>
               <div class="footer-link-group">
-                <h3>能力入口</h3>
+                <h3>核心能力</h3>
                 <div class="footer-link-list">
-                  <a href="./market.html">目标检测</a>
-                  <a href="./market.html">语义分割</a>
-                  <a href="./market.html">异常分析</a>
+                  <a href="./market.html">视觉感知与分析</a>
                   <a href="./market.html">多模态识别</a>
                   <a href="./llm.html">大模型平台</a>
                   <a href="./resources.html">资源中心</a>
@@ -145,6 +126,11 @@
   <div class="modal-shell" id="recommendModal">
     <div class="modal-mask" data-close-modal="recommendModal"></div>
     <div class="modal-card recommend-card">
+      <div class="recommend-card-bg" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
       <button class="modal-close" type="button" data-close-modal="recommendModal">×</button>
       <div class="modal-head">
         <p class="eyebrow">Smart Recommendation</p>
@@ -154,7 +140,7 @@
       <div class="recommend-form">
         <textarea id="recommendInput" placeholder="例如：需要对输电线路巡检图片中的异物、烟雾和本体缺陷进行联合识别，并支持导出检测报告。"></textarea>
         <div class="recommend-actions">
-          <button class="primary-btn" type="button" id="runRecommendBtn">开始推荐</button>
+          <button class="primary-btn recommend-run-btn" type="button" id="runRecommendBtn">开始推荐</button>
         </div>
       </div>
       <div class="recommend-result" id="recommendResult"></div>
