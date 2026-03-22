@@ -3589,7 +3589,32 @@ button, input, select { font: inherit; }
 }
 
 .header-user-area {
+  align-items: center;
   justify-content: flex-end;
+}
+
+.header-recommend-btn {
+  min-height: auto;
+  padding: 11px 18px;
+  border-radius: 0;
+}
+
+.header-recommend-nav {
+  border-color: rgba(219, 231, 241, 0.92);
+  background: #fff;
+  color: #203246;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: none;
+}
+
+.header-recommend-nav:hover,
+.header-recommend-nav:focus-visible {
+  color: #bf432d;
+  background: linear-gradient(135deg, rgba(191, 67, 45, 0.14), rgba(255, 161, 106, 0.12));
+  border-color: rgba(191, 67, 45, 0.12);
 }
 
 .user-menu {
