@@ -1,7 +1,9 @@
 const USER_STORAGE_KEY = "vision-platform-user";
+const ACCOUNT_STORAGE_KEY = "vision-platform-accounts";
 
 const defaultUserProfile = {
   loggedIn: false,
+  account: "demo",
   name: "体验用户",
   email: "demo@yupont.com",
   phone: "138-0000-1024",
@@ -27,6 +29,27 @@ const defaultUserProfile = {
   },
 };
 
+const defaultAccounts = [
+  {
+    account: "demo",
+    password: "demo123456",
+    name: "体验用户",
+    email: "demo@yupont.com",
+    phone: "138-0000-1024",
+    company: "北京煜邦电力技术股份有限公司",
+    role: "平台体验用户",
+    membership: "专业版",
+    favorites: [...defaultUserProfile.favorites],
+    apiKeys: [...defaultUserProfile.apiKeys],
+    history: [...defaultUserProfile.history],
+    settings: { ...defaultUserProfile.settings },
+  },
+];
+
+function normalizeIdentifier(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
 function getStoredUser() {
   try {
     const saved = window.localStorage.getItem(USER_STORAGE_KEY);
@@ -41,6 +64,29 @@ function saveStoredUser(profile) {
   window.localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(profile));
 }
 
+function getStoredAccounts() {
+  try {
+    const saved = window.localStorage.getItem(ACCOUNT_STORAGE_KEY);
+    if (!saved) return [...defaultAccounts];
+    return JSON.parse(saved);
+  } catch (error) {
+    return [...defaultAccounts];
+  }
+}
+
+function saveStoredAccounts(accounts) {
+  window.localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify(accounts));
+}
+
+function buildUserProfileFromAccount(account) {
+  const { password, ...rest } = account;
+  return {
+    ...defaultUserProfile,
+    ...rest,
+    loggedIn: true,
+  };
+}
+
 function getCurrentUser() {
   if (!window.__visionUserProfile) {
     window.__visionUserProfile = getStoredUser();
@@ -48,11 +94,103 @@ function getCurrentUser() {
   return window.__visionUserProfile;
 }
 
+function getPlatformAccounts() {
+  if (!window.__visionAccounts) {
+    window.__visionAccounts = getStoredAccounts();
+  }
+  return window.__visionAccounts;
+}
+
+function savePlatformAccounts(accounts) {
+  window.__visionAccounts = accounts;
+  saveStoredAccounts(accounts);
+}
+
+function syncCurrentUserToAccounts() {
+  const user = getCurrentUser();
+  if (!user.loggedIn) return;
+
+  const accounts = getPlatformAccounts();
+  const index = accounts.findIndex((item) => normalizeIdentifier(item.account) === normalizeIdentifier(user.account) || normalizeIdentifier(item.email) === normalizeIdentifier(user.email));
+  if (index === -1) return;
+
+  accounts[index] = {
+    ...accounts[index],
+    account: user.account || accounts[index].account,
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+    company: user.company,
+    role: user.role,
+    membership: user.membership,
+    favorites: [...user.favorites],
+    apiKeys: [...user.apiKeys],
+    history: [...user.history],
+    settings: { ...user.settings },
+  };
+  savePlatformAccounts(accounts);
+}
+
 function updateCurrentUser(patch) {
   window.__visionUserProfile = { ...getCurrentUser(), ...patch };
   saveStoredUser(window.__visionUserProfile);
+  syncCurrentUserToAccounts();
   renderGlobalHeader();
   window.dispatchEvent(new CustomEvent("vision-user-updated", { detail: window.__visionUserProfile }));
+}
+
+function findAccountByIdentifier(identifier) {
+  const normalized = normalizeIdentifier(identifier);
+  return getPlatformAccounts().find((item) => normalizeIdentifier(item.account) === normalized || normalizeIdentifier(item.email) === normalized) || null;
+}
+
+function authenticatePlatformAccount(identifier, password) {
+  const account = findAccountByIdentifier(identifier);
+  if (!account) {
+    return { ok: false, error: "未找到对应账号，请检查用户名或邮箱。" };
+  }
+  if (account.password !== String(password || "").trim()) {
+    return { ok: false, error: "密码不正确，请重新输入。" };
+  }
+  const profile = buildUserProfileFromAccount(account);
+  updateCurrentUser(profile);
+  return { ok: true, profile };
+}
+
+function registerPlatformAccount(payload) {
+  const accountValue = String(payload.account || "").trim();
+  const emailValue = String(payload.email || "").trim();
+  const passwordValue = String(payload.password || "").trim();
+
+  if (!accountValue || !emailValue || !passwordValue) {
+    return { ok: false, error: "请完整填写账号、邮箱和密码信息。" };
+  }
+
+  const accounts = getPlatformAccounts();
+  const hasDuplicate = accounts.some((item) => normalizeIdentifier(item.account) === normalizeIdentifier(accountValue) || normalizeIdentifier(item.email) === normalizeIdentifier(emailValue));
+  if (hasDuplicate) {
+    return { ok: false, error: "账号或邮箱已存在，请更换后再提交。" };
+  }
+
+  const nextAccount = {
+    account: accountValue,
+    password: passwordValue,
+    name: String(payload.name || accountValue).trim() || accountValue,
+    email: emailValue,
+    phone: String(payload.phone || "").trim() || defaultUserProfile.phone,
+    company: String(payload.company || "").trim() || "待完善单位信息",
+    role: "平台申请用户",
+    membership: "标准版",
+    favorites: [],
+    apiKeys: [],
+    history: [],
+    settings: { ...defaultUserProfile.settings },
+  };
+
+  savePlatformAccounts([...accounts, nextAccount]);
+  const profile = buildUserProfileFromAccount(nextAccount);
+  updateCurrentUser(profile);
+  return { ok: true, profile };
 }
 
 function isFavoriteAlgorithm(algorithmId) {
@@ -118,7 +256,6 @@ function buildHeaderMarkup() {
                 <span>登录后查看个人信息</span>
               </div>
               <button class="user-menu-link" type="button" data-auth-mode="login">登录</button>
-              <button class="user-menu-link" type="button" data-auth-mode="register">注册</button>
             `}
           </div>
         </div>
@@ -140,21 +277,22 @@ function ensureGlobalModals() {
             <h3 id="authTitle">登录平台</h3>
             <p id="authDesc">登录后可查看收藏、测试历史、API 密钥与账户设置。</p>
           </div>
-          <form class="auth-form" id="authForm">
+          <form class="auth-form" id="authForm" data-mode="login">
             <label>
-              <span>用户名</span>
-              <input id="authName" name="name" type="text" placeholder="请输入用户名" required>
-            </label>
-            <label>
-              <span>邮箱</span>
-              <input id="authEmail" name="email" type="email" placeholder="请输入邮箱" required>
+              <span>账号</span>
+              <input id="authAccount" name="account" type="text" placeholder="请输入用户名或邮箱" required>
             </label>
             <label>
               <span>密码</span>
               <input id="authPassword" name="password" type="password" placeholder="请输入密码" required>
             </label>
-            <button class="primary-btn full" type="submit" id="authSubmit">立即登录</button>
+            <p class="auth-error" id="authError"></p>
+            <button class="primary-btn full auth-submit-btn" type="submit" id="authSubmit">立即登录</button>
           </form>
+          <div class="auth-helper-row">
+            <span>没有账号？</span>
+            <a class="auth-inline-link" href="./register.html" id="authApplyLink">申请账号</a>
+          </div>
         </div>
       </div>
     `;
@@ -181,13 +319,11 @@ function bindGlobalModalActions() {
 }
 
 function configureAuthModal(mode) {
-  const isRegister = mode === "register";
-  document.getElementById("authTitle").textContent = isRegister ? "注册账号" : "登录平台";
-  document.getElementById("authDesc").textContent = isRegister
-    ? "注册后可保存收藏、在线检测历史与 API 密钥。"
-    : "登录后可查看收藏、测试历史、API 密钥与账户设置。";
-  document.getElementById("authSubmit").textContent = isRegister ? "完成注册" : "立即登录";
+  document.getElementById("authTitle").textContent = "登录平台";
+  document.getElementById("authDesc").textContent = "登录后可查看收藏、测试历史、API 密钥与账户设置。";
+  document.getElementById("authSubmit").textContent = "立即登录";
   document.getElementById("authForm").dataset.mode = mode;
+  document.getElementById("authError").textContent = "";
 }
 
 function bindAuthForm() {
@@ -198,11 +334,13 @@ function bindAuthForm() {
   authForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const formData = new FormData(authForm);
-    updateCurrentUser({
-      loggedIn: true,
-      name: String(formData.get("name")).trim() || defaultUserProfile.name,
-      email: String(formData.get("email")).trim() || defaultUserProfile.email,
-    });
+    const result = authenticatePlatformAccount(formData.get("account"), formData.get("password"));
+    const authErrorEl = document.getElementById("authError");
+    if (!result.ok) {
+      authErrorEl.textContent = result.error;
+      return;
+    }
+    authErrorEl.textContent = "";
     closeModal("authModal");
   });
 }
@@ -240,7 +378,7 @@ function bindHeaderEvents() {
   const logoutAction = document.getElementById("logoutAction");
   if (logoutAction) {
     logoutAction.addEventListener("click", () => {
-      updateCurrentUser({ loggedIn: false });
+      updateCurrentUser({ ...defaultUserProfile, loggedIn: false });
       panel.classList.remove("open");
     });
   }
@@ -255,5 +393,8 @@ function renderGlobalHeader() {
   bindHeaderEvents();
   bindAuthForm();
 }
+
+window.registerPlatformAccount = registerPlatformAccount;
+window.authenticatePlatformAccount = authenticatePlatformAccount;
 
 renderGlobalHeader();

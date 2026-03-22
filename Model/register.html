@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>申请账号 - 煜邦视觉算法平台</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="page-register" data-page="register">
+  <div class="page-bg"></div>
+  <header class="site-header site-header-solid"></header>
+
+  <main class="main-shell page-shell">
+    <section class="page-hero register-hero">
+      <div class="page-hero-copy">
+        <p class="eyebrow">Account Request</p>
+        <h1>申请平台账号并开通使用权限</h1>
+        <p>填写基础联系人信息、单位信息与使用需求，提交后即可开通演示账号并进入平台使用。</p>
+      </div>
+      <div class="page-hero-aside register-hero-aside">
+        <strong>申请说明</strong>
+        <p>账号可用于收藏算法、大模型能力体验、在线检测和资料下载等平台功能。</p>
+      </div>
+    </section>
+
+    <section class="register-shell">
+      <div class="register-card">
+        <div class="panel-head register-head">
+          <div>
+            <p class="eyebrow">Apply Access</p>
+            <h3>账号申请信息</h3>
+          </div>
+        </div>
+        <form class="register-form" id="registerForm">
+          <label>
+            <span>申请账号</span>
+            <input name="account" type="text" placeholder="请输入登录账号" required>
+          </label>
+          <label>
+            <span>联系人姓名</span>
+            <input name="name" type="text" placeholder="请输入联系人姓名" required>
+          </label>
+          <label>
+            <span>邮箱</span>
+            <input name="email" type="email" placeholder="请输入联系邮箱" required>
+          </label>
+          <label>
+            <span>手机号</span>
+            <input name="phone" type="tel" placeholder="请输入手机号" required>
+          </label>
+          <label>
+            <span>所属单位</span>
+            <input name="company" type="text" placeholder="请输入所属单位" required>
+          </label>
+          <label>
+            <span>密码</span>
+            <input name="password" type="password" placeholder="请设置登录密码" required>
+          </label>
+          <label class="register-form-full">
+            <span>使用说明</span>
+            <textarea name="purpose" placeholder="请简要填写使用场景，例如：用于输电巡检方案演示与项目资料查看。"></textarea>
+          </label>
+          <p class="register-feedback" id="registerFeedback"></p>
+          <div class="register-actions">
+            <a class="ghost-btn" href="./index.html">返回平台</a>
+            <button class="primary-btn" type="submit">提交申请</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="./platform-data.js"></script>
+  <script src="./common.js"></script>
+  <script src="./register.js"></script>
+</body>
+</html>
