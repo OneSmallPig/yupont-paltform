@@ -25,7 +25,6 @@ const defaultUserProfile = {
     notifyEmail: true,
     notifySms: false,
     watermarkExport: true,
-    theme: "商务浅色",
   },
 };
 
@@ -46,6 +45,25 @@ const defaultAccounts = [
   },
 ];
 
+function normalizeApiKeyItem(item, index = 0) {
+  return {
+    id: item?.id || `key-${index}-${String(item?.createdAt || "").replace(/\D/g, "") || "init"}`,
+    name: item?.name || `默认密钥 ${index + 1}`,
+    value: item?.value || createApiKeyValue(),
+    createdAt: item?.createdAt || formatCurrentDate(),
+    status: item?.status === "停用" ? "停用" : "启用",
+  };
+}
+
+function normalizeUserProfileShape(profile) {
+  const nextProfile = { ...defaultUserProfile, ...profile };
+  nextProfile.apiKeys = Array.isArray(nextProfile.apiKeys)
+    ? nextProfile.apiKeys.map((item, index) => normalizeApiKeyItem(item, index))
+    : defaultUserProfile.apiKeys.map((item, index) => normalizeApiKeyItem(item, index));
+  nextProfile.settings = { ...defaultUserProfile.settings, ...(nextProfile.settings || {}) };
+  return nextProfile;
+}
+
 function normalizeIdentifier(value) {
   return String(value || "").trim().toLowerCase();
 }
@@ -53,10 +71,10 @@ function normalizeIdentifier(value) {
 function getStoredUser() {
   try {
     const saved = window.localStorage.getItem(USER_STORAGE_KEY);
-    if (!saved) return { ...defaultUserProfile };
-    return { ...defaultUserProfile, ...JSON.parse(saved) };
+    if (!saved) return normalizeUserProfileShape(defaultUserProfile);
+    return normalizeUserProfileShape(JSON.parse(saved));
   } catch (error) {
-    return { ...defaultUserProfile };
+    return normalizeUserProfileShape(defaultUserProfile);
   }
 }
 
@@ -80,11 +98,11 @@ function saveStoredAccounts(accounts) {
 
 function buildUserProfileFromAccount(account) {
   const { password, ...rest } = account;
-  return {
+  return normalizeUserProfileShape({
     ...defaultUserProfile,
     ...rest,
     loggedIn: true,
-  };
+  });
 }
 
 function getCurrentUser() {
@@ -212,6 +230,114 @@ function toggleFavoriteAlgorithm(algorithmId) {
 
   updateCurrentUser({ favorites: nextFavorites });
   return nextFavorites.includes(algorithmId);
+}
+
+function removeFavoriteAlgorithm(algorithmId) {
+  const user = getCurrentUser();
+
+  if (!user.loggedIn) {
+    configureAuthModal("login");
+    openModal("authModal");
+    return false;
+  }
+
+  const nextFavorites = user.favorites.filter((id) => id !== algorithmId);
+  updateCurrentUser({ favorites: nextFavorites });
+  return true;
+}
+
+function formatCurrentDate() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function createApiKeyValue() {
+  const seed = Math.random().toString(36).slice(2, 10);
+  const stamp = Date.now().toString(36).slice(-6);
+  return `sk-live-yupont-${stamp}${seed}`.slice(0, 28);
+}
+
+function addUserApiKey(name) {
+  const user = getCurrentUser();
+  const keyName = String(name || "").trim();
+
+  if (!user.loggedIn) {
+    configureAuthModal("login");
+    openModal("authModal");
+    return { ok: false, error: "请先登录后再新增密钥。" };
+  }
+
+  if (!keyName) {
+    return { ok: false, error: "请输入密钥名称。" };
+  }
+
+  const nextKey = {
+    id: `key-${Date.now()}`,
+    name: keyName,
+    value: createApiKeyValue(),
+    createdAt: formatCurrentDate(),
+    status: "启用",
+  };
+
+  updateCurrentUser({ apiKeys: [nextKey, ...user.apiKeys] });
+  return { ok: true, item: nextKey };
+}
+
+function toggleUserApiKeyStatus(keyId) {
+  const user = getCurrentUser();
+
+  if (!user.loggedIn) {
+    configureAuthModal("login");
+    openModal("authModal");
+    return false;
+  }
+
+  const nextKeys = user.apiKeys.map((item) => (
+    item.id === keyId
+      ? { ...item, status: item.status === "启用" ? "停用" : "启用" }
+      : item
+  ));
+
+  updateCurrentUser({ apiKeys: nextKeys });
+  return true;
+}
+
+function deleteUserApiKey(keyId) {
+  const user = getCurrentUser();
+
+  if (!user.loggedIn) {
+    configureAuthModal("login");
+    openModal("authModal");
+    return false;
+  }
+
+  updateCurrentUser({ apiKeys: user.apiKeys.filter((item) => item.id !== keyId) });
+  return true;
+}
+
+function updateUserSetting(settingKey, value) {
+  const user = getCurrentUser();
+
+  if (!user.loggedIn) {
+    configureAuthModal("login");
+    openModal("authModal");
+    return false;
+  }
+
+  if (!(settingKey in user.settings)) {
+    return false;
+  }
+
+  updateCurrentUser({
+    settings: {
+      ...user.settings,
+      [settingKey]: Boolean(value),
+    },
+  });
+  return true;
 }
 
 function buildHeaderMarkup() {
