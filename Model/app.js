@@ -81,7 +81,7 @@ function renderIndustrySection() {
   if (solutionFeatureEl && featuredIndustry) {
     solutionFeatureEl.innerHTML = `
       <div class="solution-feature-copy">
-        <p class="eyebrow">Core Solutions</p>
+        <p class="eyebrow">Transmission Inspection</p>
         <h3>${featuredIndustry.name}</h3>
         <p>${featuredIndustry.desc}</p>
         <a class="primary-btn solution-feature-btn" href="./market.html">了解更多</a>

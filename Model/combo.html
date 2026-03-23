@@ -3,33 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>算法详情 - 煜邦视觉算法平台</title>
+  <title>多算法组合 - 煜邦视觉算法平台</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
-<body class="page-algorithm" data-page="market">
+<body class="page-combo" data-page="combo">
   <div class="page-bg"></div>
   <header class="site-header"></header>
 
-  <main class="main-shell page-shell algorithm-page-shell">
+  <main class="main-shell page-shell combo-page-shell">
     <nav class="breadcrumb">
       <a href="./index.html">首页</a>
       <span>/</span>
       <a href="./market.html">算法商城</a>
       <span>/</span>
-      <strong id="detailBreadcrumb">算法详情</strong>
+      <strong>多算法组合</strong>
     </nav>
 
-    <section class="algorithm-page-hero" id="algorithmHero"></section>
+    <section class="page-hero combo-page-hero">
+      <div class="page-hero-copy combo-hero-copy">
+        <p class="eyebrow">Multi-Algorithm Pipeline</p>
+        <h1>多算法组合检测</h1>
+        <p>从算法列表中选择多个能力模块，统一上传图片或多媒体流，完成组合检测、结果预览与导出，适合方案演示与联合识别流程验证。</p>
+      </div>
+      <div class="page-hero-aside combo-hero-aside">
+        <strong>组合方式</strong>
+        <p>支持按算法分类筛选、批量加入组合，并沿用平台现有的图片上传、多媒体流上传、结果预览和导出流程。</p>
+      </div>
+    </section>
 
-    <section class="algorithm-layout">
-      <aside class="algorithm-sidebar" id="algorithmSidebar"></aside>
+    <section class="combo-page-layout">
+      <aside class="combo-selection-column">
+        <section class="section-card combo-selection-panel">
+          <div class="panel-head combo-selection-head">
+            <div>
+              <p class="eyebrow">Algorithm Picker</p>
+              <h3>组合算法选择</h3>
+            </div>
+          </div>
 
-      <div class="algorithm-main">
-        <section class="section-card algorithm-workbench" id="algorithmWorkbench">
+          <label class="combo-search-wrap" for="comboSearchInput">
+            <input id="comboSearchInput" type="search" placeholder="搜索算法名称、场景、行业">
+          </label>
+
+          <div class="combo-filter-cluster" id="comboCategoryTabs"></div>
+          <div class="combo-selected-strip" id="comboSelectedSummary"></div>
+          <div class="combo-algorithm-list" id="comboAlgorithmList"></div>
+        </section>
+      </aside>
+
+      <div class="combo-main">
+        <section class="section-card algorithm-workbench">
           <div class="panel-head algorithm-section-head compact-head">
             <div>
-              <p class="eyebrow">Online Detection</p>
-              <h3>在线检测</h3>
+              <p class="eyebrow">Combined Detection</p>
+              <h3>组合在线检测</h3>
             </div>
           </div>
 
@@ -40,10 +67,11 @@
             </div>
           </div>
 
+          <div class="combo-workbench-summary" id="comboWorkbenchSummary"></div>
           <div class="upload-panel" id="uploadPanel"></div>
 
-          <div class="action-row algorithm-action-row">
-            <button class="primary-btn detection-run-btn" type="button" id="runDetectionBtn">开始检测</button>
+          <div class="action-row algorithm-action-row combo-action-row">
+            <button class="primary-btn detection-run-btn" type="button" id="runDetectionBtn">开始组合检测</button>
           </div>
         </section>
 
@@ -83,6 +111,6 @@
 
   <script src="./platform-data.js"></script>
   <script src="./common.js"></script>
-  <script src="./algorithm.js"></script>
+  <script src="./combo.js"></script>
 </body>
 </html>
