@@ -112,7 +112,7 @@ function renderGrid(list) {
   }
 
   marketGridEl.innerHTML = list.map((item) => `
-    <article class="algo-card home-featured-card sharp-featured-card market-card">
+    <article class="algo-card home-featured-card sharp-featured-card market-card market-card-clickable" data-card-href="./algorithm.html?id=${item.id}" tabindex="0" role="link" aria-label="查看${item.name}详情">
       <div class="algo-cover sharp-featured-cover market-card-cover" style="background-image: url('${item.image}');"></div>
       <div class="sharp-featured-body market-card-body">
         <div class="market-card-top">
@@ -146,11 +146,31 @@ function bindFavoriteActions() {
   });
 }
 
+function bindCardActions() {
+  document.querySelectorAll("[data-card-href]").forEach((node) => {
+    const openDetail = () => {
+      window.location.href = node.dataset.cardHref;
+    };
+
+    node.addEventListener("click", (event) => {
+      if (event.target.closest("button, a")) return;
+      openDetail();
+    });
+
+    node.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      openDetail();
+    });
+  });
+}
+
 function renderMarket() {
   const list = getFilteredAlgorithms();
   renderSummary(list);
   renderGrid(list);
   bindFavoriteActions();
+  bindCardActions();
 }
 
 function resetFilters() {

@@ -1311,9 +1311,10 @@ button, input, select { font: inherit; }
   min-height: calc(100vh - 74px);
   padding: 42px 0 64px;
   background:
-    radial-gradient(circle at 70% 18%, rgba(255, 104, 64, 0.22), transparent 24%),
-    radial-gradient(circle at 20% 25%, rgba(180, 32, 32, 0.22), transparent 20%),
-    linear-gradient(180deg, #291313 0%, #1f1012 58%, #24171a 100%);
+    radial-gradient(circle at 72% 18%, rgba(255, 145, 96, 0.26), transparent 26%),
+    radial-gradient(circle at 18% 22%, rgba(210, 70, 58, 0.18), transparent 22%),
+    radial-gradient(circle at 50% 0%, rgba(255, 214, 178, 0.08), transparent 28%),
+    linear-gradient(180deg, #48211f 0%, #321718 54%, #2a1719 100%);
 }
 
 .home-hero .section-inner {
@@ -1379,7 +1380,7 @@ button, input, select { font: inherit; }
   border: 0;
   border-radius: 34px;
   overflow: hidden;
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34);
+  box-shadow: 0 28px 80px rgba(44, 19, 20, 0.28);
 }
 
 .hero-slides,
@@ -1393,13 +1394,13 @@ button, input, select { font: inherit; }
 
 .home-hero .hero-slide::before {
   background:
-    linear-gradient(90deg, rgba(16, 10, 12, 0.04) 0%, rgba(16, 10, 12, 0.24) 42%, rgba(16, 10, 12, 0.52) 100%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 30%);
+    linear-gradient(90deg, rgba(56, 29, 30, 0.06) 0%, rgba(56, 29, 30, 0.22) 42%, rgba(56, 29, 30, 0.42) 100%),
+    linear-gradient(180deg, rgba(255, 246, 236, 0.12), transparent 34%);
 }
 
 .home-hero .hero-slide::after {
   height: 36%;
-  background: linear-gradient(180deg, transparent 0%, rgba(18, 10, 12, 0.72) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(42, 18, 20, 0.58) 100%);
 }
 
 .hero-slide-caption {
@@ -1411,7 +1412,7 @@ button, input, select { font: inherit; }
   max-width: 420px;
   padding: 20px 22px;
   border-radius: 24px;
-  background: linear-gradient(180deg, rgba(18, 12, 16, 0.36), rgba(18, 12, 16, 0.62));
+  background: linear-gradient(180deg, rgba(74, 33, 31, 0.24), rgba(58, 24, 24, 0.46));
   backdrop-filter: blur(10px);
 }
 
@@ -2386,7 +2387,9 @@ button, input, select { font: inherit; }
   margin-top: 22px;
   padding: 38px 40px;
   border-radius: 32px;
-  background: linear-gradient(145deg, rgba(42, 19, 23, 0.94), rgba(63, 34, 31, 0.9));
+  background:
+    radial-gradient(circle at right top, rgba(255, 180, 130, 0.12), transparent 24%),
+    linear-gradient(145deg, rgba(76, 34, 31, 0.94), rgba(108, 54, 45, 0.9));
   color: #fff;
   box-shadow: 0 22px 52px rgba(12, 16, 24, 0.14);
 }
@@ -2399,15 +2402,15 @@ button, input, select { font: inherit; }
 
 .page-hero-copy p:last-child,
 .page-hero-aside p {
-  color: rgba(255, 241, 236, 0.74);
+  color: rgba(255, 242, 234, 0.82);
   line-height: 1.85;
 }
 
 .page-hero-aside {
   padding: 24px;
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 238, 230, 0.12);
 }
 
 .page-market .page-bg {
@@ -2429,8 +2432,8 @@ button, input, select { font: inherit; }
   margin-top: 22px;
   border-radius: 34px;
   min-height: 560px;
-  background: #102640;
-  box-shadow: 0 28px 58px rgba(16, 38, 64, 0.18);
+  background: #1f3c5a;
+  box-shadow: 0 28px 58px rgba(31, 60, 90, 0.16);
 }
 
 .market-hero-media,
@@ -2441,16 +2444,16 @@ button, input, select { font: inherit; }
 
 .market-hero-media {
   background:
-    linear-gradient(120deg, rgba(9, 28, 52, 0.18), rgba(9, 28, 52, 0.06)),
+    linear-gradient(120deg, rgba(31, 60, 90, 0.1), rgba(31, 60, 90, 0.03)),
     url("./效果图/轮播/输电线路与设备识别能力.png") center/cover no-repeat;
   transform: scale(1.02);
 }
 
 .market-hero-overlay {
   background:
-    linear-gradient(90deg, rgba(9, 28, 52, 0.86) 0%, rgba(9, 28, 52, 0.6) 42%, rgba(9, 28, 52, 0.34) 100%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 26%),
-    radial-gradient(circle at right top, rgba(127, 224, 217, 0.22), transparent 24%);
+    linear-gradient(90deg, rgba(31, 60, 90, 0.72) 0%, rgba(31, 60, 90, 0.46) 42%, rgba(31, 60, 90, 0.2) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 28%),
+    radial-gradient(circle at right top, rgba(127, 224, 217, 0.18), transparent 24%);
 }
 
 .market-hero-content {
@@ -2546,7 +2549,7 @@ button, input, select { font: inherit; }
   transform: translateY(-2px);
   background: rgba(255, 255, 255, 0.18);
   border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 16px 32px rgba(9, 28, 52, 0.16);
+  box-shadow: 0 16px 32px rgba(31, 60, 90, 0.16);
 }
 
 .market-demand-btn:hover::after,
@@ -2563,10 +2566,10 @@ button, input, select { font: inherit; }
   gap: 18px;
   padding: 24px;
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(14px);
-  box-shadow: 0 18px 42px rgba(9, 28, 52, 0.12);
+  box-shadow: 0 18px 42px rgba(31, 60, 90, 0.12);
 }
 
 .market-search-panel {
@@ -2713,6 +2716,10 @@ button, input, select { font: inherit; }
   padding: 0;
   border-radius: 0;
   overflow: hidden;
+}
+
+.market-card-clickable {
+  position: relative;
 }
 
 .market-card-cover {
@@ -2973,8 +2980,9 @@ button, input, select { font: inherit; }
   overflow: hidden;
   border-radius: 0;
   background:
-    linear-gradient(120deg, rgba(11, 29, 49, 0.96), rgba(41, 23, 28, 0.92)),
-    #102640;
+    radial-gradient(circle at right top, rgba(255, 184, 138, 0.14), transparent 24%),
+    linear-gradient(120deg, rgba(82, 39, 34, 0.96), rgba(112, 57, 47, 0.92)),
+    #5c2b27;
 }
 
 .page-llm .page-hero::before {
@@ -2996,7 +3004,7 @@ button, input, select { font: inherit; }
 
 .page-llm .page-hero-aside {
   border-radius: 0;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .llm-grid {
@@ -3198,8 +3206,9 @@ button, input, select { font: inherit; }
   overflow: hidden;
   border-radius: 0;
   background:
-    linear-gradient(120deg, rgba(18, 35, 58, 0.96), rgba(43, 24, 28, 0.92)),
-    #102640;
+    radial-gradient(circle at right top, rgba(255, 190, 142, 0.12), transparent 24%),
+    linear-gradient(120deg, rgba(86, 42, 37, 0.96), rgba(116, 61, 49, 0.92)),
+    #5c2b27;
 }
 
 .page-resources .page-hero::before {
@@ -3221,7 +3230,7 @@ button, input, select { font: inherit; }
 
 .resource-hero-aside {
   border-radius: 0;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .resource-filter-chip {
