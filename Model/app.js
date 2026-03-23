@@ -183,7 +183,6 @@ function renderRecommendationResult() {
               <span class="status-pill status-pill-accent">${item.badge}</span>
               <span class="status-pill">${item.scene}</span>
             </div>
-            <span class="recommend-item-link">进入详情</span>
           </div>
         </a>
       `).join("")}

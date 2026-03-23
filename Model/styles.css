@@ -67,6 +67,9 @@ button, input, select { font: inherit; }
 }
 
 .header-inner {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto minmax(220px, 1fr);
+  align-items: center;
   max-width: 1360px;
   margin: 0 auto;
   padding: 18px 24px;
@@ -97,6 +100,16 @@ button, input, select { font: inherit; }
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.top-nav {
+  justify-content: center;
+  justify-self: center;
+  flex-wrap: nowrap;
+}
+
+.header-actions {
+  justify-self: end;
 }
 
 .brand-copy {
@@ -1209,6 +1222,10 @@ button, input, select { font: inherit; }
   .header-inner, .section-head, .toolbar-row, .history-toolbar, .drawer-head, .report-actions {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .header-inner {
+    display: flex;
   }
 
   .top-nav, .header-actions, .history-tabs, .history-filters, .toolbar-group {
@@ -3602,30 +3619,6 @@ button, input, select { font: inherit; }
   justify-content: flex-end;
 }
 
-.header-recommend-btn {
-  min-height: auto;
-  padding: 11px 18px;
-  border-radius: 0;
-}
-
-.header-recommend-nav {
-  border-color: rgba(219, 231, 241, 0.92);
-  background: #fff;
-  color: #203246;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0;
-  text-transform: none;
-  box-shadow: none;
-}
-
-.header-recommend-nav:hover,
-.header-recommend-nav:focus-visible {
-  color: #bf432d;
-  background: linear-gradient(135deg, rgba(191, 67, 45, 0.14), rgba(255, 161, 106, 0.12));
-  border-color: rgba(191, 67, 45, 0.12);
-}
-
 .user-menu {
   position: relative;
 }
@@ -4080,7 +4073,8 @@ button, input, select { font: inherit; }
 
 .recommend-card {
   width: min(1040px, calc(100% - 32px));
-  overflow: hidden;
+  max-height: min(calc(100vh - 48px), 920px);
+  overflow: auto;
   border-radius: 0;
   border: 1px solid rgba(219, 231, 241, 0.92);
   background:
@@ -4309,26 +4303,6 @@ button, input, select { font: inherit; }
   min-height: 58px;
   line-height: 1.8;
   color: #5f6876;
-}
-
-.recommend-item-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: #bf432d;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.recommend-item-link::after {
-  content: "→";
-  transition: transform 0.22s ease;
-}
-
-.recommend-item:hover .recommend-item-link::after {
-  transform: translateX(4px);
 }
 
 @media (max-width: 760px) {
@@ -5009,6 +4983,135 @@ button, input, select { font: inherit; }
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.recommend-floating-btn {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  z-index: 18;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  color: #bf432d;
+  box-shadow: none;
+  transform: translateY(-50%);
+  cursor: pointer;
+  overflow: visible;
+  transition: transform 0.26s ease, filter 0.26s ease;
+}
+
+.recommend-floating-btn-glow {
+  position: absolute;
+  inset: -6px;
+  border-radius: 20px;
+  background: radial-gradient(circle, rgba(255, 160, 115, 0.28), transparent 68%);
+  opacity: 0.48;
+  animation: recommendFloatPulse 2.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.recommend-floating-btn-icon {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  filter: drop-shadow(0 10px 18px rgba(191, 67, 45, 0.18));
+  transition: transform 0.26s ease;
+}
+
+.recommend-floating-btn:hover,
+.recommend-floating-btn:focus-visible {
+  transform: translateY(calc(-50% - 6px)) rotate(-4deg);
+  filter: brightness(1.04);
+}
+
+.recommend-floating-btn:hover .recommend-floating-btn-icon,
+.recommend-floating-btn:focus-visible .recommend-floating-btn-icon {
+  transform: scale(1.08) rotate(4deg);
+}
+
+.recommend-floating-btn-tooltip {
+  position: absolute;
+  right: calc(100% + 14px);
+  top: 50%;
+  z-index: 1;
+  padding: 10px 14px;
+  border: 1px solid rgba(191, 67, 45, 0.16);
+  border-radius: 14px;
+  background: rgba(32, 50, 70, 0.94);
+  color: #fff7f1;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(8px, -50%);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.recommend-floating-btn-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -6px;
+  width: 12px;
+  height: 12px;
+  background: rgba(32, 50, 70, 0.94);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.recommend-floating-btn:hover .recommend-floating-btn-tooltip,
+.recommend-floating-btn:focus-visible .recommend-floating-btn-tooltip {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+@keyframes recommendFloatPulse {
+  0%,
+  100% {
+    transform: scale(0.96);
+    opacity: 0.56;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 0.88;
+  }
+}
+
+@media (max-width: 760px) {
+  .recommend-floating-btn {
+    right: 16px;
+    bottom: 18px;
+    top: auto;
+    width: 46px;
+    height: 46px;
+    transform: none;
+    border-radius: 14px;
+  }
+
+  .recommend-floating-btn:hover,
+  .recommend-floating-btn:focus-visible {
+    transform: translateY(-2px) rotate(-2deg);
+  }
+
+  .recommend-floating-btn-icon {
+    border-radius: 14px;
+  }
+
+  .recommend-floating-btn-tooltip {
+    display: none;
+  }
 }
 
 .algorithm-hero-icon {

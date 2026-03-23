@@ -365,7 +365,6 @@ function buildHeaderMarkup() {
         ${navs.map((item) => `<a class="nav-link ${page === item.key ? "active" : ""}" href="${item.href}">${item.label}</a>`).join("")}
       </nav>
       <div class="header-actions header-user-area">
-        ${page === "home" ? `<button class="ghost-btn header-recommend-btn header-recommend-nav" type="button" id="openRecommendModal">智能算法推荐</button>` : ""}
         <div class="user-menu ${user.loggedIn ? "is-authenticated" : ""}">
           <button class="user-menu-trigger" type="button" id="userMenuTrigger">
             <span class="user-avatar ${user.loggedIn ? "" : "user-avatar-guest"}">${user.loggedIn ? user.name.slice(0, 1) : ""}</span>
