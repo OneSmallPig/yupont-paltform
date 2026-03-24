@@ -1,7 +1,3 @@
-const comboCategoryTabsEl = document.getElementById("comboCategoryTabs");
-const comboSearchInputEl = document.getElementById("comboSearchInput");
-const comboSelectedSummaryEl = document.getElementById("comboSelectedSummary");
-const comboAlgorithmListEl = document.getElementById("comboAlgorithmList");
 const comboWorkbenchSummaryEl = document.getElementById("comboWorkbenchSummary");
 const uploadPanelEl = document.getElementById("uploadPanel");
 const resultPreviewEl = document.getElementById("resultPreview");
@@ -14,26 +10,28 @@ const exportPreviewDescEl = document.getElementById("exportPreviewDesc");
 const exportPreviewEyebrowEl = document.getElementById("exportPreviewEyebrow");
 const exportConfirmBtnEl = document.getElementById("exportConfirmBtn");
 
-const comboCategories = ["全部算法", ...new Set(platformData.algorithms.map((item) => item.category))];
-
 function getDefaultImageFiles() {
-  return [{
-    name: "多算法组合样例.jpg",
-    url: "./多算法组合.png",
-    isDefault: true,
-  }];
+  return [
+    {
+      name: "biandian_03753.jpg",
+      url: "./效果图/变电设备缺陷智能识别/biandian_03753.jpg",
+    },
+    {
+      name: "杆塔104.JPG",
+      url: "./效果图/配网杆塔关键部件识别/杆塔104.JPG",
+    },
+  ];
 }
 
 const comboState = {
-  selectedIds: platformData.algorithms.slice(0, 2).map((item) => item.id),
-  category: "全部算法",
-  keyword: "",
+  selectedIds: platformData.algorithms.slice(0, 3).map((item) => item.id),
   uploadType: "image",
   imageFiles: getDefaultImageFiles(),
   fileName: "",
   fileUrl: "",
   result: null,
   exportType: "json",
+  activeMetricId: null,
 };
 
 function buildTimestamp() {
@@ -90,100 +88,21 @@ function getCurrentFileLabel() {
   return comboState.fileName || "待上传视频文件";
 }
 
-function getFilteredAlgorithms() {
-  const keyword = comboState.keyword.trim().toLowerCase();
-
-  return platformData.algorithms.filter((item) => {
-    const categoryOk = comboState.category === "全部算法" || item.category === comboState.category;
-    if (!categoryOk) return false;
-    if (!keyword) return true;
-
-    return [
-      item.name,
-      item.subtitle,
-      item.industry,
-      item.scene,
-      item.category,
-      item.desc,
-      item.businessDesc,
-    ].join(" ").toLowerCase().includes(keyword);
-  });
-}
-
-function renderCategoryTabs() {
-  comboCategoryTabsEl.innerHTML = comboCategories.map((item) => `
-    <button class="market-filter-chip market-filter-chip-soft ${comboState.category === item ? "active" : ""}" type="button" data-combo-category="${item}">${item}</button>
-  `).join("");
-}
-
-function renderSelectedSummary() {
-  const selected = getSelectedAlgorithms();
-
-  comboSelectedSummaryEl.innerHTML = `
-    <div class="combo-selected-head">
-      <strong>已选组合</strong>
-      <button class="ghost-btn combo-clear-btn" type="button" id="clearComboSelection">清空选择</button>
-    </div>
-    <div class="combo-selected-tags">
-      ${selected.length ? selected.map((item) => `
-        <span class="combo-selected-tag">
-          <em>${item.name}</em>
-          <button type="button" data-remove-combo="${item.id}" aria-label="移除${item.name}">×</button>
-        </span>
-      `).join("") : `<span class="combo-selected-empty">当前还未选择算法。</span>`}
-    </div>
-  `;
-}
-
-function renderAlgorithmList() {
-  const list = getFilteredAlgorithms();
-
-  comboAlgorithmListEl.innerHTML = list.length ? list.map((item) => {
-    const selected = comboState.selectedIds.includes(item.id);
-    return `
-      <article class="combo-algorithm-row ${selected ? "is-selected" : ""}">
-        <div class="combo-algorithm-row-main">
-          <div class="combo-algorithm-row-head">
-            <h4>${item.name}</h4>
-            <div class="combo-algorithm-inline-tags">
-              <span class="sharp-featured-type">${item.category}</span>
-              <span class="business-tag">${item.scene}</span>
-            </div>
-          </div>
-          <p>${item.industry}</p>
-        </div>
-        <div class="combo-algorithm-actions">
-          <button class="${selected ? "ghost-btn" : "primary-btn"} combo-pick-btn" type="button" data-toggle-combo="${item.id}">
-            ${selected ? "移除" : "添加"}
-          </button>
-        </div>
-      </article>
-    `;
-  }).join("") : `
-    <div class="combo-algorithm-empty">
-      <strong>没有匹配到算法</strong>
-      <span>可尝试切换分类或清空关键词后重新筛选。</span>
-    </div>
-  `;
-}
-
 function renderWorkbenchSummary() {
   const selected = getSelectedAlgorithms();
 
   comboWorkbenchSummaryEl.innerHTML = `
     <div class="combo-workbench-head">
-      <strong>本次参与检测的算法</strong>
+      <strong>本次组合算法</strong>
     </div>
-    <div class="combo-workbench-tags">
-      ${selected.length ? selected.map((item) => `<span class="combo-workbench-tag">${item.name}</span>`).join("") : `<span class="combo-workbench-empty">请先在左侧选择算法</span>`}
+    <div class="combo-workbench-title-list">
+      ${selected.map((item) => `
+        <article class="combo-workbench-title-item">
+          <strong>${item.name}</strong>
+        </article>
+      `).join("")}
     </div>
   `;
-}
-
-function renderSelectionViews() {
-  renderSelectedSummary();
-  renderAlgorithmList();
-  renderWorkbenchSummary();
 }
 
 function renderUploadPanel() {
@@ -214,7 +133,6 @@ function renderUploadPanel() {
       comboState.imageFiles = files.map((file) => ({
         name: file.name,
         url: URL.createObjectURL(file),
-        isDefault: false,
       }));
       renderDetectionResult();
       renderUploadPreview();
@@ -239,13 +157,9 @@ function renderUploadPreview() {
       ? `<div class="upload-thumb upload-thumb-large" style="background-image: url('${files[0].url || getPreviewFallback()}');"></div>`
       : `
         <div class="combo-upload-grid">
-          ${files.map((file, index) => `
+          ${files.map((file) => `
             <div class="combo-upload-card">
               <div class="combo-upload-card-cover" style="background-image: url('${file.url}');"></div>
-              <div class="combo-upload-card-meta">
-                <strong>图片 ${index + 1}</strong>
-                <span>${file.name}</span>
-              </div>
             </div>
           `).join("")}
         </div>
@@ -261,8 +175,8 @@ function renderUploadPreview() {
 
   const hasFile = Boolean(comboState.fileUrl);
   const previewVisual = hasFile
-      ? `<video class="upload-video-preview" src="${comboState.fileUrl}" controls muted playsinline preload="metadata"></video>`
-      : `<div class="upload-video-empty">VIDEO STREAM</div>`;
+    ? `<video class="upload-video-preview" src="${comboState.fileUrl}" controls muted playsinline preload="metadata"></video>`
+    : `<div class="upload-video-empty">VIDEO STREAM</div>`;
 
   uploadPreviewEl.innerHTML = `
     <div class="upload-preview-frame">
@@ -271,59 +185,94 @@ function renderUploadPreview() {
   `;
 }
 
+function buildAlgorithmMetric(item, index, imageCount) {
+  const baseConfidence = 96.1 - index * 1.2;
+  const baseLatency = 28 + index * 11 + imageCount * 5;
+  const targetCount = comboState.uploadType === "image" ? Math.max(1, imageCount + index) : 2 + index;
+
+  return {
+    id: item.id,
+    name: item.name,
+    category: item.category,
+    industry: item.industry,
+    scene: item.scene,
+    stack: item.stack,
+    confidence: `${baseConfidence.toFixed(1)}%`,
+    latency: `${baseLatency}ms`,
+    targetCount,
+    status: index === 0 ? "主检测算法" : "联合识别算法",
+    summary: `负责 ${item.scene} 场景识别，当前输出稳定，适合放入组合演示链路。`,
+    details: [
+      `行业场景：${item.industry}`,
+      `算法类别：${item.category}`,
+      `模型架构：${item.stack}`,
+      `当前识别目标数：${targetCount}`,
+    ],
+  };
+}
+
 function buildDetectionResult() {
   const selected = getSelectedAlgorithms();
   if (selected.length < 2) return null;
 
   const isImage = comboState.uploadType === "image";
   const imageCount = isImage ? getCurrentImageFiles().length : 1;
-  const totalTargets = isImage ? selected.length + imageCount : selected.length + 2;
+  const algorithmMetrics = selected.map((item, index) => buildAlgorithmMetric(item, index, imageCount));
+  const totalTargets = algorithmMetrics.reduce((sum, item) => sum + item.targetCount, 0);
+  const averageConfidence = (algorithmMetrics.reduce((sum, item) => sum + Number.parseFloat(item.confidence), 0) / algorithmMetrics.length).toFixed(1);
+  const totalLatency = algorithmMetrics.reduce((sum, item) => sum + Number.parseInt(item.latency, 10), 0);
   const summaryNames = selected.map((item) => item.name).join("、");
+
+  comboState.activeMetricId = algorithmMetrics[0]?.id || null;
 
   return {
     success: true,
-    inferenceTime: isImage ? `${46 + selected.length * 11 + imageCount * 9}ms` : `${78 + selected.length * 13}ms`,
-    confidence: isImage ? "95.6%" : "93.9%",
+    inferenceTime: `${totalLatency}ms`,
+    confidence: `${averageConfidence}%`,
     targetCount: totalTargets,
     label: isImage ? "组合检测区域" : "多媒体联合分析",
     timestamp: buildTimestamp(),
     summary: isImage
-      ? `系统已完成 ${imageCount} 张图片的 ${summaryNames} 组合检测解析，当前结果适合用于多算法协同演示、批量样本联合识别验证与结果汇报导出。`
-      : `系统已完成 ${summaryNames} 的组合检测解析，当前结果适合用于多算法协同演示、联合识别验证与结果汇报导出。`,
-    detections: selected.map((item, index) => ({
+      ? `系统已完成 ${imageCount} 张图片的 ${summaryNames} 组合检测解析，报告区可按算法分别查看检测指标与详细说明。`
+      : `系统已完成 ${summaryNames} 的组合检测解析，报告区支持按算法查看单项指标与详细说明。`,
+    detections: algorithmMetrics.map((item, index) => ({
       name: item.scene,
-      confidence: `${94 - index * 0.6}%`,
+      confidence: item.confidence,
       region: `联合检测区域 ${index + 1}`,
-    })).concat(isImage ? [
-      { name: "综合风险汇总", confidence: "91.8%", region: "组合结论区域" },
-    ] : [
-      { name: "时序异常片段", confidence: "92.4%", region: "关键帧链路" },
-      { name: "综合风险汇总", confidence: "90.9%", region: "组合结论区域" },
-    ]),
+    })),
     insights: [
       `本次组合同时调用 ${selected.length} 个算法模块，覆盖 ${[...new Set(selected.map((item) => item.industry))].length} 类业务场景。`,
       isImage ? `当前批次共上传 ${imageCount} 张图片，适合做多样本对比演示与联合识别验证。` : "当前上传素材与所选算法场景匹配度较高，组合检测输出稳定，适合方案演示和能力说明。",
-      `组合链路可继续扩展到更多算法，适用于多目标识别、联合告警和复杂场景分析。`,
+      "报告区已拆分为算法指标列表，可逐个查看单算法检测表现。",
     ],
     actions: [
       "建议保留本次组合方案用于项目演示和能力汇报。",
-      isImage ? "可继续追加更多图片样本进行批量横向对比验证。" : "可追加不同工况样本进行横向对比验证。",
+      "可继续补充更多样本验证不同算法在同一批次中的检测表现。",
       "支持导出 JSON 与 PDF 用于归档、汇报或对接。",
     ],
+    algorithmMetrics,
   };
+}
+
+function getActiveMetric() {
+  if (!comboState.result?.algorithmMetrics?.length) return null;
+  return comboState.result.algorithmMetrics.find((item) => item.id === comboState.activeMetricId) || comboState.result.algorithmMetrics[0];
 }
 
 function buildExportPayload() {
   if (!comboState.result) return null;
 
   return {
-    algorithms: getSelectedAlgorithms().map((item) => ({
+    algorithms: comboState.result.algorithmMetrics.map((item) => ({
       id: item.id,
       name: item.name,
       industry: item.industry,
       category: item.category,
       scene: item.scene,
       stack: item.stack,
+      confidence: item.confidence,
+      latency: item.latency,
+      targetCount: item.targetCount,
     })),
     input: {
       type: comboState.uploadType,
@@ -355,7 +304,7 @@ function renderDetectionResult() {
       <div class="empty-result slim-empty-result">
         <div class="result-empty-copy">
           <strong>等待组合检测</strong>
-          <span>选择算法、上传素材并开始检测后，这里会展示联合识别预览。</span>
+          <span>上传素材并开始检测后，这里会展示联合识别预览和算法指标明细。</span>
         </div>
       </div>
     `;
@@ -368,7 +317,7 @@ function renderDetectionResult() {
           </div>
           <span class="result-report-state">待生成</span>
         </div>
-        <p class="result-report-summary">完成组合检测后，将在这里生成整块报告式解析内容，并支持 JSON 与 PDF 预览导出。</p>
+        <p class="result-report-summary">完成组合检测后，将在这里生成算法指标列表，并支持点击查看单算法检测详情。</p>
       </div>
     `;
     resultStatusEl.textContent = "等待检测";
@@ -384,6 +333,12 @@ function renderDetectionResult() {
           <div class="combo-batch-item">
             <img src="${file.url || getPreviewFallback()}" alt="${file.name}">
             <span>样本 ${index + 1}</span>
+            <div class="combo-batch-detection combo-batch-detection-primary combo-batch-detection-${(index % 2) + 1}">
+              <i>${comboState.result.detections[index]?.name || comboState.result.label}</i>
+            </div>
+            <div class="combo-batch-detection combo-batch-detection-secondary combo-batch-detection-${((index + 1) % 2) + 1}">
+              <i>${comboState.result.detections[index]?.confidence || comboState.result.confidence}</i>
+            </div>
           </div>
         `).join("")}
       </div>
@@ -406,6 +361,8 @@ function renderDetectionResult() {
     </div>
   `;
 
+  const activeMetric = getActiveMetric();
+
   resultMetricsEl.innerHTML = `
     <div class="result-report-panel">
       <div class="result-report-head">
@@ -425,31 +382,59 @@ function renderDetectionResult() {
           <span>输入样本</span>
           <strong>${comboState.uploadType === "image" ? getCurrentImageFiles().length : 1}</strong>
         </div>
-        <div data-label="推理时延">
-          <span>推理时延</span>
+        <div data-label="综合时延">
+          <span>综合时延</span>
           <strong>${comboState.result.inferenceTime}</strong>
         </div>
-        <div data-label="检测时间">
-          <span>检测时间</span>
-          <strong>${comboState.result.timestamp}</strong>
-        </div>
-        <div data-label="识别目标">
-          <span>识别目标</span>
-          <strong>${comboState.result.targetCount}</strong>
+        <div data-label="平均置信度">
+          <span>平均置信度</span>
+          <strong>${comboState.result.confidence}</strong>
         </div>
       </div>
       <div class="result-report-section">
-        <h5>识别对象</h5>
-        <div class="report-line-list">
-          ${comboState.result.detections.map((item) => `
-            <div class="report-line-item">
-              <strong>${item.name}</strong>
-              <span>${item.region}</span>
-              <em>${item.confidence}</em>
-            </div>
+        <h5>算法检测指标列表</h5>
+        <div class="combo-metric-list">
+          ${comboState.result.algorithmMetrics.map((item) => `
+            <article class="combo-metric-item ${item.id === activeMetric?.id ? "is-active" : ""}">
+              <div class="combo-metric-item-main">
+                <strong>${item.name}</strong>
+                <span>${item.scene}</span>
+              </div>
+              <div class="combo-metric-chip"><span>置信度</span><em>${item.confidence}</em></div>
+              <div class="combo-metric-chip"><span>时延</span><em>${item.latency}</em></div>
+              <div class="combo-metric-chip"><span>目标数</span><em>${item.targetCount}</em></div>
+              <button class="ghost-btn combo-metric-detail-btn" type="button" data-metric-detail="${item.id}">查看详情</button>
+            </article>
           `).join("")}
         </div>
       </div>
+      ${activeMetric ? `
+        <div class="result-report-section">
+          <h5>算法详情</h5>
+          <div class="combo-metric-detail-card">
+            <div class="combo-metric-detail-head">
+              <div>
+                <strong>${activeMetric.name}</strong>
+                <span>${activeMetric.status}</span>
+              </div>
+              <div class="combo-metric-detail-badges">
+                <span>${activeMetric.category}</span>
+                <span>${activeMetric.industry}</span>
+              </div>
+            </div>
+            <p>${activeMetric.summary}</p>
+            <div class="combo-metric-detail-grid">
+              <div><span>检测场景</span><strong>${activeMetric.scene}</strong></div>
+              <div><span>推理时延</span><strong>${activeMetric.latency}</strong></div>
+              <div><span>识别目标</span><strong>${activeMetric.targetCount}</strong></div>
+              <div><span>置信度</span><strong>${activeMetric.confidence}</strong></div>
+            </div>
+            <div class="report-bullet-list">
+              ${activeMetric.details.map((item) => `<p>${item}</p>`).join("")}
+            </div>
+          </div>
+        </div>
+      ` : ""}
       <div class="result-report-section">
         <h5>解析结论</h5>
         <div class="report-bullet-list">
@@ -503,12 +488,12 @@ function renderExportPreview(type) {
           <div data-label="置信度"><span>置信度</span><strong>${comboState.result.confidence}</strong></div>
         </div>
         <div class="export-sheet-section">
-          <h5>参与算法</h5>
-          ${getSelectedAlgorithms().map((item) => `
+          <h5>算法指标列表</h5>
+          ${comboState.result.algorithmMetrics.map((item) => `
             <div class="export-sheet-line">
               <strong>${item.name}</strong>
-              <span>${item.industry}</span>
-              <em>${item.scene}</em>
+              <span>${item.latency}</span>
+              <em>${item.confidence}</em>
             </div>
           `).join("")}
         </div>
@@ -588,56 +573,13 @@ function exportCurrentResult() {
 
   const pdfText = [
     "MULTI ALGORITHM DETECTION REPORT",
-    `Algorithms: ${asciiSafe(getSelectedAlgorithms().map((item) => item.name).join(", "))}`,
+    `Algorithms: ${asciiSafe(comboState.result.algorithmMetrics.map((item) => item.name).join(", "))}`,
     `Target Count: ${comboState.result.targetCount}`,
-    `Confidence: ${comboState.result.confidence}`,
-    `Latency: ${comboState.result.inferenceTime}`,
+    `Confidence: ${asciiSafe(comboState.result.confidence)}`,
+    `Latency: ${asciiSafe(comboState.result.inferenceTime)}`,
     `Generated At: ${asciiSafe(comboState.result.timestamp)}`,
   ].join("\n");
   downloadBlob(`${baseName}.pdf`, buildSimplePdf(pdfText), "application/pdf");
-}
-
-function toggleAlgorithmSelection(id) {
-  comboState.selectedIds = comboState.selectedIds.includes(id)
-    ? comboState.selectedIds.filter((item) => item !== id)
-    : [...comboState.selectedIds, id];
-
-  comboState.result = null;
-  renderSelectionViews();
-  renderDetectionResult();
-}
-
-function bindCategoryTabs() {
-  comboCategoryTabsEl.addEventListener("click", (event) => {
-    const trigger = event.target.closest("[data-combo-category]");
-    if (!trigger) return;
-    comboState.category = trigger.dataset.comboCategory;
-    renderCategoryTabs();
-    renderAlgorithmList();
-  });
-}
-
-function bindSelectionActions() {
-  comboSelectedSummaryEl.addEventListener("click", (event) => {
-    const removeTrigger = event.target.closest("[data-remove-combo]");
-    if (removeTrigger) {
-      toggleAlgorithmSelection(removeTrigger.dataset.removeCombo);
-      return;
-    }
-
-    if (event.target.id === "clearComboSelection") {
-      comboState.selectedIds = [];
-      comboState.result = null;
-      renderSelectionViews();
-      renderDetectionResult();
-    }
-  });
-
-  comboAlgorithmListEl.addEventListener("click", (event) => {
-    const trigger = event.target.closest("[data-toggle-combo]");
-    if (!trigger) return;
-    toggleAlgorithmSelection(trigger.dataset.toggleCombo);
-  });
 }
 
 function bindUploadTabs() {
@@ -666,27 +608,24 @@ function bindUploadTabs() {
 }
 
 function bindEvents() {
-  comboSearchInputEl.addEventListener("input", () => {
-    comboState.keyword = comboSearchInputEl.value;
-    renderAlgorithmList();
-  });
-
-  bindCategoryTabs();
-  bindSelectionActions();
   bindUploadTabs();
 
   runBtnEl.addEventListener("click", () => {
-    if (getSelectedAlgorithms().length < 2) {
-      return;
-    }
     comboState.result = buildDetectionResult();
     renderDetectionResult();
   });
 
   resultMetricsEl.addEventListener("click", (event) => {
-    const trigger = event.target.closest("[data-export-type]");
-    if (!trigger || !comboState.result) return;
-    renderExportPreview(trigger.dataset.exportType);
+    const detailTrigger = event.target.closest("[data-metric-detail]");
+    if (detailTrigger && comboState.result) {
+      comboState.activeMetricId = detailTrigger.dataset.metricDetail;
+      renderDetectionResult();
+      return;
+    }
+
+    const exportTrigger = event.target.closest("[data-export-type]");
+    if (!exportTrigger || !comboState.result) return;
+    renderExportPreview(exportTrigger.dataset.exportType);
   });
 
   exportConfirmBtnEl.addEventListener("click", () => {
@@ -694,8 +633,7 @@ function bindEvents() {
   });
 }
 
-renderCategoryTabs();
-renderSelectionViews();
+renderWorkbenchSummary();
 renderUploadPanel();
 renderDetectionResult();
 bindEvents();
