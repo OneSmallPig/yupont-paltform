@@ -4954,11 +4954,14 @@ button, input, select { font: inherit; }
   display: block;
 }
 
-.combo-hero-aside p,
 .combo-workbench-head span,
 .combo-algorithm-empty span,
 .combo-selected-empty {
   color: var(--muted);
+}
+
+.combo-hero-aside p {
+  color: var(--hero-red-copy);
 }
 
 .algorithm-hero-strip {
@@ -5706,6 +5709,13 @@ button, input, select { font: inherit; }
   border-top: 0;
 }
 
+.combo-upload-hint {
+  margin: 12px 2px 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
 .upload-preview-frame {
   width: 100%;
   min-height: 264px;
@@ -5719,6 +5729,11 @@ button, input, select { font: inherit; }
   background-size: 32px 32px, 32px 32px, auto;
 }
 
+.upload-preview-frame.is-multi {
+  align-items: start;
+  padding: 18px;
+}
+
 .upload-thumb-large {
   width: min(100%, 560px);
   min-height: 250px;
@@ -5726,6 +5741,46 @@ button, input, select { font: inherit; }
   background-size: cover;
   background-position: center;
   box-shadow: 0 16px 30px rgba(16, 38, 64, 0.08);
+}
+
+.combo-upload-grid,
+.combo-batch-preview.is-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+.combo-upload-card,
+.combo-batch-item {
+  display: grid;
+  gap: 10px;
+}
+
+.combo-upload-card-cover {
+  min-height: 118px;
+  border: 1px solid rgba(219, 231, 241, 0.82);
+  background-position: center;
+  background-size: cover;
+  box-shadow: 0 12px 24px rgba(16, 38, 64, 0.06);
+}
+
+.combo-upload-card-meta {
+  display: grid;
+  gap: 4px;
+}
+
+.combo-upload-card-meta strong,
+.combo-batch-item span {
+  color: #18324d;
+  font-size: 13px;
+}
+
+.combo-upload-card-meta span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  word-break: break-all;
 }
 
 .upload-video-preview {
@@ -5819,6 +5874,52 @@ button, input, select { font: inherit; }
 .compact-annotated-preview,
 .slim-empty-result {
   min-height: 280px;
+}
+
+.combo-batch-preview {
+  display: grid;
+  width: 100%;
+  height: 100%;
+}
+
+.combo-batch-preview:not(.is-grid) .combo-batch-item {
+  height: 100%;
+}
+
+.combo-batch-item {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  background: #fff;
+}
+
+.combo-batch-preview.is-grid .combo-batch-item {
+  min-height: 180px;
+}
+
+.combo-batch-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.combo-batch-preview.is-grid .combo-batch-item img {
+  min-height: 180px;
+}
+
+.combo-batch-item span {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  background: rgba(16, 38, 64, 0.7);
+  color: #fff;
+  letter-spacing: 0.08em;
 }
 
 .stream-preview-card {

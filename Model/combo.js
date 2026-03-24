@@ -16,13 +16,22 @@ const exportConfirmBtnEl = document.getElementById("exportConfirmBtn");
 
 const comboCategories = ["全部算法", ...new Set(platformData.algorithms.map((item) => item.category))];
 
+function getDefaultImageFiles() {
+  return [{
+    name: "多算法组合样例.jpg",
+    url: "./多算法组合.png",
+    isDefault: true,
+  }];
+}
+
 const comboState = {
   selectedIds: platformData.algorithms.slice(0, 2).map((item) => item.id),
   category: "全部算法",
   keyword: "",
   uploadType: "image",
-  fileName: "多算法组合样例.jpg",
-  fileUrl: "./多算法组合.png",
+  imageFiles: getDefaultImageFiles(),
+  fileName: "",
+  fileUrl: "",
   result: null,
   exportType: "json",
 };
@@ -49,8 +58,36 @@ function getPreviewFallback() {
   return getSelectedAlgorithms()[0]?.image || "./多算法组合.png";
 }
 
+function revokeMediaFileUrl() {
+  if (comboState.fileUrl && comboState.fileUrl.startsWith("blob:")) {
+    URL.revokeObjectURL(comboState.fileUrl);
+  }
+}
+
+function revokeImageFiles(files) {
+  files.forEach((file) => {
+    if (file.url?.startsWith("blob:")) {
+      URL.revokeObjectURL(file.url);
+    }
+  });
+}
+
+function resetImageFiles() {
+  revokeImageFiles(comboState.imageFiles);
+  comboState.imageFiles = getDefaultImageFiles();
+}
+
+function getCurrentImageFiles() {
+  return comboState.imageFiles.length ? comboState.imageFiles : getDefaultImageFiles();
+}
+
 function getCurrentFileLabel() {
-  return comboState.fileName || (comboState.uploadType === "image" ? "组合检测图片样例" : "待上传视频文件");
+  if (comboState.uploadType === "image") {
+    const files = getCurrentImageFiles();
+    return files.length > 1 ? `已上传 ${files.length} 张图片` : files[0].name;
+  }
+
+  return comboState.fileName || "待上传视频文件";
 }
 
 function getFilteredAlgorithms() {
@@ -151,21 +188,43 @@ function renderSelectionViews() {
 
 function renderUploadPanel() {
   const accept = comboState.uploadType === "image" ? "image/*" : "video/*";
+  const multiple = comboState.uploadType === "image" ? "multiple" : "";
+  const uploadHint = comboState.uploadType === "image"
+    ? "支持一次上传多张图片进行组合检测"
+    : "上传单个视频文件或媒体流进行联合分析";
 
   uploadPanelEl.innerHTML = `
     <label class="upload-zone commercial-upload-zone detection-upload-zone" for="comboDetectionFile">
-      <input id="comboDetectionFile" type="file" accept="${accept}">
+      <input id="comboDetectionFile" type="file" accept="${accept}" ${multiple}>
       <div class="upload-preview compact-upload-preview" id="uploadPreview"></div>
     </label>
+    <p class="combo-upload-hint">${uploadHint}</p>
   `;
 
   renderUploadPreview();
 
   document.getElementById("comboDetectionFile")?.addEventListener("change", (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    comboState.fileName = file.name;
-    comboState.fileUrl = URL.createObjectURL(file);
+    const files = Array.from(event.target.files || []);
+    if (!files.length) return;
+
+    comboState.result = null;
+
+    if (comboState.uploadType === "image") {
+      revokeImageFiles(comboState.imageFiles);
+      comboState.imageFiles = files.map((file) => ({
+        name: file.name,
+        url: URL.createObjectURL(file),
+        isDefault: false,
+      }));
+      renderDetectionResult();
+      renderUploadPreview();
+      return;
+    }
+
+    revokeMediaFileUrl();
+    comboState.fileName = files[0].name;
+    comboState.fileUrl = URL.createObjectURL(files[0]);
+    renderDetectionResult();
     renderUploadPreview();
   });
 }
@@ -174,10 +233,34 @@ function renderUploadPreview() {
   const uploadPreviewEl = document.getElementById("uploadPreview");
   if (!uploadPreviewEl) return;
 
+  if (comboState.uploadType === "image") {
+    const files = getCurrentImageFiles();
+    const previewVisual = files.length === 1
+      ? `<div class="upload-thumb upload-thumb-large" style="background-image: url('${files[0].url || getPreviewFallback()}');"></div>`
+      : `
+        <div class="combo-upload-grid">
+          ${files.map((file, index) => `
+            <div class="combo-upload-card">
+              <div class="combo-upload-card-cover" style="background-image: url('${file.url}');"></div>
+              <div class="combo-upload-card-meta">
+                <strong>图片 ${index + 1}</strong>
+                <span>${file.name}</span>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+
+    uploadPreviewEl.innerHTML = `
+      <div class="upload-preview-frame ${files.length > 1 ? "is-multi" : ""}">
+        ${previewVisual}
+      </div>
+    `;
+    return;
+  }
+
   const hasFile = Boolean(comboState.fileUrl);
-  const previewVisual = comboState.uploadType === "image"
-    ? `<div class="upload-thumb upload-thumb-large" style="background-image: url('${hasFile ? comboState.fileUrl : getPreviewFallback()}');"></div>`
-    : hasFile
+  const previewVisual = hasFile
       ? `<video class="upload-video-preview" src="${comboState.fileUrl}" controls muted playsinline preload="metadata"></video>`
       : `<div class="upload-video-empty">VIDEO STREAM</div>`;
 
@@ -193,17 +276,20 @@ function buildDetectionResult() {
   if (selected.length < 2) return null;
 
   const isImage = comboState.uploadType === "image";
-  const totalTargets = isImage ? selected.length + 1 : selected.length + 2;
+  const imageCount = isImage ? getCurrentImageFiles().length : 1;
+  const totalTargets = isImage ? selected.length + imageCount : selected.length + 2;
   const summaryNames = selected.map((item) => item.name).join("、");
 
   return {
     success: true,
-    inferenceTime: isImage ? `${46 + selected.length * 11}ms` : `${78 + selected.length * 13}ms`,
+    inferenceTime: isImage ? `${46 + selected.length * 11 + imageCount * 9}ms` : `${78 + selected.length * 13}ms`,
     confidence: isImage ? "95.6%" : "93.9%",
     targetCount: totalTargets,
     label: isImage ? "组合检测区域" : "多媒体联合分析",
     timestamp: buildTimestamp(),
-    summary: `系统已完成 ${summaryNames} 的组合检测解析，当前结果适合用于多算法协同演示、联合识别验证与结果汇报导出。`,
+    summary: isImage
+      ? `系统已完成 ${imageCount} 张图片的 ${summaryNames} 组合检测解析，当前结果适合用于多算法协同演示、批量样本联合识别验证与结果汇报导出。`
+      : `系统已完成 ${summaryNames} 的组合检测解析，当前结果适合用于多算法协同演示、联合识别验证与结果汇报导出。`,
     detections: selected.map((item, index) => ({
       name: item.scene,
       confidence: `${94 - index * 0.6}%`,
@@ -216,12 +302,12 @@ function buildDetectionResult() {
     ]),
     insights: [
       `本次组合同时调用 ${selected.length} 个算法模块，覆盖 ${[...new Set(selected.map((item) => item.industry))].length} 类业务场景。`,
-      `当前上传素材与所选算法场景匹配度较高，组合检测输出稳定，适合方案演示和能力说明。`,
+      isImage ? `当前批次共上传 ${imageCount} 张图片，适合做多样本对比演示与联合识别验证。` : "当前上传素材与所选算法场景匹配度较高，组合检测输出稳定，适合方案演示和能力说明。",
       `组合链路可继续扩展到更多算法，适用于多目标识别、联合告警和复杂场景分析。`,
     ],
     actions: [
       "建议保留本次组合方案用于项目演示和能力汇报。",
-      "可追加不同工况样本进行横向对比验证。",
+      isImage ? "可继续追加更多图片样本进行批量横向对比验证。" : "可追加不同工况样本进行横向对比验证。",
       "支持导出 JSON 与 PDF 用于归档、汇报或对接。",
     ],
   };
@@ -242,7 +328,12 @@ function buildExportPayload() {
     input: {
       type: comboState.uploadType,
       fileName: getCurrentFileLabel(),
-      source: comboState.fileUrl || "combo-default-preview",
+      files: comboState.uploadType === "image"
+        ? getCurrentImageFiles().map((file) => file.name)
+        : [getCurrentFileLabel()],
+      source: comboState.uploadType === "image"
+        ? getCurrentImageFiles().map((file) => file.url)
+        : (comboState.fileUrl || "combo-default-preview"),
     },
     output: {
       success: comboState.result.success,
@@ -285,8 +376,18 @@ function renderDetectionResult() {
   }
 
   resultStatusEl.textContent = "检测完成";
+  const showBatchBoxes = comboState.uploadType !== "image" || getCurrentImageFiles().length === 1;
   const previewMarkup = comboState.uploadType === "image"
-    ? `<img src="${comboState.fileUrl || getPreviewFallback()}" alt="${getCurrentFileLabel()}">`
+    ? `
+      <div class="combo-batch-preview ${getCurrentImageFiles().length > 1 ? "is-grid" : ""}">
+        ${getCurrentImageFiles().map((file, index) => `
+          <div class="combo-batch-item">
+            <img src="${file.url || getPreviewFallback()}" alt="${file.name}">
+            <span>样本 ${index + 1}</span>
+          </div>
+        `).join("")}
+      </div>
+    `
     : comboState.fileUrl
       ? `<video src="${comboState.fileUrl}" controls muted playsinline preload="metadata"></video>`
       : `<div class="stream-preview-card"><div class="upload-video-empty">VIDEO STREAM</div><strong>${getCurrentFileLabel()}</strong></div>`;
@@ -294,12 +395,14 @@ function renderDetectionResult() {
   resultPreviewEl.innerHTML = `
     <div class="annotated-preview compact-annotated-preview">
       ${previewMarkup}
-      <div class="detection-box detection-box-1">
-        <span>${comboState.result.label}</span>
-      </div>
-      <div class="detection-box detection-box-2">
-        <span>${comboState.result.confidence}</span>
-      </div>
+      ${showBatchBoxes ? `
+        <div class="detection-box detection-box-1">
+          <span>${comboState.result.label}</span>
+        </div>
+        <div class="detection-box detection-box-2">
+          <span>${comboState.result.confidence}</span>
+        </div>
+      ` : ""}
     </div>
   `;
 
@@ -318,17 +421,21 @@ function renderDetectionResult() {
           <span>参与算法</span>
           <strong>${getSelectedAlgorithms().length}</strong>
         </div>
+        <div data-label="输入样本">
+          <span>输入样本</span>
+          <strong>${comboState.uploadType === "image" ? getCurrentImageFiles().length : 1}</strong>
+        </div>
         <div data-label="推理时延">
           <span>推理时延</span>
           <strong>${comboState.result.inferenceTime}</strong>
         </div>
-        <div data-label="识别目标">
-          <span>识别目标</span>
-          <strong>${comboState.result.targetCount}</strong>
-        </div>
         <div data-label="检测时间">
           <span>检测时间</span>
           <strong>${comboState.result.timestamp}</strong>
+        </div>
+        <div data-label="识别目标">
+          <span>识别目标</span>
+          <strong>${comboState.result.targetCount}</strong>
         </div>
       </div>
       <div class="result-report-section">
@@ -536,9 +643,18 @@ function bindSelectionActions() {
 function bindUploadTabs() {
   document.querySelectorAll("[data-upload-tab]").forEach((node) => {
     node.addEventListener("click", () => {
+      revokeMediaFileUrl();
       comboState.uploadType = node.dataset.uploadTab;
-      comboState.fileName = comboState.uploadType === "image" ? "多算法组合样例.jpg" : "";
-      comboState.fileUrl = comboState.uploadType === "image" ? "./多算法组合.png" : "";
+      if (comboState.uploadType === "image") {
+        resetImageFiles();
+        comboState.fileName = "";
+        comboState.fileUrl = "";
+      } else {
+        revokeImageFiles(comboState.imageFiles);
+        comboState.imageFiles = [];
+        comboState.fileName = "";
+        comboState.fileUrl = "";
+      }
       document.querySelectorAll("[data-upload-tab]").forEach((tab) => {
         tab.classList.toggle("active", tab.dataset.uploadTab === comboState.uploadType);
       });
