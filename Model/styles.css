@@ -8,6 +8,13 @@
   --primary: #1d7df2;
   --primary-soft: #e8f2ff;
   --secondary: #14b89a;
+  --hero-red-strong: #b54a36;
+  --hero-red-mid: #cf644d;
+  --hero-red-soft: #f5b29d;
+  --hero-red-panel: rgba(255, 247, 242, 0.16);
+  --hero-red-panel-border: rgba(255, 234, 225, 0.34);
+  --hero-red-copy: rgba(255, 248, 244, 0.9);
+  --hero-red-accent: #ffd3c3;
   --shadow: 0 18px 42px rgba(29, 73, 124, 0.08);
   --radius-xl: 28px;
   --radius-lg: 20px;
@@ -1325,16 +1332,20 @@ button, input, select { font: inherit; }
 }
 
 .home-hero {
+  position: relative;
+  overflow: hidden;
   min-height: calc(100vh - 74px);
   padding: 42px 0 64px;
   background:
-    radial-gradient(circle at 72% 18%, rgba(255, 145, 96, 0.26), transparent 26%),
-    radial-gradient(circle at 18% 22%, rgba(210, 70, 58, 0.18), transparent 22%),
-    radial-gradient(circle at 50% 0%, rgba(255, 214, 178, 0.08), transparent 28%),
-    linear-gradient(180deg, #48211f 0%, #321718 54%, #2a1719 100%);
+    radial-gradient(circle at 14% 10%, rgba(255, 250, 216, 0.88) 0%, rgba(255, 220, 136, 0.52) 16%, rgba(255, 177, 89, 0.16) 30%, transparent 42%),
+    radial-gradient(ellipse at 50% 82%, rgba(255, 196, 116, 0.34) 0%, rgba(255, 146, 79, 0.16) 36%, transparent 62%),
+    radial-gradient(circle at 82% 18%, rgba(255, 229, 174, 0.18), transparent 24%),
+    linear-gradient(180deg, #fff5dc 0%, #ffdca2 18%, #f7ab67 42%, #cf6a43 70%, #8b3d32 100%);
 }
 
 .home-hero .section-inner {
+  position: relative;
+  z-index: 1;
   width: 100%;
   margin: 0;
   padding-left: clamp(24px, 4vw, 56px);
@@ -1356,7 +1367,7 @@ button, input, select { font: inherit; }
 }
 
 .hero-copy-block .eyebrow {
-  color: rgba(255, 213, 199, 0.88);
+  color: rgba(131, 58, 28, 0.86);
 }
 
 .hero-copy-block h1 {
@@ -1365,12 +1376,14 @@ button, input, select { font: inherit; }
   font-size: clamp(42px, 4.2vw, 64px);
   line-height: 1.08;
   letter-spacing: 0.01em;
+  color: #fffaf3;
+  text-shadow: 0 10px 24px rgba(133, 58, 34, 0.18);
 }
 
 .hero-lead {
   max-width: 520px;
   margin: 18px 0 0;
-  color: rgba(255, 240, 235, 0.78);
+  color: rgba(255, 249, 241, 0.88);
   font-size: 16px;
   line-height: 1.85;
 }
@@ -1391,13 +1404,15 @@ button, input, select { font: inherit; }
 }
 
 .home-hero .hero-main {
+  position: relative;
+  z-index: 1;
   min-height: 680px;
   width: 100%;
   max-width: none;
   border: 0;
   border-radius: 34px;
   overflow: hidden;
-  box-shadow: 0 28px 80px rgba(44, 19, 20, 0.28);
+  box-shadow: 0 28px 80px rgba(177, 90, 48, 0.24);
 }
 
 .hero-slides,
@@ -1411,13 +1426,13 @@ button, input, select { font: inherit; }
 
 .home-hero .hero-slide::before {
   background:
-    linear-gradient(90deg, rgba(56, 29, 30, 0.06) 0%, rgba(56, 29, 30, 0.22) 42%, rgba(56, 29, 30, 0.42) 100%),
-    linear-gradient(180deg, rgba(255, 246, 236, 0.12), transparent 34%);
+    linear-gradient(90deg, rgba(156, 74, 42, 0.03) 0%, rgba(156, 74, 42, 0.12) 42%, rgba(120, 53, 35, 0.24) 100%),
+    linear-gradient(180deg, rgba(255, 251, 238, 0.26), transparent 34%);
 }
 
 .home-hero .hero-slide::after {
   height: 36%;
-  background: linear-gradient(180deg, transparent 0%, rgba(42, 18, 20, 0.58) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(118, 52, 37, 0.36) 100%);
 }
 
 .hero-slide-caption {
@@ -1429,8 +1444,9 @@ button, input, select { font: inherit; }
   max-width: 420px;
   padding: 20px 22px;
   border-radius: 24px;
-  background: linear-gradient(180deg, rgba(74, 33, 31, 0.24), rgba(58, 24, 24, 0.46));
+  background: linear-gradient(180deg, rgba(255, 242, 220, 0.22), rgba(176, 80, 46, 0.24));
   backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 0 rgba(255, 250, 238, 0.18);
 }
 
 .hero-slide-caption .eyebrow,
@@ -1451,7 +1467,7 @@ button, input, select { font: inherit; }
 
 .hero-slide-caption p {
   margin: 0;
-  color: rgba(255, 241, 236, 0.82);
+  color: rgba(255, 246, 238, 0.9);
   line-height: 1.75;
 }
 
@@ -2405,10 +2421,11 @@ button, input, select { font: inherit; }
   padding: 38px 40px;
   border-radius: 32px;
   background:
-    radial-gradient(circle at right top, rgba(255, 180, 130, 0.12), transparent 24%),
-    linear-gradient(145deg, rgba(76, 34, 31, 0.94), rgba(108, 54, 45, 0.9));
+    radial-gradient(circle at right top, rgba(255, 224, 212, 0.34), transparent 24%),
+    radial-gradient(circle at left center, rgba(255, 190, 162, 0.16), transparent 28%),
+    linear-gradient(145deg, rgba(181, 74, 54, 0.96), rgba(207, 100, 77, 0.9));
   color: #fff;
-  box-shadow: 0 22px 52px rgba(12, 16, 24, 0.14);
+  box-shadow: 0 22px 52px rgba(181, 74, 54, 0.18);
 }
 
 .page-hero-copy h1 {
@@ -2417,17 +2434,30 @@ button, input, select { font: inherit; }
   line-height: 1.08;
 }
 
+.page-hero .eyebrow,
+.market-hero-copy .eyebrow {
+  color: var(--hero-red-accent);
+  font-family: "Bahnschrift", "Consolas", "Segoe UI Variable", sans-serif;
+  letter-spacing: 0.14em;
+}
+
 .page-hero-copy p:last-child,
 .page-hero-aside p {
-  color: rgba(255, 242, 234, 0.82);
+  color: var(--hero-red-copy);
   line-height: 1.85;
 }
 
 .page-hero-aside {
   padding: 24px;
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 238, 230, 0.12);
+  background: var(--hero-red-panel);
+  border: 1px solid var(--hero-red-panel-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+.page-hero-aside strong {
+  color: #fff9f6;
 }
 
 .page-market .page-bg {
@@ -2450,7 +2480,7 @@ button, input, select { font: inherit; }
   border-radius: 34px;
   min-height: 560px;
   background: #1f3c5a;
-  box-shadow: 0 28px 58px rgba(31, 60, 90, 0.16);
+  box-shadow: 0 28px 58px rgba(31, 60, 90, 0.12);
 }
 
 .market-hero-media,
@@ -2461,16 +2491,16 @@ button, input, select { font: inherit; }
 
 .market-hero-media {
   background:
-    linear-gradient(120deg, rgba(31, 60, 90, 0.1), rgba(31, 60, 90, 0.03)),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
     url("./效果图/轮播/输电线路与设备识别能力.png") center/cover no-repeat;
   transform: scale(1.02);
 }
 
 .market-hero-overlay {
   background:
-    linear-gradient(90deg, rgba(31, 60, 90, 0.72) 0%, rgba(31, 60, 90, 0.46) 42%, rgba(31, 60, 90, 0.2) 100%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 28%),
-    radial-gradient(circle at right top, rgba(127, 224, 217, 0.18), transparent 24%);
+    linear-gradient(90deg, rgba(31, 60, 90, 0.46) 0%, rgba(31, 60, 90, 0.22) 42%, rgba(31, 60, 90, 0.06) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent 28%),
+    radial-gradient(circle at right top, rgba(255, 244, 238, 0.26), transparent 24%);
 }
 
 .market-hero-content {
@@ -2502,7 +2532,7 @@ button, input, select { font: inherit; }
 }
 
 .market-hero-copy p:last-of-type {
-  color: rgba(233, 243, 252, 0.82);
+  color: rgba(245, 250, 255, 0.9);
   line-height: 1.85;
   max-width: 640px;
 }
@@ -2518,9 +2548,9 @@ button, input, select { font: inherit; }
   gap: 14px;
   min-height: 52px;
   padding: 0 20px 0 22px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.18);
   color: #fff;
   cursor: pointer;
   overflow: hidden;
@@ -2537,7 +2567,7 @@ button, input, select { font: inherit; }
   width: 30px;
   height: 30px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.24);
 }
 
 .market-demand-btn i::before {
@@ -2564,9 +2594,9 @@ button, input, select { font: inherit; }
 .market-demand-btn:hover,
 .market-demand-btn:focus-visible {
   transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 16px 32px rgba(31, 60, 90, 0.16);
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.38);
+  box-shadow: 0 16px 32px rgba(31, 60, 90, 0.12);
 }
 
 .market-demand-btn:hover::after,
@@ -2583,10 +2613,10 @@ button, input, select { font: inherit; }
   gap: 18px;
   padding: 24px;
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   backdrop-filter: blur(14px);
-  box-shadow: 0 18px 42px rgba(31, 60, 90, 0.12);
+  box-shadow: 0 18px 42px rgba(31, 60, 90, 0.1);
 }
 
 .market-search-panel {
@@ -2595,9 +2625,10 @@ button, input, select { font: inherit; }
 }
 
 .market-filter-label {
-  color: rgba(237, 245, 252, 0.82);
+  color: rgba(245, 250, 255, 0.92);
   font-size: 13px;
   letter-spacing: 0.08em;
+  font-family: "Bahnschrift", "Consolas", "Segoe UI Variable", sans-serif;
 }
 
 .market-search-input-wrap {
@@ -2629,9 +2660,9 @@ button, input, select { font: inherit; }
   position: relative;
   width: 46px;
   height: 46px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.16);
   cursor: pointer;
   transition: all 0.22s ease;
 }
@@ -2648,8 +2679,8 @@ button, input, select { font: inherit; }
 
 .market-collect-toggle:hover,
 .market-collect-toggle.active {
-  background: rgba(255, 255, 255, 0.22);
-  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.32);
 }
 
 .market-collect-toggle.active::before {
@@ -2671,9 +2702,9 @@ button, input, select { font: inherit; }
 .market-filter-chip {
   min-height: 46px;
   padding: 0 16px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.14);
   color: #fff;
   cursor: pointer;
   transition: all 0.22s ease;
@@ -2684,8 +2715,8 @@ button, input, select { font: inherit; }
 
 .market-filter-chip:hover,
 .market-filter-chip.active {
-  background: rgba(255, 255, 255, 0.26);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.34);
   transform: translateY(-2px);
 }
 
@@ -2997,9 +3028,9 @@ button, input, select { font: inherit; }
   overflow: hidden;
   border-radius: 0;
   background:
-    radial-gradient(circle at right top, rgba(255, 184, 138, 0.14), transparent 24%),
-    linear-gradient(120deg, rgba(82, 39, 34, 0.96), rgba(112, 57, 47, 0.92)),
-    #5c2b27;
+    radial-gradient(circle at right top, rgba(255, 228, 216, 0.3), transparent 24%),
+    linear-gradient(120deg, rgba(179, 74, 54, 0.96), rgba(208, 104, 79, 0.9)),
+    #b54a36;
 }
 
 .page-llm .page-hero::before {
@@ -3007,8 +3038,8 @@ button, input, select { font: inherit; }
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(255, 244, 238, 0.06) 1px, transparent 1px),
+    linear-gradient(rgba(255, 244, 238, 0.06) 1px, transparent 1px);
   background-size: 30px 30px;
   pointer-events: none;
 }
@@ -3021,7 +3052,7 @@ button, input, select { font: inherit; }
 
 .page-llm .page-hero-aside {
   border-radius: 0;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 247, 242, 0.16);
 }
 
 .llm-grid {
@@ -3223,9 +3254,9 @@ button, input, select { font: inherit; }
   overflow: hidden;
   border-radius: 0;
   background:
-    radial-gradient(circle at right top, rgba(255, 190, 142, 0.12), transparent 24%),
-    linear-gradient(120deg, rgba(86, 42, 37, 0.96), rgba(116, 61, 49, 0.92)),
-    #5c2b27;
+    radial-gradient(circle at right top, rgba(255, 227, 214, 0.28), transparent 24%),
+    linear-gradient(120deg, rgba(184, 77, 56, 0.96), rgba(214, 110, 84, 0.9)),
+    #b84d38;
 }
 
 .page-resources .page-hero::before {
@@ -3233,8 +3264,8 @@ button, input, select { font: inherit; }
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(255, 244, 238, 0.06) 1px, transparent 1px),
+    linear-gradient(rgba(255, 244, 238, 0.06) 1px, transparent 1px);
   background-size: 30px 30px;
   pointer-events: none;
 }
@@ -3247,7 +3278,7 @@ button, input, select { font: inherit; }
 
 .resource-hero-aside {
   border-radius: 0;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 247, 242, 0.16);
 }
 
 .resource-filter-chip {
@@ -3942,8 +3973,9 @@ button, input, select { font: inherit; }
   overflow: hidden;
   border-radius: 0;
   background:
-    linear-gradient(120deg, rgba(17, 34, 56, 0.96), rgba(43, 24, 28, 0.92)),
-    #102640;
+    radial-gradient(circle at right top, rgba(255, 230, 220, 0.26), transparent 24%),
+    linear-gradient(120deg, rgba(182, 75, 54, 0.96), rgba(208, 105, 80, 0.9)),
+    #b64b36;
 }
 
 .page-register .page-hero::before {
@@ -3951,8 +3983,8 @@ button, input, select { font: inherit; }
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(255, 244, 238, 0.06) 1px, transparent 1px),
+    linear-gradient(rgba(255, 244, 238, 0.06) 1px, transparent 1px);
   background-size: 30px 30px;
   pointer-events: none;
 }
@@ -3965,7 +3997,7 @@ button, input, select { font: inherit; }
 
 .register-hero-aside {
   border-radius: 0;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 247, 242, 0.14);
 }
 
 .register-shell {
@@ -4881,9 +4913,9 @@ button, input, select { font: inherit; }
   overflow: hidden;
   border-radius: 0;
   background:
-    radial-gradient(circle at right top, rgba(255, 186, 140, 0.12), transparent 24%),
-    linear-gradient(120deg, rgba(83, 39, 34, 0.96), rgba(113, 58, 47, 0.92)),
-    #5c2b27;
+    radial-gradient(circle at right top, rgba(255, 229, 216, 0.3), transparent 24%),
+    linear-gradient(120deg, rgba(181, 75, 54, 0.96), rgba(210, 107, 81, 0.9)),
+    #b64c37;
 }
 
 .page-combo .page-hero::before {
@@ -4891,8 +4923,8 @@ button, input, select { font: inherit; }
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(255, 244, 238, 0.06) 1px, transparent 1px),
+    linear-gradient(rgba(255, 244, 238, 0.06) 1px, transparent 1px);
   background-size: 30px 30px;
   pointer-events: none;
 }
@@ -4905,7 +4937,7 @@ button, input, select { font: inherit; }
 
 .page-combo .page-hero-aside {
   border-radius: 0;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 247, 242, 0.16);
 }
 
 .combo-hero-copy {
