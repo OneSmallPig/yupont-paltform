@@ -346,7 +346,6 @@ function buildHeaderMarkup() {
   const navs = [
     { key: "home", label: "首页", href: "./index.html" },
     { key: "market", label: "算法商城", href: "./market.html" },
-    { key: "combo", label: "多算法组合", href: "./combo.html" },
     { key: "llm", label: "大模型平台", href: "./llm.html" },
     { key: "resources", label: "资源中心", href: "./resources.html" },
   ];

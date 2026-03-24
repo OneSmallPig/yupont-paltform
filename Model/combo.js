@@ -10,6 +10,17 @@ const exportPreviewDescEl = document.getElementById("exportPreviewDesc");
 const exportPreviewEyebrowEl = document.getElementById("exportPreviewEyebrow");
 const exportConfirmBtnEl = document.getElementById("exportConfirmBtn");
 
+function getInitialSelectedIds() {
+  const urlIds = new URLSearchParams(window.location.search).get("ids");
+  const fallbackIds = platformData.algorithms.slice(0, 3).map((item) => item.id);
+  if (!urlIds) return fallbackIds;
+
+  const validIds = [...new Set(urlIds.split(",").map((item) => item.trim()).filter(Boolean))]
+    .filter((id) => platformData.algorithms.some((item) => item.id === id));
+
+  return validIds.length >= 2 ? validIds : fallbackIds;
+}
+
 function getDefaultImageFiles() {
   return [
     {
@@ -24,7 +35,7 @@ function getDefaultImageFiles() {
 }
 
 const comboState = {
-  selectedIds: platformData.algorithms.slice(0, 3).map((item) => item.id),
+  selectedIds: getInitialSelectedIds(),
   uploadType: "image",
   imageFiles: getDefaultImageFiles(),
   fileName: "",

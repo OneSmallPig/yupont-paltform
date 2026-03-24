@@ -4,6 +4,8 @@ const searchInputEl = document.getElementById("searchInput");
 const marketGridEl = document.getElementById("marketAlgoGrid");
 const marketResultMetaEl = document.getElementById("marketResultMeta");
 const favoriteFilterBtnEl = document.getElementById("favoriteFilterBtn");
+const marketComboToggleBtnEl = document.getElementById("marketComboToggleBtn");
+const marketComboSubmitBtnEl = document.getElementById("marketComboSubmitBtn");
 const openDemandModalEl = document.getElementById("openDemandModal");
 const demandFormEl = document.getElementById("demandForm");
 const demandFormNoteEl = document.getElementById("demandFormNote");
@@ -12,6 +14,8 @@ const marketState = {
   selectedCategory: "全部算法",
   selectedIndustry: "全部",
   favoritesOnly: false,
+  comboMode: false,
+  comboSelectedIds: [],
 };
 
 const marketCategories = ["全部算法", "目标检测", "语义分割", "异常分析", "多模态识别", "图像处理"];
@@ -80,16 +84,7 @@ function renderMarketTabs() {
 }
 
 function renderSummary(list) {
-  const activeFilters = [
-    marketState.selectedCategory !== "全部算法" ? marketState.selectedCategory : "",
-    marketState.selectedIndustry !== "全部" ? marketState.selectedIndustry : "",
-    marketState.favoritesOnly ? "仅看收藏" : "",
-    searchInputEl.value.trim() ? `关键词：${searchInputEl.value.trim()}` : "",
-  ].filter(Boolean);
-
-  marketResultMetaEl.textContent = activeFilters.length
-    ? `当前共展示 ${list.length} 个算法，已启用 ${activeFilters.join(" / ")}。`
-    : "";
+  marketResultMetaEl.textContent = "";
 }
 
 function renderEmptyState() {
@@ -113,6 +108,11 @@ function renderGrid(list) {
 
   marketGridEl.innerHTML = list.map((item) => `
     <article class="algo-card home-featured-card sharp-featured-card market-card market-card-clickable" data-card-href="./algorithm.html?id=${item.id}" tabindex="0" role="link" aria-label="查看${item.name}详情">
+      ${marketState.comboMode ? `
+        <button class="market-card-select-toggle ${marketState.comboSelectedIds.includes(item.id) ? "is-selected" : ""}" data-combo-select="${item.id}" type="button" aria-label="${marketState.comboSelectedIds.includes(item.id) ? "取消勾选" : "勾选加入组合"}">
+          <span aria-hidden="true">${marketState.comboSelectedIds.includes(item.id) ? "✓" : ""}</span>
+        </button>
+      ` : ""}
       <div class="algo-cover sharp-featured-cover market-card-cover" style="background-image: url('${item.image}');"></div>
       <div class="sharp-featured-body market-card-body">
         <div class="market-card-top">
@@ -146,9 +146,23 @@ function bindFavoriteActions() {
   });
 }
 
+function bindComboSelectionActions() {
+  document.querySelectorAll("[data-combo-select]").forEach((node) => {
+    node.addEventListener("click", (event) => {
+      event.preventDefault();
+      const { comboSelect } = node.dataset;
+      marketState.comboSelectedIds = marketState.comboSelectedIds.includes(comboSelect)
+        ? marketState.comboSelectedIds.filter((id) => id !== comboSelect)
+        : [...marketState.comboSelectedIds, comboSelect];
+      renderMarket();
+    });
+  });
+}
+
 function bindCardActions() {
   document.querySelectorAll("[data-card-href]").forEach((node) => {
     const openDetail = () => {
+      if (marketState.comboMode) return;
       window.location.href = node.dataset.cardHref;
     };
 
@@ -167,9 +181,15 @@ function bindCardActions() {
 
 function renderMarket() {
   const list = getFilteredAlgorithms();
+  document.body.classList.toggle("market-combo-mode", marketState.comboMode);
+  marketComboToggleBtnEl.classList.toggle("is-active", marketState.comboMode);
+  marketComboSubmitBtnEl.hidden = !marketState.comboMode;
+  marketComboSubmitBtnEl.style.display = marketState.comboMode ? "inline-flex" : "none";
+  marketComboSubmitBtnEl.disabled = marketState.comboSelectedIds.length < 2;
   renderSummary(list);
   renderGrid(list);
   bindFavoriteActions();
+  bindComboSelectionActions();
   bindCardActions();
 }
 
@@ -177,6 +197,8 @@ function resetFilters() {
   marketState.selectedCategory = "全部算法";
   marketState.selectedIndustry = "全部";
   marketState.favoritesOnly = false;
+  marketState.comboMode = false;
+  marketState.comboSelectedIds = [];
   searchInputEl.value = "";
   renderMarketTabs();
   renderMarket();
@@ -217,6 +239,22 @@ favoriteFilterBtnEl.addEventListener("click", () => {
   marketState.favoritesOnly = !marketState.favoritesOnly;
   renderMarketTabs();
   renderMarket();
+});
+
+marketComboToggleBtnEl?.addEventListener("click", () => {
+  marketState.comboMode = !marketState.comboMode;
+  if (!marketState.comboMode) {
+    marketState.comboSelectedIds = [];
+  }
+  renderMarket();
+});
+
+marketComboSubmitBtnEl?.addEventListener("click", () => {
+  if (marketState.comboSelectedIds.length < 2) return;
+  const query = new URLSearchParams({
+    ids: marketState.comboSelectedIds.join(","),
+  });
+  window.location.href = `./combo.html?${query.toString()}`;
 });
 
 window.addEventListener("vision-user-updated", () => {

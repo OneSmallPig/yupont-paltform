@@ -2823,6 +2823,83 @@ button, input, select { font: inherit; }
   margin-bottom: 18px;
 }
 
+.market-section-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.market-combo-trigger,
+.market-combo-submit {
+  position: relative;
+  overflow: hidden;
+}
+
+.market-combo-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-color: rgba(191, 67, 45, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 244, 0.96));
+}
+
+.market-combo-trigger-box {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid rgba(191, 67, 45, 0.34);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.96);
+  flex: 0 0 auto;
+}
+
+.market-combo-trigger.is-active .market-combo-trigger-box {
+  background: linear-gradient(135deg, rgba(191, 67, 45, 0.96), rgba(225, 104, 63, 0.92));
+  border-color: rgba(191, 67, 45, 0.24);
+}
+
+.market-combo-trigger.is-active .market-combo-trigger-box::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 9px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(45deg);
+}
+
+.market-combo-trigger.is-active {
+  color: #bf432d;
+  border-color: rgba(191, 67, 45, 0.24);
+  box-shadow: 0 12px 24px rgba(191, 67, 45, 0.12);
+}
+
+.market-combo-trigger::after,
+.market-combo-submit::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.22) 46%, transparent 100%);
+  transform: translateX(-120%);
+  transition: transform 0.4s ease;
+}
+
+.market-combo-trigger:hover::after,
+.market-combo-trigger.is-active::after,
+.market-combo-submit:hover::after {
+  transform: translateX(120%);
+}
+
+.market-combo-submit:disabled {
+  opacity: 0.54;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 .market-result-meta {
   max-width: 680px;
   margin: 0;
@@ -2875,6 +2952,7 @@ button, input, select { font: inherit; }
   transform: translateY(0);
 }
 
+.market-card-select-toggle,
 .market-favorite-icon {
   border: 1px solid rgba(219, 231, 241, 0.92);
   background: #fff;
@@ -2885,11 +2963,41 @@ button, input, select { font: inherit; }
   overflow: hidden;
 }
 
+.market-card-select-toggle {
+  width: 24px;
+  height: 24px;
+  border-radius: 0;
+  font-size: 12px;
+}
+
 .market-favorite-icon {
   width: 40px;
   height: 40px;
   border-radius: 999px;
   font-size: 18px;
+}
+
+.market-card-select-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(24, 50, 77, 0.08);
+}
+
+.market-card-select-toggle span {
+  position: relative;
+  z-index: 1;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.market-card-select-toggle.is-selected {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(191, 67, 45, 0.96), rgba(225, 104, 63, 0.92));
+  border-color: rgba(191, 67, 45, 0.24);
+  box-shadow: 0 10px 22px rgba(191, 67, 45, 0.2);
 }
 
 .market-favorite-icon.is-favorite {
@@ -2914,6 +3022,7 @@ button, input, select { font: inherit; }
   overflow: hidden;
 }
 
+.market-card-select-toggle span,
 .market-favorite-icon span,
 .market-detail-link span {
   position: relative;
@@ -2921,6 +3030,7 @@ button, input, select { font: inherit; }
   transition: transform 0.22s ease;
 }
 
+.market-card-select-toggle::after,
 .market-favorite-icon::after,
 .market-detail-link::after {
   content: "";
@@ -2940,6 +3050,8 @@ button, input, select { font: inherit; }
   box-shadow: 0 14px 26px rgba(191, 67, 45, 0.14);
 }
 
+.market-card-select-toggle:hover::after,
+.market-card-select-toggle:focus-visible::after,
 .market-detail-link:hover::after,
 .market-favorite-icon:hover::after,
 .market-detail-link:focus-visible::after,
@@ -2947,6 +3059,8 @@ button, input, select { font: inherit; }
   opacity: 1;
 }
 
+.market-card-select-toggle:hover span,
+.market-card-select-toggle:focus-visible span,
 .market-detail-link:hover span,
 .market-favorite-icon:hover span,
 .market-detail-link:focus-visible span,
@@ -2954,9 +3068,17 @@ button, input, select { font: inherit; }
   transform: translateX(1px);
 }
 
+.market-card-select-toggle:active,
 .market-detail-link:active,
 .market-favorite-icon:active {
   transform: translateY(0) scale(0.98);
+}
+
+.market-card-select-toggle:hover,
+.market-card-select-toggle:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(191, 67, 45, 0.22);
+  box-shadow: 0 14px 26px rgba(191, 67, 45, 0.14);
 }
 
 .market-card-body h3 {
