@@ -365,6 +365,12 @@ function buildHeaderMarkup() {
         ${navs.map((item) => `<a class="nav-link ${page === item.key ? "active" : ""}" href="${item.href}">${item.label}</a>`).join("")}
       </nav>
       <div class="header-actions header-user-area">
+        ${page === "home" ? `
+          <form class="header-recommend-search" id="recommendSearchForm">
+            <input id="headerRecommendSearch" type="search" placeholder="算法名称、行业场景、业务标签" aria-label="智能算法推荐搜索">
+            <button type="submit" aria-label="开始智能推荐"></button>
+          </form>
+        ` : ""}
         <div class="user-menu ${user.loggedIn ? "is-authenticated" : ""}">
           <button class="user-menu-trigger" type="button" id="userMenuTrigger">
             <span class="user-avatar ${user.loggedIn ? "" : "user-avatar-guest"}">${user.loggedIn ? user.name.slice(0, 1) : ""}</span>

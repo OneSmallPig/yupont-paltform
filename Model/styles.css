@@ -3747,8 +3747,81 @@ button, input, select { font: inherit; }
 }
 
 .header-user-area {
+  gap: 12px;
   align-items: center;
   justify-content: flex-end;
+  flex-wrap: nowrap;
+}
+
+.header-recommend-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 54px;
+  align-items: center;
+  width: min(380px, 100%);
+  min-width: 280px;
+  border: 1px solid rgba(191, 67, 45, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 24px rgba(191, 67, 45, 0.08);
+  overflow: hidden;
+}
+
+.header-recommend-search input {
+  min-width: 0;
+  height: 42px;
+  padding: 0 16px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.header-recommend-search input::placeholder {
+  color: #7d8da1;
+  font-size: 12px;
+}
+
+.header-recommend-search input:focus {
+  outline: none;
+}
+
+.header-recommend-search button {
+  position: relative;
+  height: 42px;
+  border: 0;
+  border-left: 1px solid rgba(191, 67, 45, 0.12);
+  background: linear-gradient(135deg, rgba(191, 67, 45, 0.92), rgba(225, 104, 63, 0.92));
+  color: #fff;
+  cursor: pointer;
+}
+
+.header-recommend-search button::before,
+.header-recommend-search button::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+.header-recommend-search button::before {
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  transform: translate(-58%, -62%);
+}
+
+.header-recommend-search button::after {
+  width: 8px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 999px;
+  transform: translate(10%, 160%) rotate(45deg);
+}
+
+.header-recommend-search:focus-within {
+  border-color: rgba(191, 67, 45, 0.24);
+  box-shadow: 0 12px 28px rgba(191, 67, 45, 0.12);
 }
 
 .user-menu {
@@ -5226,6 +5299,16 @@ button, input, select { font: inherit; }
 }
 
 @media (max-width: 760px) {
+  .header-user-area {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .header-recommend-search {
+    min-width: 0;
+    width: min(100%, 280px);
+  }
+
   .recommend-floating-btn {
     right: 16px;
     bottom: 18px;

@@ -13,6 +13,8 @@ const recommendInputEl = document.getElementById("recommendInput");
 const runRecommendBtnEl = document.getElementById("runRecommendBtn");
 const recommendResultEl = document.getElementById("recommendResult");
 
+let recommendSearchBound = false;
+
 function renderHero() {
   if (!heroSlidesEl || !heroDotsEl) return;
 
@@ -134,6 +136,21 @@ function getRecommendationMatches(query) {
 
   const matchedIds = new Set();
   const hitKeywords = [];
+  const directMatches = platformData.algorithms.filter((item) => {
+    const text = [
+      item.name,
+      item.subtitle,
+      item.industry,
+      item.scene,
+      item.category,
+      item.badge,
+      item.stack,
+      item.desc,
+      item.businessDesc,
+    ].join(" ").toLowerCase();
+
+    return keywords && text.includes(keywords);
+  });
 
   rules.forEach((rule) => {
     const matched = rule.keys.some((key) => keywords.includes(key));
@@ -141,6 +158,15 @@ function getRecommendationMatches(query) {
       rule.ids.forEach((id) => matchedIds.add(id));
       hitKeywords.push(...rule.keys.filter((key) => keywords.includes(key)));
     }
+  });
+
+  directMatches.forEach((item) => {
+    matchedIds.add(item.id);
+    [item.name, item.industry, item.scene, item.category].forEach((token) => {
+      if (keywords.includes(String(token || "").toLowerCase())) {
+        hitKeywords.push(token);
+      }
+    });
   });
 
   if (!matchedIds.size) {
@@ -151,6 +177,17 @@ function getRecommendationMatches(query) {
     keywords: [...new Set(hitKeywords)].slice(0, 6),
     algorithms: [...matchedIds].map((id) => platformData.algorithms.find((item) => item.id === id)).filter(Boolean),
   };
+}
+
+function runRecommendationQuery(query) {
+  if (!recommendInputEl || !recommendResultEl) return;
+
+  const nextQuery = String(query || "").trim();
+  if (!nextQuery) return;
+
+  recommendInputEl.value = nextQuery;
+  openModal("recommendModal");
+  renderRecommendationResult();
 }
 
 function renderRecommendationResult() {
@@ -191,9 +228,20 @@ function renderRecommendationResult() {
 }
 
 function initRecommendationModal() {
-  if (!recommendModalTriggerEl) return;
-  recommendModalTriggerEl.addEventListener("click", () => openModal("recommendModal"));
+  recommendModalTriggerEl?.addEventListener("click", () => openModal("recommendModal"));
   runRecommendBtnEl.addEventListener("click", renderRecommendationResult);
+
+  if (!recommendSearchBound) {
+    recommendSearchBound = true;
+    document.addEventListener("submit", (event) => {
+      const form = event.target.closest("#recommendSearchForm");
+      if (!form) return;
+      event.preventDefault();
+      const input = form.querySelector("#headerRecommendSearch");
+      runRecommendationQuery(input?.value || "");
+    });
+  }
+
   bindGlobalModalActions();
 }
 
