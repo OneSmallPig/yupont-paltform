@@ -116,7 +116,6 @@ function renderGrid(list) {
       <div class="algo-cover sharp-featured-cover market-card-cover" style="background-image: url('${item.image}');"></div>
       <div class="sharp-featured-body market-card-body">
         <div class="market-card-top">
-          <span class="sharp-featured-type">${item.category}</span>
           <div class="market-card-icon-actions">
             <button class="market-favorite-icon ${isMarketFavorite(item.id) ? "is-favorite" : ""}" data-favorite-toggle="${item.id}" type="button" aria-label="${isMarketFavorite(item.id) ? "取消收藏" : "添加收藏"}">
               <span aria-hidden="true">${isMarketFavorite(item.id) ? "★" : "☆"}</span>

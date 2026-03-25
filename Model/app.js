@@ -62,8 +62,7 @@ function renderHomeAlgorithms() {
     <a class="algo-card home-featured-card sharp-featured-card" href="./algorithm.html?id=${item.id}">
       <div class="algo-cover sharp-featured-cover" style="background-image: url('${item.image}');"></div>
       <div class="sharp-featured-body">
-        <div class="sharp-featured-top">
-          <span class="sharp-featured-type">${item.category}</span>
+        <div class="sharp-featured-top sharp-featured-top-metrics">
           <div class="sharp-featured-actions">
             <span class="icon-pill" aria-label="收藏数">★ ${item.favorites}</span>
             <span class="icon-pill" aria-label="测试数">◉ ${item.tests}</span>
