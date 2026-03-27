@@ -782,13 +782,11 @@ button, input, select { font: inherit; }
 }
 
 .algorithm-band::before {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 251, 254, 0.98));
+  background: #fff;
 }
 
 .solution-band::before {
-  background:
-    linear-gradient(180deg, rgba(242, 248, 255, 0.94), rgba(250, 252, 255, 0.99)),
-    radial-gradient(circle at top left, rgba(29, 125, 242, 0.08), transparent 26%);
+  background: #fff;
 }
 
 .resource-band::before {
@@ -1358,10 +1356,7 @@ button, input, select { font: inherit; }
   overflow: hidden;
   min-height: calc(100vh - 74px);
   padding: 0 0 36px;
-  background:
-    radial-gradient(circle at left top, rgba(191, 67, 45, 0.06), transparent 24%),
-    radial-gradient(circle at right top, rgba(72, 211, 255, 0.07), transparent 22%),
-    linear-gradient(180deg, rgba(255, 245, 236, 0.92) 0%, rgba(255, 251, 245, 0.9) 38%, rgba(247, 249, 252, 0.96) 100%);
+  background: #fff;
 }
 
 .home-hero .section-inner {
@@ -1515,14 +1510,12 @@ button, input, select { font: inherit; }
 
 .algorithm-band {
   padding: 92px 0;
-  background: linear-gradient(180deg, #faf8f4 0%, #ffffff 100%);
+  background: #fff;
 }
 
 .solution-band {
   padding: 92px 0;
-  background:
-    radial-gradient(circle at top left, rgba(191, 67, 45, 0.08), transparent 22%),
-    linear-gradient(180deg, #f7f1ea 0%, #f3ede5 100%);
+  background: #fff;
 }
 
 .resource-band {
@@ -2161,7 +2154,7 @@ button, input, select { font: inherit; }
 }
 
 .footer-brand-block span {
-  color: #ffb497;
+  color: rgba(255, 241, 236, 0.82);
   font-size: 14px;
   letter-spacing: 0.04em;
 }
@@ -2497,15 +2490,11 @@ button, input, select { font: inherit; }
 }
 
 .home-band-contrast-a {
-  background:
-    radial-gradient(circle at top right, rgba(193, 59, 42, 0.08), transparent 24%),
-    linear-gradient(180deg, #fff8f5 0%, #fffdfb 100%);
+  background: #fff;
 }
 
 .home-band-contrast-b {
-  background:
-    radial-gradient(circle at top left, rgba(29, 125, 242, 0.08), transparent 24%),
-    linear-gradient(180deg, #f4f7fb 0%, #eef3f9 100%);
+  background: #fff;
 }
 
 .page-hero {
