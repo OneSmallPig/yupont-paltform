@@ -107,23 +107,22 @@ function renderGrid(list) {
   }
 
   marketGridEl.innerHTML = list.map((item) => `
-    <article class="algo-card home-featured-card sharp-featured-card market-card market-card-clickable" data-card-href="./algorithm.html?id=${item.id}" tabindex="0" role="link" aria-label="查看${item.name}详情">
+    <article class="algo-card market-card market-card-clickable" data-card-href="./algorithm.html?id=${item.id}" tabindex="0" role="link" aria-label="查看${item.name}详情">
       ${marketState.comboMode ? `
         <button class="market-card-select-toggle ${marketState.comboSelectedIds.includes(item.id) ? "is-selected" : ""}" data-combo-select="${item.id}" type="button" aria-label="${marketState.comboSelectedIds.includes(item.id) ? "取消勾选" : "勾选加入组合"}">
           <span aria-hidden="true">${marketState.comboSelectedIds.includes(item.id) ? "✓" : ""}</span>
         </button>
       ` : ""}
-      <div class="algo-cover sharp-featured-cover market-card-cover" style="background-image: url('${item.image}');"></div>
-      <div class="sharp-featured-body market-card-body">
+      <div class="algo-cover market-card-cover" style="background-image: url('${item.image}');"></div>
+      <div class="market-card-body">
         <div class="market-card-top">
+          <h3>${item.name}</h3>
           <div class="market-card-icon-actions">
             <button class="market-favorite-icon ${isMarketFavorite(item.id) ? "is-favorite" : ""}" data-favorite-toggle="${item.id}" type="button" aria-label="${isMarketFavorite(item.id) ? "取消收藏" : "添加收藏"}">
               <span aria-hidden="true">${isMarketFavorite(item.id) ? "★" : "☆"}</span>
             </button>
-            <a class="market-detail-link" href="./algorithm.html?id=${item.id}" aria-label="查看算法详情"><span aria-hidden="true">➜</span></a>
           </div>
         </div>
-        <h3>${item.name}</h3>
         <div class="market-card-tags">
           <span class="market-tag market-tag-scene">${item.industry}</span>
           <span class="market-tag market-tag-light">${item.scene}</span>

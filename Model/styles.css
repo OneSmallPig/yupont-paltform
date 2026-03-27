@@ -3023,44 +3023,70 @@ button, input, select { font: inherit; }
 }
 
 .market-card {
+  display: block;
   padding: 0;
+  color: var(--text);
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid rgba(24, 50, 77, 0.12);
   border-radius: 0;
   overflow: hidden;
+  box-shadow: 0 16px 32px rgba(24, 50, 77, 0.08);
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
 }
 
 .market-card-clickable {
   position: relative;
 }
 
+.market-card:hover,
+.market-card:focus-within {
+  transform: translateY(-6px);
+  border-color: rgba(191, 67, 45, 0.22);
+  box-shadow: 0 24px 40px rgba(24, 50, 77, 0.12);
+}
+
 .market-card-cover {
+  position: relative;
   min-height: 0;
   aspect-ratio: 16 / 10;
+  border-radius: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.market-card-cover::before {
+  border-radius: 0;
+}
+
+.market-card-cover::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 72px;
+  background: linear-gradient(180deg, transparent 0%, rgba(8, 15, 24, 0.42) 100%);
 }
 
 .market-card-body {
   display: grid;
   gap: 10px;
-  padding: 18px 18px 20px;
+  padding: 14px 18px 20px;
+  margin-top: -4px;
+  border-top: 4px solid #bf432d;
 }
 
 .market-card-top {
   display: flex;
   gap: 12px;
-  align-items: flex-start;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .market-card-icon-actions {
+  display: flex;
   gap: 8px;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.24s ease, transform 0.24s ease;
-}
-
-.market-card:hover .market-card-icon-actions,
-.market-card:focus-within .market-card-icon-actions {
-  opacity: 1;
-  transform: translateY(0);
+  align-items: center;
+  flex: 0 0 auto;
 }
 
 .market-card-select-toggle,
@@ -3082,10 +3108,10 @@ button, input, select { font: inherit; }
 }
 
 .market-favorite-icon {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 999px;
-  font-size: 18px;
+  font-size: 15px;
 }
 
 .market-card-select-toggle {
@@ -3117,33 +3143,15 @@ button, input, select { font: inherit; }
   border-color: rgba(191, 67, 45, 0.16);
 }
 
-.market-detail-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  text-decoration: none;
-  color: var(--text);
-  background: #fff;
-  border: 1px solid rgba(219, 231, 241, 0.92);
-  box-shadow: 0 8px 18px rgba(24, 50, 77, 0.08);
-  transition: all 0.22s ease;
-  overflow: hidden;
-}
-
 .market-card-select-toggle span,
-.market-favorite-icon span,
-.market-detail-link span {
+.market-favorite-icon span {
   position: relative;
   z-index: 1;
   transition: transform 0.22s ease;
 }
 
 .market-card-select-toggle::after,
-.market-favorite-icon::after,
-.market-detail-link::after {
+.market-favorite-icon::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -3152,9 +3160,7 @@ button, input, select { font: inherit; }
   transition: opacity 0.22s ease;
 }
 
-.market-detail-link:hover,
 .market-favorite-icon:hover,
-.market-detail-link:focus-visible,
 .market-favorite-icon:focus-visible {
   transform: translateY(-3px) scale(1.03);
   border-color: rgba(191, 67, 45, 0.22);
@@ -3163,24 +3169,19 @@ button, input, select { font: inherit; }
 
 .market-card-select-toggle:hover::after,
 .market-card-select-toggle:focus-visible::after,
-.market-detail-link:hover::after,
 .market-favorite-icon:hover::after,
-.market-detail-link:focus-visible::after,
 .market-favorite-icon:focus-visible::after {
   opacity: 1;
 }
 
 .market-card-select-toggle:hover span,
 .market-card-select-toggle:focus-visible span,
-.market-detail-link:hover span,
 .market-favorite-icon:hover span,
-.market-detail-link:focus-visible span,
 .market-favorite-icon:focus-visible span {
   transform: translateX(1px);
 }
 
 .market-card-select-toggle:active,
-.market-detail-link:active,
 .market-favorite-icon:active {
   transform: translateY(0) scale(0.98);
 }
@@ -3196,6 +3197,8 @@ button, input, select { font: inherit; }
   margin: 0;
   font-size: 20px;
   line-height: 1.26;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .market-card-tags {
