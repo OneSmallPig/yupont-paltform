@@ -1,2 +1,6 @@
 /Code/
 /Need/
+/Model/效果图/*
+/Model/设计/*
+*.png
+.DS_Store

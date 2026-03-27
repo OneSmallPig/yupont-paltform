@@ -354,9 +354,10 @@ function buildHeaderMarkup() {
     <div class="header-inner">
       <a class="brand" href="./index.html">
         <div class="brand-logo">
-          <img src="./logo.png" alt="煜邦电力 Logo">
+          <img src="./logo-mark.png" alt="煜邦电力图形标识">
         </div>
         <div class="brand-copy">
+          <span>煜邦电力</span>
           <strong>视觉算法平台</strong>
         </div>
       </a>

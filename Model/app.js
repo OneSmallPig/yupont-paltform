@@ -15,6 +15,37 @@ const recommendResultEl = document.getElementById("recommendResult");
 
 let recommendSearchBound = false;
 
+function bindFeaturedCardEffects() {
+  const cards = document.querySelectorAll(".sharp-featured-card");
+  if (!cards.length) return;
+
+  cards.forEach((card) => {
+    const reset = () => {
+      card.style.setProperty("--card-glow-x", "50%");
+      card.style.setProperty("--card-glow-y", "50%");
+      card.style.setProperty("--card-tilt-x", "0deg");
+      card.style.setProperty("--card-tilt-y", "0deg");
+    };
+
+    reset();
+
+    card.addEventListener("pointermove", (event) => {
+      const rect = card.getBoundingClientRect();
+      const offsetX = event.clientX - rect.left;
+      const offsetY = event.clientY - rect.top;
+      const rotateY = ((offsetX / rect.width) - 0.5) * 7;
+      const rotateX = (0.5 - (offsetY / rect.height)) * 6;
+
+      card.style.setProperty("--card-glow-x", `${(offsetX / rect.width) * 100}%`);
+      card.style.setProperty("--card-glow-y", `${(offsetY / rect.height) * 100}%`);
+      card.style.setProperty("--card-tilt-x", `${rotateX.toFixed(2)}deg`);
+      card.style.setProperty("--card-tilt-y", `${rotateY.toFixed(2)}deg`);
+    });
+
+    card.addEventListener("pointerleave", reset);
+  });
+}
+
 function renderHero() {
   if (!heroSlidesEl || !heroDotsEl) return;
 
@@ -248,6 +279,7 @@ function initHome() {
   renderHero();
   renderHomeAlgorithms();
   renderIndustrySection();
+  bindFeaturedCardEffects();
   initRecommendationModal();
   startHeroTimer();
 }
