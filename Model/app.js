@@ -49,8 +49,20 @@ function bindFeaturedCardEffects() {
 function renderHero() {
   if (!heroSlidesEl || !heroDotsEl) return;
 
+  const total = platformData.heroSlides.length;
+  const prevIndex = (heroState.index - 1 + total) % total;
+  const nextIndex = (heroState.index + 1) % total;
+
   heroSlidesEl.innerHTML = platformData.heroSlides.map((item, index) => `
-    <article class="hero-slide ${index === heroState.index ? "active" : ""}">
+    <article class="hero-slide ${
+      index === heroState.index
+        ? "is-active"
+        : index === prevIndex
+          ? "is-prev"
+          : index === nextIndex
+            ? "is-next"
+            : "is-hidden"
+    }">
       <img class="hero-image" src="${item.image}" alt="${item.title}">
       <div class="hero-slide-caption">
         <p class="eyebrow">Scene Focus</p>
@@ -60,17 +72,7 @@ function renderHero() {
     </article>
   `).join("");
 
-  heroDotsEl.innerHTML = platformData.heroSlides.map((_, index) => `
-    <button class="hero-dot ${index === heroState.index ? "active" : ""}" data-hero-dot="${index}" type="button"></button>
-  `).join("");
-
-  document.querySelectorAll("[data-hero-dot]").forEach((node) => {
-    node.addEventListener("click", () => {
-      heroState.index = Number(node.dataset.heroDot);
-      renderHero();
-      restartHeroTimer();
-    });
-  });
+  heroDotsEl.innerHTML = "";
 }
 
 function startHeroTimer() {
