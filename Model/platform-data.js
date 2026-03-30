@@ -36,6 +36,47 @@ const platformData = {
         image: "./效果图/轮播/城市管理.jpg",
       }
   ],
+  marketCategoryTree: [
+    {
+      label: "农林植保",
+      value: "AGRICULTURE_FORESTRY",
+      children: [
+        { label: "水面漂浮物", value: "FLOATING_DEBRIS" },
+        { label: "违规排污", value: "ILLEGAL_DISCHARGE" },
+        { label: "绿藻监测", value: "GREEN_ALGAE_MONITORING" },
+        { label: "高茬检测", value: "HIGH_STUBBLE_DETECTION" },
+        { label: "违规捕捞", value: "ILLEGAL_FISHING" },
+      ],
+    },
+    {
+      label: "电网巡检",
+      value: "POWER_GRID_INSPECTION",
+      children: [
+        { label: "输电线路巡检", value: "TRANSMISSION_LINE_INSPECTION" },
+        { label: "配网巡检", value: "DISTRIBUTION_NETWORK_INSPECTION" },
+        { label: "光伏巡检", value: "PV_INSPECTION" },
+        { label: "铁道巡检", value: "RAILWAY_INSPECTION" },
+      ],
+    },
+    {
+      label: "应急救援",
+      value: "EMERGENCY_RESCUE",
+      children: [
+        { label: "森林防火", value: "FOREST_FIRE_PREVENTION" },
+        { label: "灾害救援", value: "DISASTER_RESCUE" },
+        { label: "海上搜救", value: "MARITIME_SEARCH_RESCUE" },
+      ],
+    },
+    {
+      label: "城市管理",
+      value: "URBAN_MANAGEMENT",
+      children: [
+        { label: "交通监控", value: "TRAFFIC_MONITORING" },
+        { label: "城管执法", value: "URBAN_ADMINISTRATION_LAW_ENFORCEMENT" },
+        { label: "违规建筑", value: "ILLEGAL_CONSTRUCTION" },
+      ],
+    },
+  ],
   algorithms: [
     {
       id: "algo-1",
@@ -52,6 +93,8 @@ const platformData = {
       tests: 640,
       badge: "热门推荐",
       featured: true,
+      primaryCategory: "POWER_GRID_INSPECTION",
+      secondaryCategory: "TRANSMISSION_LINE_INSPECTION",
       image: "./效果图/输电线路本体缺陷检测/1474349739174.jpg",
     },
     {
@@ -69,6 +112,8 @@ const platformData = {
       tests: 420,
       badge: "测试活跃",
       featured: true,
+      primaryCategory: "EMERGENCY_RESCUE",
+      secondaryCategory: "FOREST_FIRE_PREVENTION",
       image: "./效果图/冀北侵物检测/101746736.jpg",
     },
     {
@@ -86,6 +131,8 @@ const platformData = {
       tests: 518,
       badge: "方案常用",
       featured: true,
+      primaryCategory: "POWER_GRID_INSPECTION",
+      secondaryCategory: "DISTRIBUTION_NETWORK_INSPECTION",
       image: "./效果图/配网杆塔关键部件识别/杆塔.JPG",
     },
     {
@@ -103,6 +150,8 @@ const platformData = {
       tests: 372,
       badge: "重点场景",
       featured: true,
+      primaryCategory: "POWER_GRID_INSPECTION",
+      secondaryCategory: "PV_INSPECTION",
       image: "./效果图/光伏缺陷检测以及定位/DJI_20210801101641_0069_T.JPG",
     },
     {
@@ -120,6 +169,8 @@ const platformData = {
       tests: 205,
       badge: "监管常用",
       featured: false,
+      primaryCategory: "URBAN_MANAGEMENT",
+      secondaryCategory: "URBAN_ADMINISTRATION_LAW_ENFORCEMENT",
       image: "./效果图/海南安检/11.3-329.JPG",
     },
     {
@@ -137,6 +188,8 @@ const platformData = {
       tests: 188,
       badge: "巡检常用",
       featured: false,
+      primaryCategory: "POWER_GRID_INSPECTION",
+      secondaryCategory: "TRANSMISSION_LINE_INSPECTION",
       image: "./效果图/冀北侵物检测/101741749.jpg",
     },
     {
@@ -154,6 +207,8 @@ const platformData = {
       tests: 116,
       badge: "组合推荐",
       featured: false,
+      primaryCategory: "EMERGENCY_RESCUE",
+      secondaryCategory: "DISASTER_RESCUE",
       image: "./效果图/去雾处理/0099_0.9_0.16.jpg",
     },
     {
@@ -171,6 +226,8 @@ const platformData = {
       tests: 96,
       badge: "场景扩展",
       featured: false,
+      primaryCategory: "AGRICULTURE_FORESTRY",
+      secondaryCategory: "ILLEGAL_DISCHARGE",
       image: "./效果图/去雾处理/1400_2.png",
     },
     {
@@ -188,6 +245,8 @@ const platformData = {
       tests: 132,
       badge: "运维关注",
       featured: false,
+      primaryCategory: "POWER_GRID_INSPECTION",
+      secondaryCategory: "DISTRIBUTION_NETWORK_INSPECTION",
       image: "./效果图/变电设备缺陷智能识别/biandian_02102.jpg",
     },
   ],
