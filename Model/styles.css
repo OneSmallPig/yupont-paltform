@@ -1394,67 +1394,46 @@ button, input, select { font: inherit; }
   overflow: hidden;
   box-shadow: none;
   background: #e9eef3;
+  --hero-side-fade: clamp(110px, 12vw, 200px);
 }
 
 .home-hero .hero-main::before,
 .home-hero .hero-main::after {
-  content: none;
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(var(--hero-side-fade) + 64px);
+  z-index: 2;
+  pointer-events: none;
 }
 
-.home-hero .hero-slide::before,
-.home-hero .hero-slide::after {
-  content: none;
+.home-hero .hero-main::before {
+  left: 0;
+  background:
+    linear-gradient(90deg, rgba(120, 145, 169, 0.9) 0%, rgba(166, 184, 201, 0.82) 30%, rgba(210, 221, 231, 0.72) 62%, rgba(231, 238, 244, 0.28) 86%, rgba(231, 238, 244, 0) 100%),
+    radial-gradient(circle at left center, rgba(95, 124, 151, 0.34) 0%, rgba(95, 124, 151, 0.16) 34%, rgba(95, 124, 151, 0) 74%);
+}
+
+.home-hero .hero-main::after {
+  right: 0;
+  background:
+    linear-gradient(270deg, rgba(120, 145, 169, 0.9) 0%, rgba(166, 184, 201, 0.82) 30%, rgba(210, 221, 231, 0.72) 62%, rgba(231, 238, 244, 0.28) 86%, rgba(231, 238, 244, 0) 100%),
+    radial-gradient(circle at right center, rgba(95, 124, 151, 0.34) 0%, rgba(95, 124, 151, 0.16) 34%, rgba(95, 124, 151, 0) 74%);
 }
 
 .home-hero .hero-slide {
-  background:
-    linear-gradient(
-      90deg,
-      #647487 0%,
-      #7f90a2 4.5%,
-      #a4b3c0 8.5%,
-      #ced8e1 12.5%,
-      #edf2f6 16%,
-      #f7f9fb 18.5%,
-      #eef3f7 23%,
-      #d7e0e8 30%,
-      #d7e0e8 70%,
-      #eef3f7 77%,
-      #f7f9fb 81.5%,
-      #edf2f6 84%,
-      #ced8e1 87.5%,
-      #a4b3c0 91.5%,
-      #7f90a2 95.5%,
-      #647487 100%
-    );
+  isolation: isolate;
+  background: linear-gradient(90deg, #f7f9fb 0%, #f1f5f8 100%);
 }
 
 .home-hero .hero-image {
   inset: 0;
   width: 100%;
   height: 100%;
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.38) 2%,
-    rgba(0, 0, 0, 0.82) 4.5%,
-    #000 7%,
-    #000 93%,
-    rgba(0, 0, 0, 0.82) 95.5%,
-    rgba(0, 0, 0, 0.38) 98%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.38) 2%,
-    rgba(0, 0, 0, 0.82) 4.5%,
-    #000 7%,
-    #000 93%,
-    rgba(0, 0, 0, 0.82) 95.5%,
-    rgba(0, 0, 0, 0.38) 98%,
-    transparent 100%
-  );
+  z-index: 1;
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 .hero-main-full {
@@ -1481,13 +1460,11 @@ button, input, select { font: inherit; }
 }
 
 .home-hero .hero-slide::before {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 24%);
+  content: none;
 }
 
 .home-hero .hero-slide::after {
-  height: 42%;
-  background: linear-gradient(180deg, transparent 0%, rgba(12, 22, 34, 0.34) 100%);
+  content: none;
 }
 
 .home-hero .hero-image {
@@ -1509,7 +1486,7 @@ button, input, select { font: inherit; }
 
 .home-hero .hero-slide.is-prev,
 .home-hero .hero-slide.is-next {
-  width: 140px;
+  width: var(--hero-side-fade);
   height: min(78vh, 680px);
   z-index: 1;
   opacity: 1;
@@ -1534,41 +1511,16 @@ button, input, select { font: inherit; }
 
 .home-hero .hero-slide.is-prev::before,
 .home-hero .hero-slide.is-next::before {
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(31, 35, 44, 0.98) 0 24px,
-      rgba(70, 73, 83, 0.92) 24px 48px,
-      rgba(118, 110, 109, 0.86) 48px 72px,
-      rgba(174, 144, 127, 0.8) 72px 96px,
-      rgba(221, 205, 193, 0.82) 96px 120px,
-      rgba(248, 240, 231, 0.86) 120px 144px
-    ),
-    linear-gradient(180deg, rgba(255, 245, 236, 0.28), rgba(29, 38, 49, 0.08)),
-    linear-gradient(90deg, rgba(191, 67, 45, 0.1), rgba(72, 98, 126, 0.08));
+  content: none;
 }
 
 .home-hero .hero-slide.is-next::before {
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(248, 240, 231, 0.86) 0 24px,
-      rgba(221, 205, 193, 0.82) 24px 48px,
-      rgba(174, 144, 127, 0.8) 48px 72px,
-      rgba(118, 110, 109, 0.86) 72px 96px,
-      rgba(70, 73, 83, 0.92) 96px 120px,
-      rgba(31, 35, 44, 0.98) 120px 144px
-    ),
-    linear-gradient(180deg, rgba(255, 245, 236, 0.28), rgba(29, 38, 49, 0.08)),
-    linear-gradient(90deg, rgba(191, 67, 45, 0.1), rgba(72, 98, 126, 0.08));
+  content: none;
 }
 
 .home-hero .hero-slide.is-prev::after,
 .home-hero .hero-slide.is-next::after {
-  height: 100%;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05)),
-    linear-gradient(90deg, rgba(191, 67, 45, 0.08), rgba(32, 50, 70, 0.06));
+  content: none;
 }
 
 .home-hero .hero-slide.is-prev {
