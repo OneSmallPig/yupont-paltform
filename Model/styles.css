@@ -7725,8 +7725,9 @@ button, input, select { font: inherit; }
   height: 100%;
   object-fit: cover;
   object-position: center center;
+  opacity: 1;
   transform: scale(1.01);
-  transition: transform 5s ease, filter 0.72s ease;
+  transition: transform 5s ease, filter 0.72s ease, opacity 0.3s ease;
 }
 
 .page-home .home-hero .hero-slide[data-hero-slide="2"] .hero-image {
@@ -7753,6 +7754,7 @@ button, input, select { font: inherit; }
 }
 
 .page-home .home-hero .hero-slide.is-next .hero-image {
+  opacity: 1;
   transform: scale(1.018);
   filter: saturate(1) brightness(0.94) contrast(1.04);
 }
