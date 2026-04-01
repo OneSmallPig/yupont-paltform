@@ -1,6 +1,7 @@
 const heroState = {
   index: 0,
   timer: null,
+  initialized: false,
 };
 
 const heroSlidesEl = document.getElementById("heroSlides");
@@ -14,6 +15,73 @@ const runRecommendBtnEl = document.getElementById("runRecommendBtn");
 const recommendResultEl = document.getElementById("recommendResult");
 
 let recommendSearchBound = false;
+let heroSlideNodes = [];
+let heroDotNodes = [];
+
+function setHeroIndex(nextIndex) {
+  const total = (platformData.heroSlides || []).length;
+  if (!total) return;
+  heroState.index = (nextIndex + total) % total;
+  renderHero();
+  restartHeroTimer();
+}
+
+function getHeroSlideState(index, currentIndex, total) {
+  const forwardDistance = (index - currentIndex + total) % total;
+
+  if (forwardDistance === 0) return "is-active";
+  if (forwardDistance === 1) return "is-next";
+  if (forwardDistance === 2) return "is-queue";
+  if (forwardDistance === 3) return "is-tail";
+  return "is-hidden";
+}
+
+function buildHero(slides) {
+  heroSlidesEl.innerHTML = slides.map((item, index) => `
+    <article class="hero-slide" data-hero-slide="${index}" aria-hidden="true">
+      <img class="hero-image" src="${item.image}" alt="${item.title}">
+      <div class="hero-slide-caption">
+        <h2>${item.title}</h2>
+        <p>${item.text}</p>
+      </div>
+    </article>
+  `).join("");
+
+  heroDotsEl.innerHTML = slides.map((item, index) => `
+    <button
+      class="hero-dot"
+      type="button"
+      data-hero-dot="${index}"
+      aria-label="hero slide ${index + 1}"
+    ></button>
+  `).join("");
+
+  heroSlideNodes = Array.from(heroSlidesEl.querySelectorAll("[data-hero-slide]"));
+  heroDotNodes = Array.from(heroDotsEl.querySelectorAll("[data-hero-dot]"));
+
+  heroDotNodes.forEach((node) => {
+    node.addEventListener("click", () => {
+      setHeroIndex(Number(node.dataset.heroDot));
+    });
+  });
+
+  heroState.initialized = true;
+}
+
+function updateHero(slides) {
+  const total = slides.length;
+
+  heroSlideNodes.forEach((node, index) => {
+    const stateClass = getHeroSlideState(index, heroState.index, total);
+    node.className = `hero-slide ${stateClass}`;
+    node.setAttribute("aria-hidden", String(index !== heroState.index));
+  });
+
+  heroDotNodes.forEach((node, index) => {
+    node.classList.toggle("active", index === heroState.index);
+    node.setAttribute("aria-current", index === heroState.index ? "true" : "false");
+  });
+}
 
 function bindFeaturedCardEffects() {
   const cards = document.querySelectorAll(".sharp-featured-card");
@@ -49,33 +117,29 @@ function bindFeaturedCardEffects() {
 function renderHero() {
   if (!heroSlidesEl || !heroDotsEl) return;
 
-  const total = platformData.heroSlides.length;
-  const prevIndex = (heroState.index - 1 + total) % total;
-  const nextIndex = (heroState.index + 1) % total;
+  const slides = platformData.heroSlides || [];
+  if (!slides.length) {
+    heroSlidesEl.innerHTML = "";
+    heroDotsEl.innerHTML = "";
+    heroSlideNodes = [];
+    heroDotNodes = [];
+    heroState.initialized = false;
+    return;
+  }
 
-  heroSlidesEl.innerHTML = platformData.heroSlides.map((item, index) => `
-    <article class="hero-slide ${
-      index === heroState.index
-        ? "is-active"
-        : index === prevIndex
-          ? "is-prev"
-          : index === nextIndex
-            ? "is-next"
-            : "is-hidden"
-    }">
-      <img class="hero-image" src="${item.image}" alt="${item.title}">
-      <div class="hero-slide-caption">
-        <p class="eyebrow">Scene Focus</p>
-        <h2>${item.title}</h2>
-        <p>${item.text}</p>
-      </div>
-    </article>
-  `).join("");
+  heroState.index = ((heroState.index % slides.length) + slides.length) % slides.length;
 
-  heroDotsEl.innerHTML = "";
+  if (!heroState.initialized || heroSlideNodes.length !== slides.length || heroDotNodes.length !== slides.length) {
+    buildHero(slides);
+  }
+
+  updateHero(slides);
 }
 
 function startHeroTimer() {
+  window.clearInterval(heroState.timer);
+  if ((platformData.heroSlides || []).length < 2) return;
+
   heroState.timer = window.setInterval(() => {
     heroState.index = (heroState.index + 1) % platformData.heroSlides.length;
     renderHero();
@@ -83,7 +147,6 @@ function startHeroTimer() {
 }
 
 function restartHeroTimer() {
-  window.clearInterval(heroState.timer);
   startHeroTimer();
 }
 
