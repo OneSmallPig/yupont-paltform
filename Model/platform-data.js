@@ -250,6 +250,107 @@ const platformData = {
       image: "./效果图/变电设备缺陷智能识别/biandian_02102.jpg",
     },
   ],
+  homeVideoShowcase: [
+    {
+      id: "demo-1",
+      eyebrow: "Platform Walkthrough",
+      title: "平台首页与能力总览演示",
+      description: "从首页切入展示平台定位、精选算法和核心视觉能力，适合作为首次交流时的整体介绍片段。",
+      playlistText: "聚焦平台定位、展示逻辑与页面体验。",
+      sceneTag: "平台总览",
+      duration: "01:42",
+      sceneTag: "农林植保",
+      status: "精选片段",
+      poster: "./参考设计.png",
+      src: "",
+      fallbackHref: "./combo.html",
+      secondaryHref: "./market.html",
+      secondaryLabel: "浏览算法能力",
+      badges: ["首页总览", "能力地图", "视觉展示", "售前演示"],
+      highlights: [
+        "用更直接的视觉方式代替纯文字方案说明",
+        "统一首页节奏，让算法展示与演示入口形成前后呼应",
+        "保留后续接入本地视频文件的扩展能力"
+      ],
+      metrics: [
+        { label: "展示重点", value: "平台总览" },
+        { label: "适用场景", value: "首轮介绍" },
+        { label: "内容结构", value: "概览导览" }
+      ]
+    },
+    {
+      id: "demo-2",
+      eyebrow: "Detection Workflow",
+      title: "在线检测与结果反馈演示",
+      description: "以检测流程为主线，串联上传样本、运行算法、查看结果与输出反馈的完整操作体验。",
+      playlistText: "适合强调检测链路和操作闭环。",
+      sceneTag: "在线检测",
+      duration: "02:18",
+      sceneTag: "电网巡检",
+      status: "流程演示",
+      poster: "./在线检测.png",
+      src: "",
+      fallbackHref: "./combo.html",
+      secondaryHref: "./algorithm.html?id=algo-1",
+      secondaryLabel: "查看代表算法",
+      badges: ["在线检测", "结果反馈", "交互闭环", "业务验证"],
+      highlights: [
+        "突出样本上传到结果回看的完整链路",
+        "更适合介绍平台如何承接算法落地验证",
+        "与算法详情页形成自然跳转关系"
+      ],
+      metrics: [
+        { label: "展示重点", value: "检测流程" },
+        { label: "适用场景", value: "客户演示" },
+        { label: "内容结构", value: "操作闭环" }
+      ]
+    },
+    {
+      id: "demo-3",
+      eyebrow: "Pipeline Demo",
+      title: "多算法联动识别演示",
+      description: "突出多算法组合、联动识别和结果联查的展示方式，适合说明复杂场景下的平台组合能力。",
+      playlistText: "用于说明多模型编排与组合式验证能力。",
+      sceneTag: "多算法联动",
+      duration: "02:56",
+      sceneTag: "应急救援",
+      status: "联动演示",
+      poster: "./多算法组合.png",
+      src: "",
+      fallbackHref: "./combo.html",
+      secondaryHref: "./combo.html",
+      secondaryLabel: "进入组合检测",
+      badges: ["多算法", "联动识别", "流程验证", "方案表达"],
+      highlights: [
+        "强调组合式识别而不是单点算法展示",
+        "适合在方案交流里解释复杂任务的处理逻辑",
+        "能自然承接到组合检测页面进行进一步演示"
+      ],
+      metrics: [
+        { label: "展示重点", value: "联动能力" },
+        { label: "适用场景", value: "方案讲解" },
+        { label: "内容结构", value: "多段串联" }
+      ]
+    },
+    {
+      id: "demo-4",
+      eyebrow: "Urban Management",
+      title: "城市管理场景演示",
+      description: "聚焦城市治理中的巡查监管、秩序识别与信息联动，适合在展示环节说明平台对城市管理类项目的支撑能力。",
+      playlistText: "展示城市管理场景中的巡查、识别与联动能力。",
+      sceneTag: "城市管理",
+      duration: "02:06",
+      status: "场景演示",
+      poster: "./结果导出.png",
+      src: "",
+      fallbackHref: "./market.html",
+      secondaryHref: "./resources.html",
+      secondaryLabel: "查看能力说明",
+      badges: ["城市巡查", "秩序识别", "治理联动"],
+      highlights: [],
+      metrics: []
+    }
+  ],
   industries: [
     {
       name: "输电巡检",

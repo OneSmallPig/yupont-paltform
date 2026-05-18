@@ -7,8 +7,8 @@ const heroState = {
 const heroSlidesEl = document.getElementById("heroSlides");
 const heroDotsEl = document.getElementById("heroDots");
 const homeAlgoGridEl = document.getElementById("homeAlgoGrid");
-const industryGridEl = document.getElementById("industryGrid");
-const solutionFeatureEl = document.getElementById("solutionFeature");
+const demoStagePanelEl = document.getElementById("demoStagePanel");
+const demoPlaylistPanelEl = document.getElementById("demoPlaylistPanel");
 const recommendModalTriggerEl = document.getElementById("openRecommendModal");
 const recommendInputEl = document.getElementById("recommendInput");
 const runRecommendBtnEl = document.getElementById("runRecommendBtn");
@@ -17,6 +17,7 @@ const recommendResultEl = document.getElementById("recommendResult");
 let recommendSearchBound = false;
 let heroSlideNodes = [];
 let heroDotNodes = [];
+let homeDemoVideoNodes = [];
 
 function setHeroIndex(nextIndex) {
   const total = (platformData.heroSlides || []).length;
@@ -217,6 +218,133 @@ function renderIndustrySection() {
   `).join("");
 }
 
+function createDemoStageMarkup(item) {
+  return `
+    <div class="demo-stage-shell">
+      <div class="demo-stage-frame ${item.src ? "" : "is-poster-mode"}">
+        <div class="demo-stage-glow"></div>
+        <video
+          class="demo-stage-video"
+          id="homeDemoVideo"
+          ${item.src ? `src="${item.src}"` : ""}
+          poster="${item.poster}"
+          playsinline
+          preload="metadata"
+        ></video>
+        <div class="demo-stage-overlay">
+          <div class="demo-stage-actions">
+            ${item.src ? `<button class="primary-btn demo-inline-play" type="button" data-demo-play>播放演示</button>` : `<a class="primary-btn" href="${item.fallbackHref || "./combo.html"}">查看联动演示</a>`}
+            <a class="ghost-btn demo-ghost-link" href="${item.secondaryHref || "./market.html"}">${item.secondaryLabel || "浏览算法能力"}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function createDemoPlaylistMarkup(videos, activeId) {
+  return `
+    <div class="demo-playlist-shell">
+      <div class="demo-playlist-head">
+        <p class="eyebrow">Scene Cards</p>
+        <strong>按场景查看演示</strong>
+      </div>
+      <div class="demo-playlist">
+        ${videos.map((item, index) => `
+          <button
+            class="demo-playlist-item ${item.id === activeId ? "is-active" : ""}"
+            type="button"
+            data-demo-item="${item.id}"
+            aria-pressed="${item.id === activeId ? "true" : "false"}"
+          >
+            <span class="demo-playlist-index">${String(index + 1).padStart(2, "0")}</span>
+            <span class="demo-playlist-thumb" style="background-image: linear-gradient(180deg, rgba(8, 16, 28, 0.08), rgba(8, 16, 28, 0.42)), url('${item.poster}');"></span>
+            <span class="demo-playlist-copy">
+              <strong>${item.sceneTag || item.title}</strong>
+              <em>${item.playlistText || item.description}</em>
+            </span>
+          </button>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function syncDemoSectionHeading() {
+  const demoSection = document.querySelector(".demo-band .section-head");
+  if (!demoSection) return;
+
+  const titleEl = demoSection.querySelector("h2");
+  const introEl = demoSection.querySelector(".section-intro");
+
+  if (titleEl) {
+    titleEl.textContent = "优秀场景演示";
+  }
+
+  if (introEl) {
+    introEl.textContent = "通过视频化演示方式，围绕四大典型应用场景，对平台能力架构、业务流程及智能分析能力进行动态展示。";
+  }
+}
+
+function bindHomeDemoInteractions(videos, activeId) {
+  const activeVideo = videos.find((item) => item.id === activeId) || videos[0];
+  const stageVideoEl = document.getElementById("homeDemoVideo");
+  const playTriggerEl = document.querySelector("[data-demo-play]");
+
+  homeDemoVideoNodes = stageVideoEl ? [stageVideoEl] : [];
+
+  document.querySelectorAll("[data-demo-item]").forEach((node) => {
+    node.addEventListener("click", () => {
+      renderHomeDemoSection(node.dataset.demoItem);
+    });
+  });
+
+  if (playTriggerEl && stageVideoEl && activeVideo?.src) {
+    playTriggerEl.addEventListener("click", async () => {
+      try {
+        if (stageVideoEl.paused) {
+          await stageVideoEl.play();
+          playTriggerEl.textContent = "暂停演示";
+        } else {
+          stageVideoEl.pause();
+          playTriggerEl.textContent = "播放演示";
+        }
+      } catch (error) {
+        playTriggerEl.textContent = "浏览演示";
+        playTriggerEl.setAttribute("disabled", "disabled");
+      }
+    });
+
+    stageVideoEl.addEventListener("pause", () => {
+      playTriggerEl.textContent = "播放演示";
+    });
+
+    stageVideoEl.addEventListener("play", () => {
+      playTriggerEl.textContent = "暂停演示";
+    });
+  }
+}
+
+function renderHomeDemoSection(activeId) {
+  if (!demoStagePanelEl || !demoPlaylistPanelEl) return;
+
+  syncDemoSectionHeading();
+
+  const videos = platformData.homeVideoShowcase || [];
+  if (!videos.length) {
+    demoStagePanelEl.innerHTML = "";
+    demoPlaylistPanelEl.innerHTML = "";
+    return;
+  }
+
+  const activeVideo = videos.find((item) => item.id === activeId) || videos[0];
+
+  demoStagePanelEl.innerHTML = createDemoStageMarkup(activeVideo);
+  demoPlaylistPanelEl.innerHTML = createDemoPlaylistMarkup(videos, activeVideo.id);
+
+  bindHomeDemoInteractions(videos, activeVideo.id);
+}
+
 function getRecommendationMatches(query) {
   const keywords = query.toLowerCase();
   const rules = [
@@ -343,7 +471,7 @@ function initRecommendationModal() {
 function initHome() {
   renderHero();
   renderHomeAlgorithms();
-  renderIndustrySection();
+  renderHomeDemoSection();
   bindFeaturedCardEffects();
   initRecommendationModal();
   startHeroTimer();
